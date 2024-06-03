@@ -1,5 +1,7 @@
+'use client'
 import { Poppins } from 'next/font/google'
 import './globals.css'
+import NextAuthSessionProvider from '@/providers/sessionProvider'
 
 const poppins = Poppins({
   subsets: ['latin'],
@@ -13,7 +15,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt_BR">
-      <body className={poppins.className}>{children}</body>
+      <body className={poppins.className}>
+        <NextAuthSessionProvider>{children}</NextAuthSessionProvider>
+      </body>
     </html>
   )
 }
