@@ -1,23 +1,6 @@
 import NextAuth, { NextAuthOptions } from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
 
-
-interface AuthenticationResult {
-  IdToken: string;
-  AccessToken: string;
-  RefreshToken: string;
-  ExpiresIn: number;
-}
-
-interface AccessToken {
-  AuthenticationResult: AuthenticationResult;
-}
-
-interface ResponseToken{
-  AccessToken: AccessToken
-}
-
-
 const nextAuthOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({
@@ -47,16 +30,16 @@ const nextAuthOptions: NextAuthOptions = {
     signIn: '/',
   },
   callbacks: {
-    async jwt({ token, user }) {    
-      let responseToken: ResponseToken = token;
-      console.log(">>>>>>>>111", responseToken.AccessToken?.AuthenticationResult?.IdToken);
-  
-      ////!!!!!!!Aqui precisa tratar a condição de erro de login!!!!!
-     
+    async jwt({ token, user }) {
+      console.log('token: ', token)
+      console.log('user: ', user)
+
       user && (token.AccessToken = user)
       return token
     },
     async session({ session, token }) {
+      console.log('Session: ', session)
+      console.log('Token session: ', token)
       session = token.AccessToken as never
       return session
     },

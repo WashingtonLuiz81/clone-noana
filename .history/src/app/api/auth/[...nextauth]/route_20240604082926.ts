@@ -10,11 +10,7 @@ interface AuthenticationResult {
 }
 
 interface AccessToken {
-  AuthenticationResult: AuthenticationResult;
-}
-
-interface ResponseToken{
-  AccessToken: AccessToken
+  authenticationResult: AuthenticationResult;
 }
 
 
@@ -48,10 +44,12 @@ const nextAuthOptions: NextAuthOptions = {
   },
   callbacks: {
     async jwt({ token, user }) {    
-      let responseToken: ResponseToken = token;
-      console.log(">>>>>>>>111", responseToken.AccessToken?.AuthenticationResult?.IdToken);
-  
-      ////!!!!!!!Aqui precisa tratar a condição de erro de login!!!!!
+      let accessToken: AccessToken = token.AccessToken;
+      
+      if (accessToken.hasOwnProperty("authenticationResult")){
+        console.log(">>>>>>>>", accessToken.authenticationResult!) 
+      }
+      ////Aqui precisa tratar a condição de erro de login
      
       user && (token.AccessToken = user)
       return token

@@ -9,15 +9,6 @@ interface AuthenticationResult {
   ExpiresIn: number;
 }
 
-interface AccessToken {
-  AuthenticationResult: AuthenticationResult;
-}
-
-interface ResponseToken{
-  AccessToken: AccessToken
-}
-
-
 const nextAuthOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({
@@ -48,11 +39,9 @@ const nextAuthOptions: NextAuthOptions = {
   },
   callbacks: {
     async jwt({ token, user }) {    
-      let responseToken: ResponseToken = token;
-      console.log(">>>>>>>>111", responseToken.AccessToken?.AuthenticationResult?.IdToken);
-  
-      ////!!!!!!!Aqui precisa tratar a condição de erro de login!!!!!
-     
+
+      ////Aqui precisa tratar a condição de erro de login
+      console.log("IdToken", token.AccessToken)
       user && (token.AccessToken = user)
       return token
     },
