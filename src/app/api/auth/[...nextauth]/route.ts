@@ -48,11 +48,8 @@ const nextAuthOptions: NextAuthOptions = {
   },
   callbacks: {
     async jwt({ token, user }) {    
-      let responseToken: ResponseToken = token;
-      console.log(">>>>>>>>111", responseToken.AccessToken?.AuthenticationResult?.IdToken);
-  
-      ////!!!!!!!Aqui precisa tratar a condição de erro de login!!!!!
-     
+      let responseToken: ResponseToken = token;  
+      ////!!!!!!!Aqui precisa tratar a condição de erro de login!!!!!     
       user && (token.AccessToken = user)
       return token
     },
