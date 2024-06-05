@@ -1,22 +1,20 @@
 import NextAuth, { NextAuthOptions } from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
 
+// interface AuthenticationResult {
+//   IdToken: string
+//   AccessToken: string
+//   RefreshToken: string
+//   ExpiresIn: number
+// }
 
-interface AuthenticationResult {
-  IdToken: string;
-  AccessToken: string;
-  RefreshToken: string;
-  ExpiresIn: number;
-}
+// interface AccessToken {
+//   AuthenticationResult: AuthenticationResult
+// }
 
-interface AccessToken {
-  AuthenticationResult: AuthenticationResult;
-}
-
-interface ResponseToken{
-  AccessToken: AccessToken
-}
-
+// interface ResponseToken {
+//   AccessToken: AccessToken
+// }
 
 const nextAuthOptions: NextAuthOptions = {
   providers: [
@@ -26,7 +24,7 @@ const nextAuthOptions: NextAuthOptions = {
         username: { label: 'Username', type: 'text' },
         password: { label: 'Password', type: 'password' },
       },
-      async authorize(credentials:any) {
+      async authorize(credentials) {
         const response = await fetch('https://admin.hml.noana.link/v1/auth/', {
           method: 'POST',
           body: JSON.stringify(credentials),
@@ -35,8 +33,8 @@ const nextAuthOptions: NextAuthOptions = {
 
         const responseJson = await response.json()
 
-        if (response.ok && responseJson) {
-          return responseJson;
+        if (response.ok && !responseJson.__type) {
+          return responseJson
         }
 
         return null
@@ -47,17 +45,22 @@ const nextAuthOptions: NextAuthOptions = {
     signIn: '/',
   },
   callbacks: {
-    async jwt({ token, user }) {    
-      let responseToken: ResponseToken = token;
-      console.log(">>>>>>>>111", responseToken.AccessToken?.AuthenticationResult?.IdToken);
-  
-      ////!!!!!!!Aqui precisa tratar a condição de erro de login!!!!!
-     
+    async jwt({ token, user }) {
+      // const responseToken: ResponseToken = token as never
+      // console.log(
+      //   '>>>>>>>>111',
+      //   responseToken.AccessToken?.AuthenticationResult?.IdToken,
+      // )
+
+      /// /!!!!!!!Aqui precisa tratar a condição de erro de login!!!!!
+
       user && (token.AccessToken = user)
       return token
     },
     async session({ session, token }) {
       session = token.AccessToken as never
+      // console.log('session session: ', session)
+      // console.log('session token: ', token)
       return session
     },
   },

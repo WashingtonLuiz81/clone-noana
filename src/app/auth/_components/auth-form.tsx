@@ -5,18 +5,18 @@ import LoginForm from '@/components/form/LoginForm'
 
 export function AuthForm() {
   return (
-    <div className="flex items-center justify-center min-h-screen bg-primary">
-      <div className="max-w-md p-10 bg-white rounded-lg shadow-md">
+    <div className="flex items-center justify-center min-h-screen bg-primary px-4 sm:px-0">
+      <div className="w-full max-w-xs md:max-w-md p-6 md:p-10 bg-white rounded-lg shadow-md">
         <div className="mb-4">
           <figure className="flex justify-center mb-4">
             <Image src={logoNoana} alt="Logo Noana" width={141} height={29} />
           </figure>
 
-          <p className="text-base text-center font-medium text-gray-400">
+          <p className="text-sm sm:text-base text-center font-medium text-gray-400">
             Olá, seja bem-vindo(a)!
           </p>
 
-          <p className="mt-1 text-base text-center font-medium text-gray-400">
+          <p className="mt-1 text-sm sm:text-base text-center font-medium text-gray-400">
             Insira o acesso que você recebeu por e-mail.
           </p>
         </div>
