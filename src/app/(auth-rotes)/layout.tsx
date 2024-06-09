@@ -2,6 +2,7 @@ import { ReactNode } from 'react'
 import { getServerSession } from 'next-auth'
 import { nextAuthOptions } from '../api/auth/[...nextauth]/route'
 import { redirect } from 'next/navigation'
+import Header from '@/components/header'
 
 interface PrivateLayouProps {
   children: ReactNode
@@ -14,5 +15,14 @@ export default async function PrivateLayout({ children }: PrivateLayouProps) {
     redirect('/dashboard')
   }
 
-  return <>{children}</>
+  return (
+    <div>
+      <Header />
+
+      <div>
+        <nav>Menu</nav>
+        {children}
+      </div>
+    </div>
+  )
 }

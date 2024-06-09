@@ -1,20 +1,21 @@
 import { nextAuthOptions } from '@/app/api/auth/[...nextauth]/route'
 import { getServerSession } from 'next-auth'
-import { redirect } from 'next/navigation'
+// import { redirect } from 'next/navigation'
 
 export default async function Dashboard() {
   const session = await getServerSession(nextAuthOptions)
-  const IdToken = session?.AuthenticationResult?.IdToken
 
-  if (!session) {
-    redirect('/')
-  }
+  console.log('Session Page: ', session)
+
+  // if (!session) {
+  //   redirect('/')
+  // }
 
   const res = await fetch('https://admin.hml.noana.link/v1/person/person', {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${IdToken}`,
+      Authorization: `Bearer ${session}`,
     },
   })
 
