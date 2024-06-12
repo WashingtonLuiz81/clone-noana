@@ -3,15 +3,16 @@ import ReactDOM from 'react-dom'
 import Slider from 'react-slick'
 import './Modal.css'
 
+import Image from 'next/image'
+
 import { Button } from '@/components/ui/button'
 
 type ModalProps = {
   isOpen: boolean
-  onClose: () => void
-  images: string[]
+  onClose?: () => void
 }
 
-const Modal: React.FC<ModalProps> = ({ isOpen, onClose, images }) => {
+const Modal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
   if (!isOpen) return null
 
   const settings = {
@@ -22,13 +23,22 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, images }) => {
     slidesToScroll: 1,
   }
 
+  const img = [
+    'https://via.placeholder.com/600x400',
+    'https://via.placeholder.com/600x400?text=Second+Image',
+    'https://via.placeholder.com/600x400?text=Third+Image',
+  ]
+
   return ReactDOM.createPortal(
     <div className="modal-overlay max-w-sm mx-auto" onClick={onClose}>
-      <div className="modal-content mt-4 text-center">
+      <div
+        className="modal-content mt-4 text-center"
+        onClick={(e) => e.stopPropagation()}
+      >
         <Slider {...settings}>
-          {images.map((image, index) => (
+          {img.map((image, index) => (
             <div key={index}>
-              <img src={image} alt={`Slide ${index}`} />
+              <Image src={image} alt={`Slide ${index}`} />
             </div>
           ))}
         </Slider>
@@ -47,4 +57,5 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, images }) => {
     document.body,
   )
 }
+
 export default Modal
