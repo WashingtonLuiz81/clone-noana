@@ -11,7 +11,7 @@ export default function NavigationBar() {
   const pathname = usePathname()
 
   return (
-    <nav className="w-[256px] px-3 py-10">
+    <nav className="w-64 px-3 py-10">
       <ul className="flex flex-col gap-4">
         <li
           className={classNames('px-4 py-2', {

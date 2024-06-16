@@ -1,3 +1,3 @@
 export default function Unidades() {
-  return <div>Unidades</div>
+  return <div className="flex flex-1">Unidades</div>
 }

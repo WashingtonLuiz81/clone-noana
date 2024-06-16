@@ -20,7 +20,7 @@ const Header: React.FC = () => {
           />
         </div>
 
-        <div className="w-full flex items-center justify-between pr-8">
+        <div className="w-full flex flex-1 items-center justify-between pr-8">
           <div className="flex items-center gap-2">
             {/* <span className="w-2 h-2 rounded-full bg-lime-500"></span>
             <span className="text-base font-semibold">

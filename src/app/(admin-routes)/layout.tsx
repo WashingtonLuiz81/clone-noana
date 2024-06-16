@@ -19,10 +19,10 @@ export default async function PrivateLayout({ children }: PrivateLayouProps) {
   }
 
   return (
-    <div>
+    <div className="h-screen">
       <Header />
 
-      <div>
+      <div className="flex">
         <NavigationBar />
         {children}
       </div>
