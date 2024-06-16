@@ -18,7 +18,7 @@ export default function NavigationBar() {
             'bg-gray-200': pathname === '/unidades',
           })}
         >
-          <Link href="/" className="flex items-center gap-2">
+          <Link href="/unidades" className="flex items-center gap-2">
             <Image src={icoHospital} alt="Ícone de hospital" /> Unidades
           </Link>
         </li>
