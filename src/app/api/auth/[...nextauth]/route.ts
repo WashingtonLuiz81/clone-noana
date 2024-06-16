@@ -1,20 +1,6 @@
+import { getUser, refreshAccessToken } from '@/lib/utils'
 import NextAuth, { NextAuthOptions } from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
-
-// interface AuthenticationResult {
-//   IdToken: string
-//   AccessToken: string
-//   RefreshToken: string
-//   ExpiresIn: number
-// }
-
-// interface AccessToken {
-//   AuthenticationResult: AuthenticationResult
-// }
-
-// interface ResponseToken {
-//   AccessToken: AccessToken
-// }
 
 const nextAuthOptions: NextAuthOptions = {
   providers: [
@@ -25,7 +11,7 @@ const nextAuthOptions: NextAuthOptions = {
         password: { label: 'Password', type: 'password' },
       },
       async authorize(credentials) {
-        const response = await fetch('https://admin.hml.noana.link/v1/auth/', {
+        const response = await fetch(`${process.env.NEXT_APP_API_URL}/auth/`, {
           method: 'POST',
           body: JSON.stringify(credentials),
           headers: { 'Content-Type': 'application/json' },
@@ -46,14 +32,33 @@ const nextAuthOptions: NextAuthOptions = {
   },
   callbacks: {
     async jwt({ token, user }) {
-      user && (token.AccessToken = user)
-      console.log('Token Jwt: ', token.AccessToken)
-      return token
+      // Inicialmente, quando o usuário faz login
+      if (user) {
+        token.UserId = user.UserId
+        token.IdToken = user.IdToken
+        token.AccessToken = user.AccessToken
+        token.RefreshToken = user.RefreshToken
+        token.ExpiresIn = Date.now() + user.ExpiresIn * 1000 // Guardar o timestamp de expiração
+        token.FirstAccess = user.FirstAccess
+        return await getUser(token)
+      }
+
+      // Verificar se o token de acesso expirou
+      if (Date.now() < token.ExpiresIn) {
+        return await getUser(token)
+      }
+
+      // Caso o token de acesso tenha expirado, renovar usando o refresh_token
+      token = await refreshAccessToken(token)
+      return await getUser(token)
     },
     async session({ session, token }) {
-      session = token.AccessToken as never
-      console.log('Session session: ', session)
-      return session
+      return {
+        ...session,
+        user: {
+          ...token.user,
+        },
+      }
     },
   },
 }
