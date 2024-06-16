@@ -10,7 +10,6 @@ import { Loader2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import Input from './FormInput'
 import { useRouter } from 'next/navigation'
-import Link from 'next/link'
 
 const schema = z
   .object({
@@ -78,7 +77,7 @@ export default function FirstAccessForm() {
     //   return
     // }
 
-    // router.replace('/dashboard')
+    // router.replace('/usuario-mestre')
   })
 
   const toggleVisibility = (field: keyof VisiblePasswordState) => {

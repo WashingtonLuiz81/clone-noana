@@ -25,7 +25,7 @@ export default function NavigationBar() {
 
         <li
           className={classNames('px-4 py-2', {
-            'bg-gray-200': pathname === '/dashboard',
+            'bg-gray-200': pathname === '/usuario-mestre',
           })}
         >
           <Link href="/usuarios" className="flex items-center gap-2">
