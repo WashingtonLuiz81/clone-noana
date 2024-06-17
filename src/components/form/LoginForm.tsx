@@ -6,20 +6,28 @@ import { signIn } from 'next-auth/react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 
+import Image from 'next/image'
 import { EyeClosedIcon, EyeOpenIcon } from '@radix-ui/react-icons'
 import { Loader2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import Input from './FormInput'
-import { useRouter } from 'next/navigation'
+// import { useRouter } from 'next/navigation'
+
+import Facebook from '../../assets/img/ico-facebook.svg'
+import Google from '../../assets/img/ico-google.svg'
 
 const schema = z.object({
   username: z.string().nonempty('Usuário é obrigatório'),
-  password: z.string().min(6, 'Senha deve ter no mínimo 6 caracteres'),
+  password: z.string().nonempty('Senha é obrigatória'),
 })
 
 type FormData = z.infer<typeof schema>
 
-export default function LoginForm() {
+interface LoginFormProps {
+  forgotPassword: (value: boolean | ((prevState: boolean) => boolean)) => void
+}
+
+export default function LoginForm({ forgotPassword }: LoginFormProps) {
   const [visiblePassword, setVisiblePassword] = useState(false)
   const [loading, setLoading] = useState(false)
   const [authErrorMessage, setAuthErrorMessage] = useState('')
@@ -33,7 +41,7 @@ export default function LoginForm() {
     register,
     formState: { errors, isValid },
   } = form
-  const router = useRouter()
+  // const router = useRouter()
 
   const onSubmit = handleSubmit(async (data) => {
     setLoading(true)
@@ -51,8 +59,8 @@ export default function LoginForm() {
       setLoading(false)
       return
     }
-
-    router.replace('/usuario-mestre')
+    console.log('Result: ', result)
+    // router.replace('/usuario-mestre')
   })
 
   return (
@@ -72,25 +80,28 @@ export default function LoginForm() {
 
       <div>
         <div className="mt-1 relative">
-          <Input
-            placeholder="Senha"
-            type={`${visiblePassword ? 'text' : 'password'}`}
-            className="h-14 rounded-xl"
-            {...register('password')}
-          />
+          <div className="relative">
+            <Input
+              placeholder="Senha"
+              type={`${visiblePassword ? 'text' : 'password'}`}
+              className="h-14 rounded-xl"
+              {...register('password')}
+            />
+
+            {visiblePassword ? (
+              <EyeClosedIcon
+                className="absolute inset-y-0 right-0 mr-3 my-auto h-7 w-7 text-gray-400 cursor-pointer"
+                onClick={() => setVisiblePassword(!visiblePassword)}
+              />
+            ) : (
+              <EyeOpenIcon
+                className="absolute inset-y-0 right-0 mr-3 my-auto h-7 w-7 text-gray-400 cursor-pointer"
+                onClick={() => setVisiblePassword(!visiblePassword)}
+              />
+            )}
+          </div>
           {errors.password && (
             <p className="text-red-500">{errors.password.message}</p>
-          )}
-          {visiblePassword ? (
-            <EyeClosedIcon
-              className="absolute inset-y-0 right-0 mr-3 my-auto h-7 w-7 text-gray-400 cursor-pointer"
-              onClick={() => setVisiblePassword(!visiblePassword)}
-            />
-          ) : (
-            <EyeOpenIcon
-              className="absolute inset-y-0 right-0 mr-3 my-auto h-7 w-7 text-gray-400 cursor-pointer"
-              onClick={() => setVisiblePassword(!visiblePassword)}
-            />
           )}
         </div>
       </div>
@@ -105,6 +116,29 @@ export default function LoginForm() {
           {loading ? 'Carregando...' : 'Entrar'}
         </Button>
         {authErrorMessage && <p className="text-red-500">{authErrorMessage}</p>}
+      </div>
+
+      <span
+        className="w-full cursor-pointer block text-center mt-6 text-primary font-semibold size-4"
+        onClick={() => forgotPassword(true)}
+      >
+        Esqueci minha senha
+      </span>
+
+      <div className="flex gap-4 items-center justify-center">
+        <button
+          type="button"
+          className="w-28 h-11 flex items-center justify-center rounded-lg border border-gray-200 bg-gray-50 shadow-md border-1"
+        >
+          <Image src={Google} alt={''} />
+        </button>
+
+        <button
+          type="button"
+          className="w-28 h-11 flex items-center justify-center rounded-lg border border-gray-200 bg-gray-50 shadow-md border-1"
+        >
+          <Image src={Facebook} alt={''} />
+        </button>
       </div>
     </form>
   )

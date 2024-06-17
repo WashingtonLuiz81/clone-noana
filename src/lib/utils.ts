@@ -16,7 +16,7 @@ export const refreshAccessToken = async (token: Token) => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          RefreshToken: token.RefreshToken,
+          RefreshToken: token.refreshToken,
         }),
       },
     )
@@ -31,7 +31,7 @@ export const refreshAccessToken = async (token: Token) => {
       ...token,
       AccessToken: refreshedTokens.AccessToken,
       IdToken: refreshedTokens.IdToken,
-      RefreshToken: refreshedTokens.RefreshToken ?? token.RefreshToken, // Fall back to old refresh token
+      RefreshToken: refreshedTokens.RefreshToken ?? token.refreshToken, // Fall back to old refresh token
       ExpiresIn: Date.now() + refreshedTokens.ExpiresIn * 1000,
     }
   } catch (error) {
