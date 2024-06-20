@@ -1,6 +1,38 @@
-import { getUser, refreshAccessToken } from '@/lib/utils'
-import NextAuth, { NextAuthOptions } from 'next-auth'
+import {
+  getUser,
+  refreshAccessToken,
+  UserToken,
+  RefreshResult,
+} from '@/lib/utils'
+import NextAuth, { NextAuthOptions, User } from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
+
+interface CustomUser extends User {
+  tokenInfo: {
+    UserId: string
+    IdToken: string
+    AccessToken: string
+    RefreshToken: string
+    ExpiresIn: number
+    FirstAccess: boolean
+  }
+}
+
+// Type guard para verificar se o token é do tipo UserToken
+function isUserToken(token: unknown): token is UserToken {
+  if (typeof token === 'object' && token !== null) {
+    const t = token as Record<string, unknown>
+    return (
+      typeof t.UserId === 'string' &&
+      typeof t.IdToken === 'string' &&
+      typeof t.AccessToken === 'string' &&
+      typeof t.RefreshToken === 'string' &&
+      typeof t.ExpiresIn === 'number' &&
+      typeof t.FirstAccess === 'boolean'
+    )
+  }
+  return false
+}
 
 const nextAuthOptions: NextAuthOptions = {
   providers: [
@@ -33,30 +65,70 @@ const nextAuthOptions: NextAuthOptions = {
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
-        token.UserId = user.UserId
-        token.IdToken = user.IdToken
-        token.AccessToken = user.AccessToken
-        token.RefreshToken = user.RefreshToken
-        token.ExpiresIn = Date.now() + user.ExpiresIn * 1000
-        token.FirstAccess = user.FirstAccess
-        return await getUser(token)
+        const userToken: Omit<UserToken, 'user'> = {
+          UserId: user.UserId,
+          IdToken: user.IdToken,
+          AccessToken: user.AccessToken,
+          RefreshToken: user.RefreshToken,
+          ExpiresIn: Date.now() + user.ExpiresIn * 1000,
+          FirstAccess: user.FirstAccess,
+        }
+        const tokenWithUser = await getUser(userToken as UserToken)
+        return {
+          ...tokenWithUser,
+          user: tokenWithUser.user,
+        }
       }
 
-      if (Date.now() < token.ExpiresIn) {
-        return await getUser(token)
+      if (isUserToken(token)) {
+        if (Date.now() < token.ExpiresIn) {
+          const tokenWithUser = await getUser(token)
+          return {
+            ...tokenWithUser,
+            user: tokenWithUser.user,
+          }
+        } else {
+          const refreshedTokenResult: RefreshResult =
+            await refreshAccessToken(token)
+
+          if ('error' in refreshedTokenResult) {
+            // Tratar o erro de renovação de token aqui
+            console.error(
+              'Erro ao renovar o token:',
+              refreshedTokenResult.error,
+            )
+            // Retornar o token original, pois o refresh falhou
+            return token
+          }
+
+          // Se a renovação for bem-sucedida, obtenha o usuário com o novo token
+          const tokenWithUser = await getUser(refreshedTokenResult)
+          return {
+            ...tokenWithUser,
+            user: tokenWithUser.user,
+          }
+        }
       }
 
-      // Caso o token de acesso tenha expirado, renovar usando o refresh_token
-      token = await refreshAccessToken(token)
-      return await getUser(token)
+      return token
     },
     async session({ session, token }) {
-      return {
-        ...session,
-        user: {
-          ...token.user,
-        },
+      const userToken = token as unknown as UserToken
+      if (userToken && userToken.user) {
+        session.user = {
+          ...session.user,
+          ...userToken.user,
+        } as unknown as CustomUser
+        ;(session.user as CustomUser).tokenInfo = {
+          UserId: userToken.UserId,
+          IdToken: userToken.IdToken,
+          AccessToken: userToken.AccessToken,
+          RefreshToken: userToken.RefreshToken,
+          ExpiresIn: userToken.ExpiresIn,
+          FirstAccess: userToken.FirstAccess,
+        }
       }
+      return session
     },
   },
 }
