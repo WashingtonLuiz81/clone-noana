@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useForm, SubmitHandler } from 'react-hook-form'
 import { signIn, getSession } from 'next-auth/react'
-import { Session } from 'next-auth'
+import { Session, User } from 'next-auth'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 
@@ -21,12 +21,12 @@ const schema = z.object({
 
 type FormData = z.infer<typeof schema>
 
-interface ExtendedUser {
+interface ExtendedUser extends User {
   firstAccess?: boolean
 }
 
 interface ExtendedSession extends Session {
-  user?: ExtendedUser & Session['user']
+  user: ExtendedUser
 }
 
 interface LoginFormProps {
@@ -64,6 +64,7 @@ export default function LoginForm({ showForm }: LoginFormProps) {
       setLoading(false)
       return
     }
+
     const session = (await getSession()) as ExtendedSession
     if (session?.user?.firstAccess) {
       showForm('firstAccess')
