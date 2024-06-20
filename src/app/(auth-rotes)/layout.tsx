@@ -1,6 +1,5 @@
 import { ReactNode } from 'react'
 import { getServerSession } from 'next-auth'
-import { nextAuthOptions } from '../api/auth/[...nextauth]/route'
 import { redirect } from 'next/navigation'
 import { Bounce, ToastContainer } from 'react-toastify'
 
@@ -9,7 +8,7 @@ interface PrivateLayouProps {
 }
 
 export default async function PrivateLayout({ children }: PrivateLayouProps) {
-  const session = await getServerSession(nextAuthOptions)
+  const session = await getServerSession()
 
   console.log('session: ', session)
 
