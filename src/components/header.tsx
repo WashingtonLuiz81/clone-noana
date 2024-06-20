@@ -5,11 +5,10 @@ import { BellIcon, ChevronDownIcon, ExitIcon } from '@radix-ui/react-icons'
 import logoNoana from '../assets/img/logo-noana-white.svg'
 import userAvatar from '../assets/img/avatar.png'
 import { getServerSession } from 'next-auth'
-import { nextAuthOptions } from '@/app/api/auth/[...nextauth]/route'
 // import { Button } from './ui/button'
 
 const Header: React.FC = async () => {
-  const session = await getServerSession(nextAuthOptions)
+  const session = await getServerSession()
 
   return (
     <header className="h-16 bg-purple-800 text-white">
