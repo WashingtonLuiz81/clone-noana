@@ -1,20 +1,18 @@
-'use client'
-
 import { useState } from 'react'
-import { useForm } from 'react-hook-form'
-import { signIn } from 'next-auth/react'
+import { useForm, SubmitHandler } from 'react-hook-form'
+import { signIn, getSession } from 'next-auth/react'
+import { Session } from 'next-auth'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 
-import Image from 'next/image'
 import { EyeClosedIcon, EyeOpenIcon } from '@radix-ui/react-icons'
 import { Loader2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import Input from './FormInput'
-// import { useRouter } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 
-import Facebook from '../../assets/img/ico-facebook.svg'
-import Google from '../../assets/img/ico-google.svg'
+import { toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 const schema = z.object({
   username: z.string().nonempty('Usuário é obrigatório'),
@@ -23,14 +21,22 @@ const schema = z.object({
 
 type FormData = z.infer<typeof schema>
 
-interface LoginFormProps {
-  forgotPassword: (value: boolean | ((prevState: boolean) => boolean)) => void
+interface ExtendedUser {
+  firstAccess?: boolean
 }
 
-export default function LoginForm({ forgotPassword }: LoginFormProps) {
+interface ExtendedSession extends Session {
+  user?: ExtendedUser & Session['user']
+}
+
+interface LoginFormProps {
+  showForm: (value: string) => void
+}
+
+export default function LoginForm({ showForm }: LoginFormProps) {
+  const router = useRouter()
   const [visiblePassword, setVisiblePassword] = useState(false)
   const [loading, setLoading] = useState(false)
-  const [authErrorMessage, setAuthErrorMessage] = useState('')
   const form = useForm<FormData>({
     resolver: zodResolver(schema),
     mode: 'onChange',
@@ -41,9 +47,8 @@ export default function LoginForm({ forgotPassword }: LoginFormProps) {
     register,
     formState: { errors, isValid },
   } = form
-  // const router = useRouter()
 
-  const onSubmit = handleSubmit(async (data) => {
+  const onSubmit: SubmitHandler<FormData> = async (data) => {
     setLoading(true)
 
     const { username, password } = data
@@ -55,25 +60,32 @@ export default function LoginForm({ forgotPassword }: LoginFormProps) {
     })
 
     if (result?.error) {
-      setAuthErrorMessage('Usuário ou senha inválido')
+      toast.error('Usuário ou senha inválido')
       setLoading(false)
       return
     }
-    console.log('Result: ', result)
-    // router.replace('/usuario-mestre')
-  })
+    const session = (await getSession()) as ExtendedSession
+    if (session?.user?.firstAccess) {
+      showForm('firstAccess')
+    } else {
+      router.replace('/usuario-mestre')
+    }
+    setLoading(false)
+  }
 
   return (
-    <form onSubmit={onSubmit} className="space-y-6 mt-10">
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 mt-10">
       <div>
         <div className="mt-1">
           <Input
             placeholder="Usuário"
-            className="h-14 rounded-xl"
+            className={`h-14 rounded-xl outline-none ${errors.username ? 'border border-red-500' : ''}`}
             {...register('username')}
           />
           {errors.username && (
-            <p className="text-red-500">{errors.username.message}</p>
+            <p className="text-red-500 mt-2 text-sm font-medium">
+              {errors.username.message}
+            </p>
           )}
         </div>
       </div>
@@ -83,8 +95,8 @@ export default function LoginForm({ forgotPassword }: LoginFormProps) {
           <div className="relative">
             <Input
               placeholder="Senha"
-              type={`${visiblePassword ? 'text' : 'password'}`}
-              className="h-14 rounded-xl"
+              type={visiblePassword ? 'text' : 'password'}
+              className={`h-14 rounded-xl outline-none ${errors.password ? 'border border-red-500' : ''}`}
               {...register('password')}
             />
 
@@ -101,7 +113,9 @@ export default function LoginForm({ forgotPassword }: LoginFormProps) {
             )}
           </div>
           {errors.password && (
-            <p className="text-red-500">{errors.password.message}</p>
+            <p className="text-red-500 mt-2 text-sm font-medium">
+              {errors.password.message}
+            </p>
           )}
         </div>
       </div>
@@ -115,31 +129,14 @@ export default function LoginForm({ forgotPassword }: LoginFormProps) {
           {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
           {loading ? 'Carregando...' : 'Entrar'}
         </Button>
-        {authErrorMessage && <p className="text-red-500">{authErrorMessage}</p>}
       </div>
 
       <span
         className="w-full cursor-pointer block text-center mt-6 text-primary font-semibold size-4"
-        onClick={() => forgotPassword(true)}
+        onClick={() => showForm('forgot')}
       >
         Esqueci minha senha
       </span>
-
-      <div className="flex gap-4 items-center justify-center">
-        <button
-          type="button"
-          className="w-28 h-11 flex items-center justify-center rounded-lg border border-gray-200 bg-gray-50 shadow-md border-1"
-        >
-          <Image src={Google} alt={''} />
-        </button>
-
-        <button
-          type="button"
-          className="w-28 h-11 flex items-center justify-center rounded-lg border border-gray-200 bg-gray-50 shadow-md border-1"
-        >
-          <Image src={Facebook} alt={''} />
-        </button>
-      </div>
     </form>
   )
 }

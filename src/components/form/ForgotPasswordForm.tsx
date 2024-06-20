@@ -5,17 +5,24 @@ import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button } from '@/components/ui/button'
 import Input from './FormInput'
+import { useState } from 'react'
+import { toast } from 'react-toastify'
+import { Loader2 } from 'lucide-react'
 
 const forgotPasswordSchema = z.object({
-  email: z.string().email('Email inválido').nonempty('Email é obrigatório'),
+  email: z.string().nonempty('Email é obrigatório').email('Email inválido'),
 })
 
 type ForgotPasswordFormData = z.infer<typeof forgotPasswordSchema>
 
-interface LoginFormProps {
-  forgotPassword: (value: boolean | ((prevState: boolean) => boolean)) => void
+interface ForgotPasswordFormProps {
+  showForm: (value: string) => void
 }
-export default function ForgotPasswordForm({ forgotPassword }: LoginFormProps) {
+
+export default function ForgotPasswordForm({
+  showForm,
+}: ForgotPasswordFormProps) {
+  const [loading, setLoading] = useState(false)
   const form = useForm<ForgotPasswordFormData>({
     resolver: zodResolver(forgotPasswordSchema),
     mode: 'onChange',
@@ -28,17 +35,29 @@ export default function ForgotPasswordForm({ forgotPassword }: LoginFormProps) {
   } = form
 
   const onSubmit = async (data: ForgotPasswordFormData) => {
-    const response = await fetch(
-      `https://admin.hml.noana.link/v1/password_reset/`,
-      {
-        method: 'POST',
-        body: JSON.stringify(data),
-        headers: { 'Content-Type': 'application/json' },
-      },
-    )
+    setLoading(true)
+
+    const response = await fetch('/api/password_reset/', {
+      method: 'POST',
+      body: JSON.stringify(data),
+      headers: { 'Content-Type': 'application/json' },
+    })
 
     const responseJson = await response.json()
-    console.log('Data: ', responseJson)
+
+    if (!responseJson.status) {
+      setLoading(false)
+      toast.error(
+        'Não foi possível encontrar uma conta associada a esse e-mail. Tente um endereço de e-mail diferente.',
+      )
+      return
+    }
+
+    setLoading(false)
+    toast.success(
+      'Enviamos um link no email cadastrado para criação de uma nova senha!',
+    )
+    showForm('login')
   }
 
   return (
@@ -47,11 +66,13 @@ export default function ForgotPasswordForm({ forgotPassword }: LoginFormProps) {
         <div className="mt-1">
           <Input
             placeholder="Email"
-            className="h-14 rounded-xl"
+            className={`h-14 rounded-xl ${errors.email && 'border border-red-500 focus-visible:outline-none focus:outline-none focus:ring focus:border-red-500'}`}
             {...register('email')}
           />
           {errors.email && (
-            <p className="text-red-500">{errors.email.message}</p>
+            <p className="text-red-500 mt-2 text-sm font-medium">
+              {errors.email.message}
+            </p>
           )}
         </div>
       </div>
@@ -60,15 +81,16 @@ export default function ForgotPasswordForm({ forgotPassword }: LoginFormProps) {
         <Button
           type="submit"
           className={`w-full h-11 text-white bg-primary ${!isValid ? 'opacity-50 cursor-not-allowed' : ''}`}
-          disabled={!isValid}
+          disabled={!isValid || loading}
         >
-          Recuperar Senha
+          {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+          {loading ? 'Carregando...' : 'Recuperar Senha'}
         </Button>
       </div>
 
       <span
         className="w-full cursor-pointer block text-center mt-6 text-primary font-semibold size-4"
-        onClick={() => forgotPassword(false)}
+        onClick={() => showForm('login')}
       >
         Voltar para o login
       </span>

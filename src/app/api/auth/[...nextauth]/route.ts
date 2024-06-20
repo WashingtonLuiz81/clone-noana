@@ -32,18 +32,16 @@ const nextAuthOptions: NextAuthOptions = {
   },
   callbacks: {
     async jwt({ token, user }) {
-      // Inicialmente, quando o usuário faz login
       if (user) {
         token.UserId = user.UserId
         token.IdToken = user.IdToken
         token.AccessToken = user.AccessToken
         token.RefreshToken = user.RefreshToken
-        token.ExpiresIn = Date.now() + user.ExpiresIn * 1000 // Guardar o timestamp de expiração
+        token.ExpiresIn = Date.now() + user.ExpiresIn * 1000
         token.FirstAccess = user.FirstAccess
         return await getUser(token)
       }
 
-      // Verificar se o token de acesso expirou
       if (Date.now() < token.ExpiresIn) {
         return await getUser(token)
       }

@@ -1,12 +1,12 @@
 import { type ClassValue, clsx } from 'clsx'
-import { Token } from 'next-auth'
+import { JWT } from 'next-auth/jwt'
 import { twMerge } from 'tailwind-merge'
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-export const refreshAccessToken = async (token: Token) => {
+export const refreshAccessToken = async (token: JWT) => {
   try {
     const response = await fetch(
       `${process.env.NEXT_APP_API_URL}/auth/refresh`,
@@ -43,7 +43,7 @@ export const refreshAccessToken = async (token: Token) => {
   }
 }
 
-export const getUser = async (token: { IdToken: Token }) => {
+export const getUser = async (token: { IdToken: never }) => {
   const res = await fetch(`${process.env.NEXT_APP_API_URL}/person/person`, {
     method: 'GET',
     headers: {
@@ -57,11 +57,14 @@ export const getUser = async (token: { IdToken: Token }) => {
   return {
     ...token,
     user: {
-      userId: fetchedUser[0].uuid,
+      userId: fetchedUser[0].user.uuid,
       name: fetchedUser[0].name,
+      email: fetchedUser[0].user.email,
       lastName: fetchedUser[0].last_name,
       profile: fetchedUser[0].profile,
       firstAccess: fetchedUser[0].is_first_access,
+      avatar: fetchedUser[0].avatar,
+      idToken: token.IdToken,
     },
   }
 }

@@ -9,10 +9,20 @@ import { EyeClosedIcon, EyeOpenIcon } from '@radix-ui/react-icons'
 import { Loader2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import Input from './FormInput'
+import { getSession } from 'next-auth/react'
+import { toast } from 'react-toastify'
+import { Session } from 'next-auth'
 import { useRouter } from 'next/navigation'
+
+type CustomSession = Session & {
+  user?: {
+    idToken?: string
+  }
+}
 
 const schema = z
   .object({
+    currentPassword: z.string(),
     newPassword: z
       .string()
       .min(3, 'Nova senha deve ter no mínimo 3 caracteres'),
@@ -34,13 +44,14 @@ type VisiblePasswordState = {
 }
 
 export default function FirstAccessForm() {
+  const router = useRouter()
   const [visiblePassword, setVisiblePassword] = useState<VisiblePasswordState>({
     currentPassword: false,
     newPassword: false,
     confirmNewPassword: false,
   })
   const [loading, setLoading] = useState(false)
-  const [authErrorMessage, setAuthErrorMessage] = useState('')
+  const [authErrorMessage] = useState('')
   const form = useForm<FormData>({
     resolver: zodResolver(schema),
     mode: 'onChange',
@@ -54,30 +65,43 @@ export default function FirstAccessForm() {
     setError,
     clearErrors,
   } = form
-  const router = useRouter()
 
   const newPassword = useWatch({ control, name: 'newPassword' })
   const confirmNewPassword = useWatch({ control, name: 'confirmNewPassword' })
 
   const onSubmit = handleSubmit(async (data) => {
     setLoading(true)
+    const session: CustomSession | null = await getSession()
 
-    console.log('Data: ', newPassword)
-    console.log('Data: ', confirmNewPassword)
+    if (!session?.user?.idToken) {
+      toast.error('Sessão inválida. Por favor, faça login novamente.')
+      return
+    }
 
-    // const result = await signIn('credentials', {
-    //   currentPassword,
-    //   newPassword,
-    //   redirect: false,
-    // })
+    const response = await fetch('/api/change_password/', {
+      method: 'POST',
+      body: JSON.stringify({
+        old_password: data.currentPassword,
+        new_password: data.newPassword,
+      }),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${session?.user?.idToken}`,
+      },
+    })
 
-    // if (result?.error) {
-    //   setAuthErrorMessage('Usuário ou senha inválido')
-    //   setLoading(false)
-    //   return
-    // }
+    const responseJson = await response.json()
 
-    // router.replace('/usuario-mestre')
+    if (responseJson.error) {
+      setLoading(false)
+      toast.error('A senha atual está incorreta')
+      return
+    }
+
+    toast.success('Senha alterada com sucesso!')
+    setTimeout(() => {
+      router.replace('/usuario-mestre')
+    }, 4000)
   })
 
   const toggleVisibility = (field: keyof VisiblePasswordState) => {
@@ -111,6 +135,7 @@ export default function FirstAccessForm() {
               placeholder="Senha Atual"
               type={visiblePassword.currentPassword ? 'text' : 'password'}
               className="h-14 rounded-xl"
+              {...register('currentPassword')}
             />
 
             {visiblePassword.currentPassword ? (
@@ -125,6 +150,11 @@ export default function FirstAccessForm() {
               />
             )}
           </div>
+          {errors.currentPassword && (
+            <p className="text-red-500 mt-2 text-sm font-medium">
+              {errors.currentPassword.message}
+            </p>
+          )}
         </div>
       </div>
 
@@ -151,7 +181,9 @@ export default function FirstAccessForm() {
             )}
           </div>
           {errors.newPassword && (
-            <p className="text-red-500 mt-2">{errors.newPassword.message}</p>
+            <p className="text-red-500 mt-2 text-sm font-medium">
+              {errors.newPassword.message}
+            </p>
           )}
         </div>
       </div>
@@ -179,7 +211,7 @@ export default function FirstAccessForm() {
             )}
           </div>
           {errors.confirmNewPassword && (
-            <p className="text-red-500 mt-2">
+            <p className="text-red-500 mt-2 text-sm font-medium">
               {errors.confirmNewPassword.message}
             </p>
           )}
@@ -193,7 +225,7 @@ export default function FirstAccessForm() {
           disabled={!isValid || loading}
         >
           {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-          {loading ? 'Carregando...' : 'Entrar'}
+          {loading ? 'Carregando...' : 'Salvar'}
         </Button>
         {authErrorMessage && (
           <p className="text-red-500 mt-2">{authErrorMessage}</p>

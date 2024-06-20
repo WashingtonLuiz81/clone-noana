@@ -59,6 +59,10 @@ const config = {
           '800': '#27272A',
           '900': '#202024',
         },
+        shadowAvatar: 'rgba(0, 0, 0, 0.14)',
+      },
+      boxShadow: {
+        avatar: '0px 1.75px 4px -1px',
       },
       borderRadius: {},
       keyframes: {

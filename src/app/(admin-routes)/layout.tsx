@@ -12,14 +12,12 @@ interface PrivateLayouProps {
 export default async function PrivateLayout({ children }: PrivateLayouProps) {
   const session = await getServerSession(nextAuthOptions)
 
-  console.log('session Layout: ', session)
-
   if (!session) {
     redirect('/')
   }
 
   return (
-    <div className="h-screen">
+    <div className="h-screen bg-gray-100">
       <Header />
 
       <div className="flex">
