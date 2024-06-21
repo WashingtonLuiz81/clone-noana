@@ -19,6 +19,19 @@ interface ForgotPasswordFormProps {
   showForm: (value: string) => void
 }
 
+interface MsgProps {
+  email: string
+}
+const Msg: React.FC<MsgProps> = ({ email }) => {
+  return (
+    <div>
+      Se o e-mail <strong>{email}</strong> estiver registrado, você receberá
+      instruções para redefinir sua senha. Caso nao receba, verifique o e-mail
+      digitado e tente novamente.
+    </div>
+  )
+}
+
 export default function ForgotPasswordForm({
   showForm,
 }: ForgotPasswordFormProps) {
@@ -47,16 +60,12 @@ export default function ForgotPasswordForm({
 
     if (!responseJson.status) {
       setLoading(false)
-      toast.error(
-        'Não foi possível encontrar uma conta associada a esse e-mail. Tente um endereço de e-mail diferente.',
-      )
+      toast.success(<Msg email={data.email} />)
       return
     }
 
     setLoading(false)
-    toast.success(
-      'Enviamos um link no email cadastrado para criação de uma nova senha!',
-    )
+    toast.success(<Msg email={data.email} />)
     showForm('login')
   }
 
