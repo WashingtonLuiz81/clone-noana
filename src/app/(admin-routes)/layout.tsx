@@ -1,8 +1,8 @@
 import { ReactNode } from 'react'
 import { getServerSession } from 'next-auth'
 import { redirect } from 'next/navigation'
-import Header from '@/components/header'
 import NavigationBar from '@/components/navbar'
+import Header from '@/components/header/header'
 
 interface PrivateLayouProps {
   children: ReactNode
