@@ -1,10 +1,10 @@
 import React from 'react'
 import Image from 'next/image'
-import logoNoana from '../../assets/img/logo-noana-white.svg'
 import { getServerSession } from 'next-auth'
 import { nextAuthOptions } from '@/app/api/auth/[...nextauth]/route'
 import ProfileMenu from './profileMenu'
 import Notification from './notification'
+import { logoNoana, logoNoanaWhite } from '@/assets/img/icons'
 
 const Header: React.FC = async () => {
   const session = await getServerSession(nextAuthOptions)
@@ -36,7 +36,7 @@ const Header: React.FC = async () => {
       <div className="h-16 flex items-center gap-8">
         <div className="w-64 h-16 flex items-center bg-purple-900">
           <Image
-            src={logoNoana}
+            src={logoNoanaWhite}
             className="ml-6"
             width={121}
             height={25}

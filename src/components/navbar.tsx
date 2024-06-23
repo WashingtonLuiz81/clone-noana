@@ -3,9 +3,7 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import classNames from 'classnames'
-import icoHospital from '../assets/img/ico-hospital.svg'
-import icoUserHeart from '../assets/img/ico-user-heart.svg'
-import Image from 'next/image'
+import { UserHeart, Hospital } from '@/assets/img/icons'
 
 export default function NavigationBar() {
   const pathname = usePathname()
@@ -13,23 +11,41 @@ export default function NavigationBar() {
   return (
     <nav className="w-64 px-3 py-10">
       <ul className="flex flex-col gap-4">
-        <li
-          className={classNames('px-4 py-2', {
-            'bg-gray-200': pathname === '/unidades',
-          })}
-        >
-          <Link href="/unidades" className="flex items-center gap-2">
-            <Image src={icoHospital} alt="Ícone de hospital" /> Unidades
+        <li className="px-4 py-2">
+          <Link
+            href="/usuarios"
+            className={classNames(
+              'flex items-center gap-2 font-medium text-gray-600',
+              {
+                'text-primary font-semibold': pathname === '/usuario-mestre',
+              },
+            )}
+          >
+            <Hospital
+              className={classNames({
+                'text-primary': pathname === '/usuario-mestre',
+              })}
+            />{' '}
+            Unidades
           </Link>
         </li>
 
-        <li
-          className={classNames('px-4 py-2', {
-            'bg-gray-200': pathname === '/usuario-mestre',
-          })}
-        >
-          <Link href="/usuarios" className="flex items-center gap-2">
-            <Image src={icoUserHeart} alt="Ícone de usuários" /> Usuários
+        <li className="px-4 py-2">
+          <Link
+            href="/usuarios"
+            className={classNames(
+              'flex items-center gap-2 font-medium text-gray-600',
+              {
+                'text-primary font-semibold': pathname === '/usuarios',
+              },
+            )}
+          >
+            <UserHeart
+              className={classNames({
+                'text-primary': pathname === '/usuarios',
+              })}
+            />{' '}
+            Usuários
           </Link>
         </li>
       </ul>

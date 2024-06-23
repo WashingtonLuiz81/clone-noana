@@ -1,11 +1,11 @@
 'use client'
 import Image from 'next/image'
-import logoNoana from '../../../assets/img/logo-noana.svg'
 
 import LoginForm from '@/components/form/LoginForm'
 import ForgotPasswordForm from '@/components/form/ForgotPasswordForm'
 import { useState } from 'react'
 import FirstAccessForm from '@/components/form/FirstAccessForm'
+import { logoNoana } from '@/assets/img/icons'
 
 export function AuthForm() {
   const [showForm, setShowForm] = useState('login')
