@@ -13,7 +13,7 @@ export default function NavigationBar() {
       <ul className="flex flex-col gap-4">
         <li className="px-4 py-2">
           <Link
-            href="/usuarios"
+            href="/usuario-mestre"
             className={classNames(
               'flex items-center gap-2 font-medium text-gray-600',
               {
@@ -32,17 +32,18 @@ export default function NavigationBar() {
 
         <li className="px-4 py-2">
           <Link
-            href="/usuarios"
+            href="/usuario-mestre/usuarios"
             className={classNames(
               'flex items-center gap-2 font-medium text-gray-600',
               {
-                'text-primary font-semibold': pathname === '/usuarios',
+                'text-primary font-semibold':
+                  pathname === '/usuario-mestre/usuarios',
               },
             )}
           >
             <UserHeart
               className={classNames({
-                'text-primary': pathname === '/usuarios',
+                'text-primary': pathname === '/usuario-mestre/usuarios',
               })}
             />{' '}
             Usuários
