@@ -44,7 +44,7 @@ const ProfileMenu: React.FC<{ user: User }> = ({ user }) => {
       </div>
 
       {isProfileVisible && (
-        <div className="absolute w-64 border-2 border-solid border-gray-100 bg-white rounded-xl top-10 right-0 py-9 px-6 shadow-avatar shadow-shadowAvatar transition-opacity duration-300">
+        <div className="absolute w-64 border-2 border-solid border-gray-100 bg-white rounded-xl top-10 right-0 py-9 px-6 shadow-avatar shadow-shadowAvatar transition-opacity duration-300 z-10">
           <div className="flex gap-2 items-center">
             <Image
               src={userAvatar}

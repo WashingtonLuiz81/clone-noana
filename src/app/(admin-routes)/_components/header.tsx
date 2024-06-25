@@ -1,7 +1,8 @@
+'use client'
+
 import {
   Breadcrumb,
   BreadcrumbItem,
-  BreadcrumbLink,
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
@@ -18,11 +19,11 @@ export default function Header() {
       <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem>
-            <BreadcrumbLink>
+            <div>
               <Link href="/" className="text-gray-400 size-3 font-medium">
                 Unidades
               </Link>
-            </BreadcrumbLink>
+            </div>
           </BreadcrumbItem>
 
           <BreadcrumbSeparator className="text-gray-400" />

@@ -9,7 +9,7 @@ export default function NavigationBar() {
   const pathname = usePathname()
 
   return (
-    <nav className="w-64 px-3 py-10">
+    <nav className="w-64 bg-white px-3 py-10">
       <ul className="flex flex-col gap-4">
         <li className="px-4 py-2">
           <Link

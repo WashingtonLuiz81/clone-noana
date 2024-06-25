@@ -16,10 +16,10 @@ export default async function PrivateLayout({ children }: PrivateLayouProps) {
   }
 
   return (
-    <div className="h-screen bg-gray-100">
+    <div className="flex flex-col h-screen bg-gray-100">
       <Header />
 
-      <div className="flex">
+      <div className="flex flex-1">
         <NavigationBar />
         {children}
       </div>
