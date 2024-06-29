@@ -3,8 +3,8 @@
 import React, { useState } from 'react'
 import Image from 'next/image'
 import { ChevronDownIcon } from '@radix-ui/react-icons'
-import userAvatar from '../../assets/img/avatar.png'
 import LogoutButton from '../button/logoutButton'
+import { CircleUserIcon } from 'lucide-react'
 
 interface User {
   name?: string | null
@@ -26,13 +26,22 @@ const ProfileMenu: React.FC<{ user: User }> = ({ user }) => {
         className="flex items-center justify-around cursor-pointer"
         onClick={toggleProfileVisibility}
       >
-        <Image
-          src={user.avatar ? userAvatar : userAvatar}
-          width={32}
-          height={32}
-          className="-ml-1"
-          alt="Avatar do Usuário"
-        />
+        {!user.avatar ? (
+          <Image
+            src={user.avatar!}
+            width={36}
+            height={36}
+            className="-ml-1"
+            alt="Avatar do Usuário"
+          />
+        ) : (
+          <CircleUserIcon
+            width={32}
+            height={32}
+            color="#692B96"
+            className="-ml-1"
+          />
+        )}
 
         <ChevronDownIcon
           width={16}
@@ -47,13 +56,22 @@ const ProfileMenu: React.FC<{ user: User }> = ({ user }) => {
       {isProfileVisible && (
         <div className="absolute w-64 border-2 border-solid border-gray-100 bg-white rounded-xl top-10 right-0 py-9 px-6 shadow-avatar shadow-shadowAvatar transition-opacity duration-300 z-10">
           <div className="flex gap-2 items-center">
-            <Image
-              src={user.avatar ? userAvatar : userAvatar}
-              width={36}
-              height={36}
-              className="-ml-1 w-9 h-9"
-              alt="Avatar do Usuário"
-            />
+            {!user.avatar ? (
+              <Image
+                src={user.avatar!}
+                width={36}
+                height={36}
+                className="-ml-1"
+                alt="Avatar do Usuário"
+              />
+            ) : (
+              <CircleUserIcon
+                width={36}
+                height={36}
+                color="#692B96"
+                className="-ml-1"
+              />
+            )}
 
             <div className="flex flex-col">
               <span className="font-medium text-gray-700 text-xs">
