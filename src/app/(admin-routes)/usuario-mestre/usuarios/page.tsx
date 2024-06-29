@@ -1,3 +1,5 @@
+import Cadastro from '../../_components/sections/cadastro'
+
 export default function Usuarios() {
-  return <div>Usuários</div>
+  return <Cadastro />
 }
