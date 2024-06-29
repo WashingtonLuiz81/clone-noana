@@ -8,6 +8,7 @@ import { PlusIcon } from '@radix-ui/react-icons'
 import { Button } from '@/components/ui/button'
 import Table from '../_components/table'
 import { useState, useMemo } from 'react'
+import { unitTableHeader } from '@/lib/config'
 
 interface Person {
   Nome: string
@@ -41,18 +42,113 @@ const data: Person[] = [
     'E-mail': 'jose@example.com',
     Telefone: '(22) 2468-1357',
   },
-]
-
-const columns: Column<Person>[] = [
-  { key: 'Nome', label: 'Nome' },
-  { key: 'Text Label', label: 'Text Label' },
-  { key: 'E-mail', label: 'E-mail' },
-  { key: 'Telefone', label: 'Telefone' },
-  { key: 'Ações', label: 'Ações', isAction: true },
+  {
+    Nome: 'Ana',
+    'Text Label': 'Sed do eiusmod',
+    'E-mail': 'ana@example.com',
+    Telefone: '(33) 1357-2468',
+  },
+  {
+    Nome: 'Pedro',
+    'Text Label': 'Tempor incididunt',
+    'E-mail': 'pedro@example.com',
+    Telefone: '(44) 5555-1234',
+  },
+  {
+    Nome: 'Mariana',
+    'Text Label': 'Ut labore et dolore',
+    'E-mail': 'mariana@example.com',
+    Telefone: '(55) 9876-5432',
+  },
+  {
+    Nome: 'Carlos',
+    'Text Label': 'Excepteur sint occaecat',
+    'E-mail': 'carlos@example.com',
+    Telefone: '(66) 2222-4444',
+  },
+  {
+    Nome: 'Patrícia',
+    'Text Label': 'Cupidatat non proident',
+    'E-mail': 'patricia@example.com',
+    Telefone: '(77) 7777-7777',
+  },
+  {
+    Nome: 'Fernanda',
+    'Text Label': 'Sunt in culpa qui',
+    'E-mail': 'fernanda@example.com',
+    Telefone: '(88) 8888-8888',
+  },
+  {
+    Nome: 'Rafael',
+    'Text Label': 'Deserunt mollit anim',
+    'E-mail': 'rafael@example.com',
+    Telefone: '(99) 9999-9999',
+  },
+  {
+    Nome: 'João',
+    'Text Label': 'Lorem ipsum',
+    'E-mail': 'joao@example.com',
+    Telefone: '(00) 1234-5678',
+  },
+  {
+    Nome: 'Maria',
+    'Text Label': 'Dolor sit amet',
+    'E-mail': 'maria@example.com',
+    Telefone: '(11) 9876-5432',
+  },
+  {
+    Nome: 'José',
+    'Text Label': 'Consectetur adipiscing elit',
+    'E-mail': 'jose@example.com',
+    Telefone: '(22) 2468-1357',
+  },
+  {
+    Nome: 'Ana',
+    'Text Label': 'Sed do eiusmod',
+    'E-mail': 'ana@example.com',
+    Telefone: '(33) 1357-2468',
+  },
+  {
+    Nome: 'Pedro',
+    'Text Label': 'Tempor incididunt',
+    'E-mail': 'pedro@example.com',
+    Telefone: '(44) 5555-1234',
+  },
+  {
+    Nome: 'Mariana',
+    'Text Label': 'Ut labore et dolore',
+    'E-mail': 'mariana@example.com',
+    Telefone: '(55) 9876-5432',
+  },
+  {
+    Nome: 'Carlos',
+    'Text Label': 'Excepteur sint occaecat',
+    'E-mail': 'carlos@example.com',
+    Telefone: '(66) 2222-4444',
+  },
+  {
+    Nome: 'Patrícia',
+    'Text Label': 'Cupidatat non proident',
+    'E-mail': 'patricia@example.com',
+    Telefone: '(77) 7777-7777',
+  },
+  {
+    Nome: 'Fernanda',
+    'Text Label': 'Sunt in culpa qui',
+    'E-mail': 'fernanda@example.com',
+    Telefone: '(88) 8888-8888',
+  },
+  {
+    Nome: 'Rafael',
+    'Text Label': 'Deserunt mollit anim',
+    'E-mail': 'rafael@example.com',
+    Telefone: '(99) 9999-9999',
+  },
 ]
 
 export default function Dashboard() {
   const [searchQuery, setSearchQuery] = useState('')
+  const [showSection, setShowSection] = useState('')
 
   const filteredData = useMemo(() => {
     return data.filter((item) =>
@@ -64,7 +160,15 @@ export default function Dashboard() {
 
   return (
     <div className="w-[calc(100%-16rem)] bg-gray-50 border-l-[1px] border-[#E9E9EB] flex flex-col gap-10 py-10 px-8">
-      <Header />
+      <Header
+        title="Unidades de Cuidado"
+        links={['unidades', 'Unidades Cadastradas']}
+      />
+
+      <div>
+        <strong>Seção Ativa:</strong>{' '}
+        {showSection === '' ? 'Nenhuma sessção ativa' : showSection}
+      </div>
 
       <section>
         <header className="flex items-center justify-between mb-6">
@@ -95,7 +199,11 @@ export default function Dashboard() {
           </div>
         </header>
 
-        <Table data={filteredData} columns={columns} />
+        <Table
+          data={filteredData}
+          columns={unitTableHeader}
+          showSection={setShowSection}
+        />
       </section>
     </div>
   )

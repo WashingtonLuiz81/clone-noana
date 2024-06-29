@@ -18,7 +18,6 @@ interface CustomUser extends User {
   }
 }
 
-// Type guard para verificar se o token é do tipo UserToken
 function isUserToken(token: unknown): token is UserToken {
   if (typeof token === 'object' && token !== null) {
     const t = token as Record<string, unknown>
@@ -92,16 +91,14 @@ const nextAuthOptions: NextAuthOptions = {
             await refreshAccessToken(token)
 
           if ('error' in refreshedTokenResult) {
-            // Tratar o erro de renovação de token aqui
             console.error(
               'Erro ao renovar o token:',
               refreshedTokenResult.error,
             )
-            // Retornar o token original, pois o refresh falhou
+
             return token
           }
 
-          // Se a renovação for bem-sucedida, obtenha o usuário com o novo token
           const tokenWithUser = await getUser(refreshedTokenResult)
           return {
             ...tokenWithUser,

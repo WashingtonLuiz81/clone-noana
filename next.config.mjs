@@ -1,13 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: 'admin.hml.noana.link',
-        pathname: '**',
-      },
-    ],
+    domains: ['admin.hml.noana.link'],
   },
   async rewrites() {
     return [

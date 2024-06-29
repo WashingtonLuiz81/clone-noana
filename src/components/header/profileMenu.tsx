@@ -10,6 +10,7 @@ interface User {
   name?: string | null
   email?: string | null
   avatar?: string | null
+  profile?: string
 }
 
 const ProfileMenu: React.FC<{ user: User }> = ({ user }) => {
@@ -26,7 +27,7 @@ const ProfileMenu: React.FC<{ user: User }> = ({ user }) => {
         onClick={toggleProfileVisibility}
       >
         <Image
-          src={userAvatar}
+          src={user.avatar ? userAvatar : userAvatar}
           width={32}
           height={32}
           className="-ml-1"
@@ -47,7 +48,7 @@ const ProfileMenu: React.FC<{ user: User }> = ({ user }) => {
         <div className="absolute w-64 border-2 border-solid border-gray-100 bg-white rounded-xl top-10 right-0 py-9 px-6 shadow-avatar shadow-shadowAvatar transition-opacity duration-300 z-10">
           <div className="flex gap-2 items-center">
             <Image
-              src={userAvatar}
+              src={user.avatar ? userAvatar : userAvatar}
               width={36}
               height={36}
               className="-ml-1 w-9 h-9"
@@ -59,7 +60,7 @@ const ProfileMenu: React.FC<{ user: User }> = ({ user }) => {
                 {user.name || 'Usuário'}
               </span>
               <span className="font-medium text-gray-500 text-xs">
-                Técnico em enfermagem
+                {user.profile}
               </span>
             </div>
           </div>
