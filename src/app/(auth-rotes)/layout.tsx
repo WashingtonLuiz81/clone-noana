@@ -10,8 +10,6 @@ interface PrivateLayouProps {
 export default async function PrivateLayout({ children }: PrivateLayouProps) {
   const session = await getServerSession()
 
-  console.log('session: ', session)
-
   if (session) {
     redirect('/usuario-mestre')
   }

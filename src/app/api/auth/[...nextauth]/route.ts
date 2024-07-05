@@ -33,7 +33,7 @@ function isUserToken(token: unknown): token is UserToken {
   return false
 }
 
-const nextAuthOptions: NextAuthOptions = {
+export const nextAuthOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({
       name: 'credentials',
@@ -132,4 +132,4 @@ const nextAuthOptions: NextAuthOptions = {
 
 const handler = NextAuth(nextAuthOptions)
 
-export { handler as GET, handler as POST, nextAuthOptions }
+export { handler as GET, handler as POST }

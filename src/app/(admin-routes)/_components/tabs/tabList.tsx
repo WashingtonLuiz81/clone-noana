@@ -3,16 +3,10 @@ import TabItem from './tabItem'
 interface TabListProps {
   tabTitle: string
   setTabTitle: (tab: string) => void
+  tabs: string[]
 }
 
-export default function TabList({ tabTitle, setTabTitle }: TabListProps) {
-  const tabs = [
-    'Cuidador Mestre',
-    'Cuidador Simples',
-    'Monitor',
-    'Beneficiário',
-  ]
-
+export default function TabList({ tabTitle, setTabTitle, tabs }: TabListProps) {
   return (
     <ul className="w-full flex items-center">
       {tabs.map((tab) => (

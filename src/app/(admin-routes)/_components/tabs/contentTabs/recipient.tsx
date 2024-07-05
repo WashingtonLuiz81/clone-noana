@@ -6,6 +6,7 @@ import { PlusIcon } from '@radix-ui/react-icons'
 import { Button } from '@/components/ui/button'
 import { unitTableHeader } from '@/lib/config'
 import Table from '../../table'
+import BeneficiariesRegistration from '../../sections/beneficiaries/beneficiariesRegistration'
 
 interface Person {
   Nome: string
@@ -145,6 +146,7 @@ const data: Person[] = [
 
 export default function Recipient() {
   const [searchQuery, setSearchQuery] = useState('')
+  const [isVisibleSection, setIsVisibleSection] = useState('')
 
   const filteredData = useMemo(() => {
     return data.filter((item) =>
@@ -156,10 +158,38 @@ export default function Recipient() {
 
   return (
     <section>
+      <div
+        id="slideover-container"
+        className={`fixed inset-0 z-10 transition-opacity duration-500 ease-in-out ${
+          isVisibleSection !== ''
+            ? 'opacity-100'
+            : 'opacity-0 pointer-events-none'
+        }`}
+      >
+        <div
+          id="slideover-bg"
+          className={`absolute inset-0 bg-black transition-opacity duration-500 ease-in-out ${
+            isVisibleSection !== '' ? 'opacity-50' : 'opacity-0'
+          }`}
+          onClick={() => setIsVisibleSection('')}
+        ></div>
+
+        <div
+          id="slideover"
+          className={`absolute top-0 right-0 h-full max-w-[888px] w-full bg-gray-100 border transform transition-transform duration-500 ease-in-out ${
+            isVisibleSection !== '' ? 'translate-x-0' : 'translate-x-full'
+          }`}
+        >
+          {isVisibleSection === 'beneficiaries' && (
+            <BeneficiariesRegistration closeSection={setIsVisibleSection} />
+          )}
+        </div>
+      </div>
+
       <header className="flex items-center justify-between mb-6">
         <div className="flex flex-auto items-center gap-2">
           <UserRoundSearchIcon className="text-primary" />
-          <span className="flex-1 text-xl font-semibold italic text-[#1A1A1A]">
+          <span className="flex-1 text-xl font-semibold text-[#1A1A1A]">
             Beneficiários
           </span>
         </div>
@@ -177,7 +207,10 @@ export default function Recipient() {
             />
           </div>
 
-          <Button className="flex items-center gap-2 bg-primary text-gray-50 shadow-xl">
+          <Button
+            className="flex items-center gap-2 bg-primary text-gray-50 shadow-xl"
+            onClick={() => setIsVisibleSection('beneficiaries')}
+          >
             <PlusIcon />
             <span className="text-white font-semibold">Adicionar</span>
           </Button>

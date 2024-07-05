@@ -159,7 +159,7 @@ export default function MasterCaregiver() {
       <header className="flex items-center justify-between mb-6">
         <div className="flex flex-auto items-center gap-2">
           <Hospital className="text-primary" />
-          <span className="flex-1 text-xl font-semibold italic text-[#1A1A1A]">
+          <span className="flex-1 text-xl font-semibold text-[#1A1A1A]">
             Cuidadores Mestres
           </span>
         </div>

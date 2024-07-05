@@ -10,7 +10,7 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 
-export default function Cadastro() {
+export default function CareUnitRegistration() {
   return (
     <>
       <div className="flex flex-col items-start px-5 py-5 justify-center border bg-gray-100">

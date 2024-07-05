@@ -1,7 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    domains: ['admin.hml.noana.link'],
+    domains: ['noana-admin-images-hml.s3.amazonaws.com'],
+    loader: 'imgix',
+    path: '/assets/img/',
   },
   async rewrites() {
     return [
