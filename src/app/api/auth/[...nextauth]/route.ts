@@ -33,7 +33,7 @@ function isUserToken(token: unknown): token is UserToken {
   return false
 }
 
-export const nextAuthOptions: NextAuthOptions = {
+const nextAuthOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({
       name: 'credentials',
