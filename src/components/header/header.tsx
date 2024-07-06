@@ -22,10 +22,6 @@ const Header: React.FC = async () => {
               alt="Logo Noana"
             />
           </div>
-
-          <div className="w-full flex flex-1 items-center justify-between pr-8">
-            <Notification />
-          </div>
         </div>
       </header>
     )
@@ -45,7 +41,7 @@ const Header: React.FC = async () => {
         </div>
 
         <div className="w-full flex flex-1 items-center justify-between pr-8">
-          <Notification />
+          <Notification session={session} />
 
           <div className="flex items-center gap-4">
             <ProfileMenu user={session.user} />

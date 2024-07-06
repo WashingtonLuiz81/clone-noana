@@ -63,7 +63,10 @@ export default function BeneficiariesRegistrationManual() {
         )}
 
         {activeStep === 1 && (
-          <BeneficiariesRegistrationManualFormBonds nextStep={handleNext} />
+          <BeneficiariesRegistrationManualFormBonds
+            handleBack={handleBack}
+            nextStep={handleNext}
+          />
         )}
 
         {activeStep === 2 && (

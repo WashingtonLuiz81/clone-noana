@@ -1,20 +1,21 @@
-import React, { useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import Input from '@/components/form/FormInput'
 import { Button } from '@/components/ui/button'
 import { ArrowRightIcon } from 'lucide-react'
 import { toast } from 'react-toastify'
 import { stateAbbreviations } from '@/lib/config'
-import { FormValues } from '../../types/types'
+import { PersonalInfo } from '../../types/types'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useStore } from '@/store/formStore'
 
 interface ManualFormProps {
   nextStep: () => void
   handleBack: () => void
 }
 
-export interface ExtendedFormValues extends FormValues {
+export interface ExtendedPersonalInfo extends PersonalInfo {
   grauParentesco: string
 }
 
@@ -35,14 +36,18 @@ const formSchema = z.object({
 const BeneficiariesRegistrationManualFormContractor: React.FC<
   ManualFormProps
 > = ({ nextStep, handleBack }) => {
+  const { payload, setContractorData } = useStore()
+  const { contractorData } = payload
   const {
     register,
     handleSubmit,
     setValue,
     formState: { errors },
-  } = useForm<ExtendedFormValues>({
+  } = useForm<ExtendedPersonalInfo>({
     resolver: zodResolver(formSchema),
+    defaultValues: contractorData || {},
   })
+  const formRef = useRef<HTMLFormElement>(null)
 
   const [address, setAddress] = useState({
     logradouro: '',
@@ -50,6 +55,12 @@ const BeneficiariesRegistrationManualFormContractor: React.FC<
     cidade: '',
     estado: '',
   })
+
+  useEffect(() => {
+    if (formRef.current) {
+      formRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }
+  }, [])
 
   const handleCEPChange = async (cep: string) => {
     try {
@@ -93,13 +104,13 @@ const BeneficiariesRegistrationManualFormContractor: React.FC<
     }
   }
 
-  const onSubmit = (data: ExtendedFormValues) => {
-    console.log(data)
+  const onSubmit = (data: ExtendedPersonalInfo) => {
+    setContractorData(data)
     nextStep()
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form onSubmit={handleSubmit(onSubmit)} ref={formRef}>
       <span className="text-gray-900 text-xl font-semibold mb-8 block">
         Agora preecha os dados do Contratante!
       </span>
@@ -261,7 +272,7 @@ const BeneficiariesRegistrationManualFormContractor: React.FC<
             type="submit"
             className="flex items-center space-x-2 text-white"
           >
-            <span>Próximo</span>
+            <span>Continuar</span>
             <ArrowRightIcon className="w-4 h-4" />
           </Button>
         </div>

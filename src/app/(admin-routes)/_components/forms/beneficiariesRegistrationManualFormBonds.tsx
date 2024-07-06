@@ -1,13 +1,15 @@
-import Input from '@/components/form/FormInput'
-import FormSelect from '@/components/form/formSelect'
-import { Button } from '@/components/ui/button'
-import { ArrowRightIcon } from 'lucide-react'
-import { useState } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { useForm, Controller } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useStore } from '@/store/formStore'
+import Input from '@/components/form/FormInput'
+import { Button } from '@/components/ui/button'
+import { ArrowRightIcon } from 'lucide-react'
+import FormSelect from '@/components/form/formSelect'
 
 interface ManualFormProps {
+  handleBack: () => void
   nextStep: () => void
 }
 
@@ -32,20 +34,39 @@ type FormValuesProps = z.infer<typeof formSchema>
 
 export default function BeneficiariesRegistrationManualFormBonds({
   nextStep,
+  handleBack,
 }: ManualFormProps) {
+  const { payload, setBondsData } = useStore()
+  const { bondsData } = payload
   const {
     control,
     handleSubmit,
     register,
     formState: { errors },
+    setValue,
   } = useForm<FormValuesProps>({
     resolver: zodResolver(formSchema),
+    defaultValues: bondsData || {},
   })
 
+  const formRef = useRef<HTMLFormElement>(null)
   const [selected, setSelected] = useState<string>('')
 
+  useEffect(() => {
+    if (formRef.current) {
+      formRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }
+  }, [])
+
+  useEffect(() => {
+    if (bondsData?.unitcare) {
+      setSelected(bondsData.unitcare)
+      setValue('unitcare', bondsData.unitcare)
+    }
+  }, [bondsData, setValue])
+
   const onSubmit = (data: FormValuesProps) => {
-    console.log('Data: ', data)
+    setBondsData(data)
     nextStep()
   }
 
@@ -62,7 +83,7 @@ export default function BeneficiariesRegistrationManualFormBonds({
   ]
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form onSubmit={handleSubmit(onSubmit)} ref={formRef}>
       <span className="text-gray-900 text-xl font-semibold mb-8 block">
         Vincule o beneficiário à uma unidade e dispositivo
       </span>
@@ -163,13 +184,21 @@ export default function BeneficiariesRegistrationManualFormBonds({
           </div>
         </div>
 
-        <div className="flex justify-end">
+        <div className="flex gap-6 justify-end">
+          <Button
+            type="button"
+            className="w-36 flex items-center font-semibold text-base space-x-2 bg-gray-100 border border-gray-200 text-gray-900 hover:bg-gray-100"
+            onClick={handleBack}
+          >
+            <span>Voltar</span>
+          </Button>
+
           <Button
             type="submit"
-            className="flex items-center gap-3 text-white bg-primary"
+            className="flex items-center space-x-2 text-white"
           >
             <span>Continuar</span>
-            <ArrowRightIcon />
+            <ArrowRightIcon className="w-4 h-4" />
           </Button>
         </div>
       </div>

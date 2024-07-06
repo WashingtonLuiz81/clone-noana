@@ -42,11 +42,14 @@ export const nextAuthOptions: NextAuthOptions = {
         password: { label: 'Password', type: 'password' },
       },
       async authorize(credentials) {
-        const response = await fetch(`${process.env.NEXT_APP_API_URL}/auth/`, {
-          method: 'POST',
-          body: JSON.stringify(credentials),
-          headers: { 'Content-Type': 'application/json' },
-        })
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/auth/`,
+          {
+            method: 'POST',
+            body: JSON.stringify(credentials),
+            headers: { 'Content-Type': 'application/json' },
+          },
+        )
 
         const responseJson = await response.json()
 
