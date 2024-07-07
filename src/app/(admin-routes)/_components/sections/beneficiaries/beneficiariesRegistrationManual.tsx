@@ -17,45 +17,11 @@ export default function BeneficiariesRegistrationManual() {
     setActiveStep((prevActiveStep) => prevActiveStep - 1)
   }
 
-  // const handleReset = () => {
-  //   setActiveStep(0)
-  // }
-
   return (
     <div className="bg-gray-50 rounded-2xl">
       <div className="px-6 py-8 border-b-[1px] border-gray-300">
         <StepperComponent activeStep={activeStep} steps={steps} />
       </div>
-
-      {/* <div className="mt-4">
-        {activeStep === 3 ? (
-          <div>
-            <p>All steps completed</p>
-            <button
-              className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700"
-              onClick={handleReset}
-            >
-              Reset
-            </button>
-          </div>
-        ) : (
-          <div>
-            <button
-              className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 disabled:bg-gray-400"
-              disabled={activeStep === 0}
-              onClick={handleBack}
-            >
-              Back
-            </button>
-            <button
-              className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 ml-2"
-              onClick={handleNext}
-            >
-              {activeStep === 2 ? 'Finish' : 'Next'}
-            </button>
-          </div>
-        )}
-      </div> */}
 
       <div className="py-8 px-6">
         {activeStep === 0 && (
