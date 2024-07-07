@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import Input from '@/components/form/FormInput'
 import { Button } from '@/components/ui/button'
 import { ArrowRightIcon } from 'lucide-react'
 import { toast } from 'react-toastify'
@@ -9,6 +8,7 @@ import { PersonalInfo } from '../../types/types'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useStore } from '@/store/formStore'
+import { Input } from '@/components/form'
 
 interface ManualFormProps {
   nextStep: () => void
@@ -115,82 +115,63 @@ const BeneficiariesRegistrationManualFormContractor: React.FC<
       <div className="flex flex-col gap-6">
         <div className="flex flex-col space-y-4 sm:flex-row sm:space-y-0 sm:space-x-6">
           <div className="flex-1">
-            <label htmlFor="nomeCompleto">Nome Completo</label>
             <Input
               {...register('nomeCompleto', { required: 'Campo obrigatório' })}
               type="text"
               className="w-full mt-3 mb-1"
+              label="Nome Completo"
+              error={errors?.nomeCompleto?.message}
             />
-            {errors.nomeCompleto && (
-              <span className="text-red-500">
-                {errors.nomeCompleto.message}
-              </span>
-            )}
           </div>
 
           <div className="flex-1">
-            <label htmlFor="cpf">CPF</label>
             <Input
               {...register('cpf', { required: 'Campo obrigatório' })}
               type="text"
-              className="w-full mt-3 mb-1"
+              label="CPF"
+              error={errors?.cpf?.message}
             />
-            {errors.cpf && (
-              <span className="text-red-500">{errors.cpf.message}</span>
-            )}
           </div>
         </div>
 
         <div className="flex flex-col space-y-4 sm:flex-row sm:space-y-0 sm:space-x-6">
           <div className="flex-1">
-            <label htmlFor="dataNascimento">Data de Nascimento</label>
             <Input
               {...register('dataNascimento', { required: 'Campo obrigatório' })}
               type="date"
-              className="w-full mt-3 mb-1"
+              label="Data de Nascimento"
+              error={errors?.dataNascimento?.message}
             />
-            {errors.dataNascimento && (
-              <span className="text-red-500">
-                {errors.dataNascimento.message}
-              </span>
-            )}
           </div>
 
           <div className="flex-1">
-            <label htmlFor="telefone">Telefone</label>
             <Input
               {...register('telefone', { required: 'Campo obrigatório' })}
               type="text"
-              className="w-full mt-3 mb-1"
+              label="Telefone"
+              error={errors?.telefone?.message}
               maxLength={11}
             />
-            {errors.telefone && (
-              <span className="text-red-500">{errors.telefone.message}</span>
-            )}
           </div>
         </div>
 
         <div className="flex flex-col space-y-4 sm:flex-row sm:space-y-0 sm:space-x-6">
           <div className="flex-1">
-            <label htmlFor="cep">CEP</label>
             <Input
               {...register('cep', { required: 'Campo obrigatório' })}
               type="text"
-              className="w-full mt-3 mb-1"
+              label="CEP"
+              error={errors?.cep?.message}
               onBlur={(e) => handleCEPChange(e.target.value)}
             />
-            {errors.cep && (
-              <span className="text-red-500">{errors.cep.message}</span>
-            )}
           </div>
 
           <div className="flex-1">
-            <label htmlFor="logradouro">Endereço</label>
             <Input
               {...register('logradouro')}
               type="text"
-              className="w-full mt-3 mb-1"
               value={address.logradouro}
+              label="Endereço"
               readOnly
             />
           </div>
@@ -198,62 +179,53 @@ const BeneficiariesRegistrationManualFormContractor: React.FC<
 
         <div className="flex flex-col space-y-4 sm:flex-row sm:space-y-0 sm:space-x-6">
           <div className="flex-1">
-            <label htmlFor="bairro">Bairro</label>
             <Input
               {...register('bairro')}
               type="text"
-              className="w-full mt-3 mb-1"
+              label="Bairro"
               value={address.bairro}
               readOnly
             />
           </div>
 
           <div className="flex-1">
-            <label htmlFor="complemento">Complemento</label>
             <Input
               {...register('complemento')}
               type="text"
-              className="w-full mt-3 mb-1"
+              label="Complemento"
             />
           </div>
         </div>
 
         <div className="flex flex-col space-y-4 sm:flex-row sm:space-y-0 sm:space-x-6">
           <div className="flex-1">
-            <label htmlFor="cidade">Cidade</label>
             <Input
               {...register('cidade')}
               type="text"
-              className="w-full mt-3 mb-1"
               value={address.cidade}
+              label="Cidade"
               readOnly
             />
           </div>
 
           <div className="flex-1">
-            <label htmlFor="estado">Estado</label>
             <Input
               {...register('estado')}
               type="text"
-              className="w-full mt-3 mb-1"
               value={address.estado}
+              label="Estado"
               readOnly
             />
           </div>
         </div>
 
         <div className="flex-1">
-          <label htmlFor="grauParentesco">Grau de Parentesco</label>
           <Input
             {...register('grauParentesco', { required: 'Campo obrigatório' })}
             type="text"
-            className="w-full mt-3 mb-1"
+            label="Grau de Parentesco"
+            error={errors?.grauParentesco?.message}
           />
-          {errors.grauParentesco && (
-            <span className="text-red-500">
-              {errors.grauParentesco.message}
-            </span>
-          )}
         </div>
 
         <div className="flex gap-6 justify-end">

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import Input from '@/components/form/FormInput'
 import { Button } from '@/components/ui/button'
 import { ArrowRightIcon } from 'lucide-react'
 import { toast } from 'react-toastify'
@@ -8,8 +7,8 @@ import { stateAbbreviations } from '@/lib/config'
 import { PersonalInfo } from '../../types/types'
 import { useStore } from '@/store/formStore'
 import * as z from 'zod'
+import { Input } from '@/components/form'
 
-// Definição do schema usando zod
 const schema = z.object({
   nomeCompleto: z.string().nonempty('Nome Completo é obrigatório'),
   cpf: z.string().refine((value) => isValidCPF(value), {
@@ -29,11 +28,10 @@ const schema = z.object({
   estado: z.string(),
 })
 
-// Função de validação de CPF simplificada
 function isValidCPF(cpf: string): boolean {
   console.log(cpf)
-  // Lógica de validação de CPF aqui
-  return true // Simplificado para o exemplo
+
+  return true
 }
 
 interface ManualFormProps {
@@ -119,7 +117,6 @@ const BeneficiariesRegistrationManualFormData: React.FC<ManualFormProps> = ({
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
     const { name, value } = event.target
-    // Remove tudo que não for número
     const onlyNums = value.replace(/[^0-9]/g, '')
     setValue(name as keyof PersonalInfo, onlyNums)
   }

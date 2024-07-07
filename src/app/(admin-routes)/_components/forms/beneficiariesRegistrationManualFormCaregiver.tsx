@@ -1,4 +1,3 @@
-import Input from '@/components/form/FormInput'
 import { Button } from '@/components/ui/button'
 import { useForm, useFieldArray } from 'react-hook-form'
 import { z } from 'zod'
@@ -6,6 +5,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useStore } from '@/store/formStore'
 import { PlusIcon } from 'lucide-react'
 import { useEffect } from 'react'
+import { Input } from '@/components/form'
 
 interface ManualFormProps {
   handleBack: () => void
@@ -94,15 +94,17 @@ export default function BeneficiariesRegistrationManualFormCaregiver({
               {index + 1}. Cuidador
             </span>
 
-            <div className="flex items-center gap-6 pb-10 border-b-[1px] border-gray-200">
+            <div className="flex items-center gap-6">
               <div className="flex-1">
-                <label htmlFor={`caregivers[${index}].nomeCompleto`}>
+                <label
+                  className="block mb-3 text-sm font-medium text-gray-700"
+                  htmlFor={`caregivers[${index}].nomeCompleto`}
+                >
                   Nome Completo
                 </label>
                 <Input
                   {...register(`caregivers.${index}.nomeCompleto` as const)}
                   type="text"
-                  className="w-full mb-1"
                 />
                 {errors.caregivers?.[index]?.nomeCompleto && (
                   <span className="text-red-500">
@@ -112,11 +114,15 @@ export default function BeneficiariesRegistrationManualFormCaregiver({
               </div>
 
               <div className="flex-1">
-                <label htmlFor={`caregivers[${index}].cpf`}>CPF</label>
+                <label
+                  className="block mb-3 text-sm font-medium text-gray-700"
+                  htmlFor={`caregivers[${index}].cpf`}
+                >
+                  CPF
+                </label>
                 <Input
                   {...register(`caregivers.${index}.cpf` as const)}
                   type="text"
-                  className="w-full mb-1"
                 />
                 {errors.caregivers?.[index]?.cpf && (
                   <span className="text-red-500">
@@ -126,15 +132,17 @@ export default function BeneficiariesRegistrationManualFormCaregiver({
               </div>
             </div>
 
-            <div className="flex items-center gap-6 pb-10 border-b-[1px] border-gray-200">
+            <div className="flex items-center gap-6">
               <div className="flex-1">
-                <label htmlFor={`caregivers[${index}].dataNascimento`}>
+                <label
+                  className="block mb-3 text-sm font-medium text-gray-700"
+                  htmlFor={`caregivers[${index}].dataNascimento`}
+                >
                   Data de Nascimento
                 </label>
                 <Input
                   {...register(`caregivers.${index}.dataNascimento` as const)}
                   type="date"
-                  className="w-full mb-1"
                 />
                 {errors.caregivers?.[index]?.dataNascimento && (
                   <span className="text-red-500">
@@ -144,13 +152,15 @@ export default function BeneficiariesRegistrationManualFormCaregiver({
               </div>
 
               <div className="flex-1">
-                <label htmlFor={`caregivers[${index}].telefone`}>
+                <label
+                  className="block mb-3 text-sm font-medium text-gray-700"
+                  htmlFor={`caregivers[${index}].telefone`}
+                >
                   Telefone
                 </label>
                 <Input
                   {...register(`caregivers.${index}.telefone` as const)}
                   type="text"
-                  className="w-full mb-1"
                 />
                 {errors.caregivers?.[index]?.telefone && (
                   <span className="text-red-500">

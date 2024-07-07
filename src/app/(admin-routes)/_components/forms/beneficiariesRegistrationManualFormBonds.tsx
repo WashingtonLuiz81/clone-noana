@@ -3,10 +3,9 @@ import { useForm, Controller } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useStore } from '@/store/formStore'
-import Input from '@/components/form/FormInput'
 import { Button } from '@/components/ui/button'
 import { ArrowRightIcon } from 'lucide-react'
-import FormSelect from '@/components/form/formSelect'
+import { Input, FormSelect } from '@/components/form'
 
 interface ManualFormProps {
   handleBack: () => void
@@ -141,7 +140,7 @@ export default function BeneficiariesRegistrationManualFormBonds({
             2. Vincule um dispositivo
           </span>
 
-          <div className="flex items-start gap-6 pb-10 border-b-[1px] border-gray-200">
+          <div className="flex items-start gap-6">
             <div className="flex-1">
               <Controller
                 name="campoSelect"
