@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useForm, Controller } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -49,13 +49,10 @@ export default function BeneficiariesRegistrationManualFormBonds({
     defaultValues: bondsData || {},
   })
 
-  const formRef = useRef<HTMLFormElement>(null)
   const [selected, setSelected] = useState<string>('')
 
   useEffect(() => {
-    if (formRef.current) {
-      formRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' })
-    }
+    window.scrollTo({ top: 0, behavior: 'smooth' })
   }, [])
 
   useEffect(() => {
@@ -83,7 +80,7 @@ export default function BeneficiariesRegistrationManualFormBonds({
   ]
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} ref={formRef}>
+    <form onSubmit={handleSubmit(onSubmit)}>
       <span className="text-gray-900 text-xl font-semibold mb-8 block">
         Vincule o beneficiário à uma unidade e dispositivo
       </span>
@@ -144,7 +141,7 @@ export default function BeneficiariesRegistrationManualFormBonds({
             2. Vincule um dispositivo
           </span>
 
-          <div className="flex items-center gap-6 pb-10 border-b-[1px] border-gray-200">
+          <div className="flex items-start gap-6 pb-10 border-b-[1px] border-gray-200">
             <div className="flex-1">
               <Controller
                 name="campoSelect"
@@ -157,29 +154,20 @@ export default function BeneficiariesRegistrationManualFormBonds({
                     options={dispositives}
                     value={field.value}
                     onChange={(value) => field.onChange(value)}
-                    label="Selecione uma opção"
+                    label="Identificação do dispositivo (MEI)"
+                    error={errors?.campoSelect?.message}
                   />
                 )}
               />
-              {errors.campoSelect && (
-                <span className="text-red-500">
-                  {errors.campoSelect.message}
-                </span>
-              )}
             </div>
 
             <div className="flex-1">
-              <label htmlFor="dispositiveModel">Modelo do dispositivo</label>
               <Input
                 {...register('dispositiveModel')}
                 type="text"
-                className="w-full mb-1"
+                label="Modelo do dispositivo"
+                error={errors?.dispositiveModel?.message}
               />
-              {errors.dispositiveModel && (
-                <span className="text-red-500">
-                  {errors.dispositiveModel.message}
-                </span>
-              )}
             </div>
           </div>
         </div>

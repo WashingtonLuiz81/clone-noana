@@ -57,7 +57,7 @@ export default function BeneficiariesRegistrationManual() {
         )}
       </div> */}
 
-      <div className="py-8 px-6 h-96 overflow-y-auto">
+      <div className="py-8 px-6">
         {activeStep === 0 && (
           <BeneficiariesRegistrationManualFormData nextStep={handleNext} />
         )}

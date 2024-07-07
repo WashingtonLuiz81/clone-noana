@@ -33,7 +33,7 @@ function isUserToken(token: unknown): token is UserToken {
   return false
 }
 
-const nextAuthOptions: NextAuthOptions = {
+export const nextAuthOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({
       name: 'credentials',
@@ -79,6 +79,7 @@ const nextAuthOptions: NextAuthOptions = {
         return {
           ...tokenWithUser,
           user: tokenWithUser.user,
+          expires: new Date(Date.now() + user.ExpiresIn * 1000).toISOString(),
         }
       }
 
@@ -88,6 +89,7 @@ const nextAuthOptions: NextAuthOptions = {
           return {
             ...tokenWithUser,
             user: tokenWithUser.user,
+            expires: new Date(token.ExpiresIn).toISOString(),
           }
         } else {
           const refreshedTokenResult: RefreshResult =
@@ -106,6 +108,7 @@ const nextAuthOptions: NextAuthOptions = {
           return {
             ...tokenWithUser,
             user: tokenWithUser.user,
+            expires: new Date(tokenWithUser.ExpiresIn).toISOString(),
           }
         }
       }
@@ -113,12 +116,13 @@ const nextAuthOptions: NextAuthOptions = {
       return token
     },
     async session({ session, token }) {
-      const userToken = token as unknown as UserToken
+      const userToken = token as unknown as UserToken & { expires: string }
       if (userToken && userToken.user) {
         session.user = {
           ...session.user,
           ...userToken.user,
-        } as unknown as CustomUser
+        }
+        session.expires = userToken.expires
         ;(session.user as CustomUser).tokenInfo = {
           UserId: userToken.UserId,
           IdToken: userToken.IdToken,

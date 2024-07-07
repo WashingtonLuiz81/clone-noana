@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import Input from '@/components/form/FormInput'
 import { Button } from '@/components/ui/button'
@@ -7,6 +7,34 @@ import { toast } from 'react-toastify'
 import { stateAbbreviations } from '@/lib/config'
 import { PersonalInfo } from '../../types/types'
 import { useStore } from '@/store/formStore'
+import * as z from 'zod'
+
+// Definição do schema usando zod
+const schema = z.object({
+  nomeCompleto: z.string().nonempty('Nome Completo é obrigatório'),
+  cpf: z.string().refine((value) => isValidCPF(value), {
+    message: 'CPF inválido',
+  }),
+  dataNascimento: z.string().nonempty('Data de Nascimento é obrigatória'),
+  telefone: z.string().refine((value) => /^\d{11}$/.test(value), {
+    message: 'Telefone inválido',
+  }),
+  cep: z.string().refine((value) => /^\d{8}$/.test(value), {
+    message: 'CEP inválido',
+  }),
+  logradouro: z.string(),
+  bairro: z.string(),
+  complemento: z.string(),
+  cidade: z.string(),
+  estado: z.string(),
+})
+
+// Função de validação de CPF simplificada
+function isValidCPF(cpf: string): boolean {
+  console.log(cpf)
+  // Lógica de validação de CPF aqui
+  return true // Simplificado para o exemplo
+}
 
 interface ManualFormProps {
   nextStep: () => void
@@ -27,7 +55,6 @@ const BeneficiariesRegistrationManualFormData: React.FC<ManualFormProps> = ({
     defaultValues: beneficiaryData || {},
   })
 
-  const formRef = useRef<HTMLFormElement>(null)
   const [address, setAddress] = useState({
     logradouro: '',
     bairro: '',
@@ -36,9 +63,7 @@ const BeneficiariesRegistrationManualFormData: React.FC<ManualFormProps> = ({
   })
 
   useEffect(() => {
-    if (formRef.current) {
-      formRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' })
-    }
+    window.scrollTo({ top: 0, behavior: 'smooth' })
   }, [])
 
   const handleCEPChange = async (cep: string) => {
@@ -77,9 +102,17 @@ const BeneficiariesRegistrationManualFormData: React.FC<ManualFormProps> = ({
     }
   }
 
-  const onSubmit = (data: PersonalInfo) => {
-    setBeneficiaryData(data)
-    nextStep()
+  const onSubmit = async (data: PersonalInfo) => {
+    try {
+      await schema.parseAsync(data) // Validar os dados usando zod
+      setBeneficiaryData(data)
+      nextStep()
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        console.error('Validation errors:', error.errors)
+        toast.error('Por favor, preencha o formulário corretamente')
+      }
+    }
   }
 
   const handleNumericInputChange = (
@@ -92,7 +125,7 @@ const BeneficiariesRegistrationManualFormData: React.FC<ManualFormProps> = ({
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} ref={formRef}>
+    <form onSubmit={handleSubmit(onSubmit)}>
       <span className="text-gray-900 text-xl font-semibold mb-8 block">
         Para iniciar, preencha os dados do Beneficiário!
       </span>
@@ -102,15 +135,13 @@ const BeneficiariesRegistrationManualFormData: React.FC<ManualFormProps> = ({
           <div className="flex-1">
             <label htmlFor="nomeCompleto">Nome Completo</label>
             <Input
-              {...register('nomeCompleto', { required: 'Campo obrigatório' })}
+              {...register('nomeCompleto', {
+                required: 'Nome Completo é obrigatório',
+              })}
               type="text"
               className="w-full mt-3 mb-1"
+              error={errors.nomeCompleto?.message}
             />
-            {errors.nomeCompleto && (
-              <span className="text-red-500">
-                {errors.nomeCompleto.message}
-              </span>
-            )}
           </div>
 
           <div className="flex-1">
@@ -119,18 +150,16 @@ const BeneficiariesRegistrationManualFormData: React.FC<ManualFormProps> = ({
               type="text"
               className="w-full mt-3 mb-1"
               {...register('cpf', {
-                required: 'Campo obrigatório',
+                required: 'CPF é obrigatório',
                 pattern: {
-                  value: /^[0-9]{11}$/,
+                  value: /^\d{11}$/,
                   message: 'CPF inválido',
                 },
               })}
-              onChange={handleNumericInputChange} // Trata apenas números
+              onChange={handleNumericInputChange}
               maxLength={11}
+              error={errors.cpf?.message}
             />
-            {errors.cpf && (
-              <span className="text-red-500">{errors.cpf.message}</span>
-            )}
           </div>
         </div>
 
@@ -138,24 +167,22 @@ const BeneficiariesRegistrationManualFormData: React.FC<ManualFormProps> = ({
           <div className="flex-1">
             <label htmlFor="dataNascimento">Data de Nascimento</label>
             <Input
-              {...register('dataNascimento', { required: 'Campo obrigatório' })}
+              {...register('dataNascimento', {
+                required: 'Data de Nascimento é obrigatória',
+              })}
               type="date"
               className="w-full mt-3 mb-1"
+              error={errors.dataNascimento?.message}
             />
-            {errors.dataNascimento && (
-              <span className="text-red-500">
-                {errors.dataNascimento.message}
-              </span>
-            )}
           </div>
 
           <div className="flex-1">
             <label htmlFor="telefone">Telefone</label>
             <Input
               {...register('telefone', {
-                required: 'Campo obrigatório',
-                maxLength: {
-                  value: 11,
+                required: 'Telefone é obrigatório',
+                pattern: {
+                  value: /^\d{11}$/,
                   message: 'Telefone inválido',
                 },
               })}
@@ -163,10 +190,8 @@ const BeneficiariesRegistrationManualFormData: React.FC<ManualFormProps> = ({
               className="w-full mt-3 mb-1"
               maxLength={11}
               onChange={handleNumericInputChange} // Trata apenas números
+              error={errors.telefone?.message}
             />
-            {errors.telefone && (
-              <span className="text-red-500">{errors.telefone.message}</span>
-            )}
           </div>
         </div>
 
@@ -175,9 +200,9 @@ const BeneficiariesRegistrationManualFormData: React.FC<ManualFormProps> = ({
             <label htmlFor="cep">CEP</label>
             <Input
               {...register('cep', {
-                required: 'Campo obrigatório',
-                maxLength: {
-                  value: 8,
+                required: 'CEP é obrigatório',
+                pattern: {
+                  value: /^\d{8}$/,
                   message: 'CEP inválido',
                 },
               })}
@@ -186,10 +211,8 @@ const BeneficiariesRegistrationManualFormData: React.FC<ManualFormProps> = ({
               onBlur={(e) => handleCEPChange(e.target.value)}
               onChange={handleNumericInputChange} // Trata apenas números
               maxLength={8}
+              error={errors.cep?.message}
             />
-            {errors.cep && (
-              <span className="text-red-500">{errors.cep.message}</span>
-            )}
           </div>
 
           <div className="flex-1">
@@ -197,7 +220,7 @@ const BeneficiariesRegistrationManualFormData: React.FC<ManualFormProps> = ({
             <Input
               {...register('logradouro')}
               type="text"
-              className="w-full mt-3 mb-1"
+              className={`w-full mt-3 mb-1 ${address.bairro ? '' : 'readonly-input'}`}
               value={address.logradouro}
               readOnly
             />
@@ -210,7 +233,7 @@ const BeneficiariesRegistrationManualFormData: React.FC<ManualFormProps> = ({
             <Input
               {...register('bairro')}
               type="text"
-              className="w-full mt-3 mb-1"
+              className={`w-full mt-3 mb-1 ${address.bairro ? '' : 'readonly-input'}`}
               value={address.bairro}
               readOnly
             />
@@ -232,7 +255,7 @@ const BeneficiariesRegistrationManualFormData: React.FC<ManualFormProps> = ({
             <Input
               {...register('cidade')}
               type="text"
-              className="w-full mt-3 mb-1"
+              className={`w-full mt-3 mb-1 ${address.bairro ? '' : 'readonly-input'}`}
               value={address.cidade}
               readOnly
             />
@@ -243,7 +266,7 @@ const BeneficiariesRegistrationManualFormData: React.FC<ManualFormProps> = ({
             <Input
               {...register('estado')}
               type="text"
-              className="w-full mt-3 mb-1"
+              className={`w-full mt-3 mb-1 ${address.bairro ? '' : 'readonly-input'}`}
               value={address.estado}
               readOnly
             />

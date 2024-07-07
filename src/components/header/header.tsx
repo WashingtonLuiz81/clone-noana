@@ -1,13 +1,15 @@
 import React from 'react'
 import Image from 'next/image'
-import { getServerSession } from 'next-auth'
 import ProfileMenu from './profileMenu'
 import Notification from './notification'
 import { logoNoana, logoNoanaWhite } from '@/assets/img/icons'
+import { Session } from 'next-auth'
 
-const Header: React.FC = async () => {
-  const session = await getServerSession()
+interface HeaderProps {
+  session: Session
+}
 
+const Header: React.FC<HeaderProps> = ({ session }) => {
   if (!session?.user) {
     return (
       <header className="h-16 bg-purple-800 text-white">

@@ -16,7 +16,7 @@ export default function BeneficiariesRegistration({
   const tabs = ['Manual', 'Em Lote']
 
   return (
-    <div className="bg-gray-100 px-6 py-10">
+    <div className="h-screen bg-gray-100 px-6 py-10 overflow-y-auto scrollbar-hide">
       <header className="flex flex-col gap-6 mb-8">
         <div className="flex items-center justify-between">
           <span className="text-[#1A1A1A] text-2xl font-semibold">

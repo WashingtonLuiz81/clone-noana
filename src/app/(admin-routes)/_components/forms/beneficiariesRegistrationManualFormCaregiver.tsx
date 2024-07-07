@@ -5,7 +5,7 @@ import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useStore } from '@/store/formStore'
 import { PlusIcon } from 'lucide-react'
-import { useEffect, useRef } from 'react'
+import { useEffect } from 'react'
 
 interface ManualFormProps {
   handleBack: () => void
@@ -27,7 +27,6 @@ type FormValuesProps = z.infer<typeof formSchema>
 export default function BeneficiariesRegistrationManualFormCaregiver({
   handleBack,
 }: ManualFormProps) {
-  const formRef = useRef<HTMLFormElement>(null)
   const { setCaregiverData, clearPayload } = useStore()
 
   const {
@@ -45,9 +44,7 @@ export default function BeneficiariesRegistrationManualFormCaregiver({
   })
 
   useEffect(() => {
-    if (formRef.current) {
-      formRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' })
-    }
+    window.scrollTo({ top: 0, behavior: 'smooth' })
   }, [])
 
   const { fields, append } = useFieldArray({
@@ -65,7 +62,7 @@ export default function BeneficiariesRegistrationManualFormCaregiver({
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} ref={formRef}>
+    <form onSubmit={handleSubmit(onSubmit)}>
       <div className="flex items-center justify-between mb-8">
         <span className="text-gray-900 text-xl font-semibold block">
           Para finalizar, cadastre um cuidador!

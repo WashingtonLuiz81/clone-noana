@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import Input from '@/components/form/FormInput'
 import { Button } from '@/components/ui/button'
@@ -47,7 +47,6 @@ const BeneficiariesRegistrationManualFormContractor: React.FC<
     resolver: zodResolver(formSchema),
     defaultValues: contractorData || {},
   })
-  const formRef = useRef<HTMLFormElement>(null)
 
   const [address, setAddress] = useState({
     logradouro: '',
@@ -57,9 +56,7 @@ const BeneficiariesRegistrationManualFormContractor: React.FC<
   })
 
   useEffect(() => {
-    if (formRef.current) {
-      formRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' })
-    }
+    window.scrollTo({ top: 0, behavior: 'smooth' })
   }, [])
 
   const handleCEPChange = async (cep: string) => {
@@ -110,7 +107,7 @@ const BeneficiariesRegistrationManualFormContractor: React.FC<
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} ref={formRef}>
+    <form onSubmit={handleSubmit(onSubmit)}>
       <span className="text-gray-900 text-xl font-semibold mb-8 block">
         Agora preecha os dados do Contratante!
       </span>
