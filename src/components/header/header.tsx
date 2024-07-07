@@ -1,13 +1,12 @@
 import React from 'react'
 import Image from 'next/image'
 import { getServerSession } from 'next-auth'
-import { nextAuthOptions } from '@/app/api/auth/[...nextauth]/route'
 import ProfileMenu from './profileMenu'
 import Notification from './notification'
 import { logoNoana, logoNoanaWhite } from '@/assets/img/icons'
 
 const Header: React.FC = async () => {
-  const session = await getServerSession(nextAuthOptions)
+  const session = await getServerSession()
 
   if (!session?.user) {
     return (
