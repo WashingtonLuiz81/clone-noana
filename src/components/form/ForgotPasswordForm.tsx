@@ -76,13 +76,9 @@ export default function ForgotPasswordForm({
           <Input
             placeholder="Email"
             className={`h-14 rounded-xl ${errors.email && 'border border-red-500 focus-visible:outline-none focus:outline-none focus:ring focus:border-red-500'}`}
+            error={errors?.email?.message}
             {...register('email')}
           />
-          {errors.email && (
-            <p className="text-red-500 mt-2 text-sm font-medium">
-              {errors.email.message}
-            </p>
-          )}
         </div>
       </div>
 
