@@ -1,0 +1,11 @@
+import BeneficiariesRegistrationManualFormData from './beneficiariesRegistrationManualFormData'
+import BeneficiariesRegistrationManualFormBonds from './beneficiariesRegistrationManualFormBonds'
+import BeneficiariesRegistrationManualFormContractor from './beneficiariesRegistrationManualFormContractor'
+import BeneficiariesRegistrationManualFormCaregiver from './beneficiariesRegistrationManualFormCaregiver'
+
+export {
+  BeneficiariesRegistrationManualFormData,
+  BeneficiariesRegistrationManualFormBonds,
+  BeneficiariesRegistrationManualFormContractor,
+  BeneficiariesRegistrationManualFormCaregiver,
+}

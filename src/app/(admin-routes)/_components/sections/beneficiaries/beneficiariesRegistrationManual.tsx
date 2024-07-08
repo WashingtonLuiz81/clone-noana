@@ -1,9 +1,11 @@
 import { useState } from 'react'
-import StepperComponent from '../../stepper'
-import BeneficiariesRegistrationManualFormData from '../../forms/beneficiariesRegistrationManualFormData'
-import BeneficiariesRegistrationManualFormBonds from '../../forms/beneficiariesRegistrationManualFormBonds'
-import BeneficiariesRegistrationManualFormContractor from '../../forms/beneficiariesRegistrationManualFormContractor'
-import BeneficiariesRegistrationManualFormCaregiver from '../../forms/beneficiariesRegistrationManualFormCaregiver'
+import {
+  BeneficiariesRegistrationManualFormData,
+  BeneficiariesRegistrationManualFormBonds,
+  BeneficiariesRegistrationManualFormContractor,
+  BeneficiariesRegistrationManualFormCaregiver,
+} from '../../forms'
+import StepperComponent from '@/components/stepper'
 
 export default function BeneficiariesRegistrationManual() {
   const [activeStep, setActiveStep] = useState(0)
@@ -19,7 +21,7 @@ export default function BeneficiariesRegistrationManual() {
 
   return (
     <div className="bg-gray-50 rounded-2xl">
-      <div className="px-6 py-8 border-b-[1px] border-gray-300">
+      <div className="flex items-center justify-center px-6 py-8 border-b-[1px] border-gray-300">
         <StepperComponent activeStep={activeStep} steps={steps} />
       </div>
 
