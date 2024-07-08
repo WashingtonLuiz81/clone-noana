@@ -25,7 +25,7 @@ interface Column<T> {
 interface TableProps<T> {
   data: T[]
   columns: Column<T>[]
-  showSection?: (section: string) => void
+  showSection: (section: string) => void
 }
 
 interface SortConfig<T> {
@@ -37,8 +37,7 @@ interface IconMap {
   [key: string]: JSX.Element
 }
 
-// const Table = <T,>({ data, columns, showSection }: TableProps<T>) => {
-const Table = <T,>({ data, columns }: TableProps<T>) => {
+const Table = <T,>({ data, columns, showSection }: TableProps<T>) => {
   const [sortConfig, setSortConfig] = useState<SortConfig<T> | null>(null)
   const styleButtonAction = 'text-primary cursor-pointer'
 
@@ -47,49 +46,49 @@ const Table = <T,>({ data, columns }: TableProps<T>) => {
       <EyeIcon
         className={styleButtonAction}
         width="20"
-        // onClick={() => showSection('view')}
+        onClick={() => showSection('view')}
       />
     ),
     list: (
       <UserCheckIcon
         className={styleButtonAction}
         width="20"
-        // onClick={() => showSection('list')}
+        onClick={() => showSection('list')}
       />
     ),
     edit: (
       <PencilLineIcon
         className={styleButtonAction}
         width="20"
-        // onClick={() => showSection('edit')}
+        onClick={() => showSection('edit')}
       />
     ),
     call: (
       <PhoneCallIcon
         className={styleButtonAction}
         width="20"
-        // onClick={() => showSection('call')}
+        onClick={() => showSection('call')}
       />
     ),
     map: (
       <MapPinIcon
         className={styleButtonAction}
         width="20"
-        // onClick={() => showSection('map')}
+        onClick={() => showSection('map')}
       />
     ),
     trash: (
       <Trash2Icon
         className={styleButtonAction}
         width="20"
-        // onClick={() => showSection('delete')}
+        onClick={() => showSection('delete')}
       />
     ),
     lock: (
       <LockKeyholeIcon
         className={styleButtonAction}
         width="20"
-        // onClick={() => showSection('lock')}
+        onClick={() => showSection('lock')}
       />
     ),
   }
@@ -129,12 +128,6 @@ const Table = <T,>({ data, columns }: TableProps<T>) => {
     if (column.key === 'Ações') {
       return (
         <div className="flex items-center gap-3">
-          {/* <EyeIcon className={styleButtonAction} width="20" />
-          <UserCheckIcon className={styleButtonAction} width="20" />
-          <PencilLineIcon className={styleButtonAction} width="20" />
-          <PhoneCallIcon className={styleButtonAction} width="20" />
-          <MapPinIcon className={styleButtonAction} width="20" />
-          <Trash2Icon className={styleButtonAction} width="20" /> */}
           {filteredIcons.map((icon, index) => (
             <React.Fragment key={index}>{icon}</React.Fragment>
           ))}

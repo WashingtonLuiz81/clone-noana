@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button'
 import { unitTableHeader } from '@/lib/config'
 import Table from '../../table'
 import BeneficiariesRegistration from '../../sections/beneficiaries/beneficiariesRegistration'
+import BeneficiaryDetails from '../../sections/beneficiaries/actions/beneficiaryDetails'
 
 interface Person {
   Nome: string
@@ -183,6 +184,8 @@ export default function Recipient() {
           {isVisibleSection === 'beneficiaries' && (
             <BeneficiariesRegistration closeSection={setIsVisibleSection} />
           )}
+
+          {isVisibleSection === 'view' && <BeneficiaryDetails />}
         </div>
       </div>
 
@@ -217,7 +220,11 @@ export default function Recipient() {
         </div>
       </header>
 
-      <Table data={filteredData} columns={unitTableHeader} />
+      <Table
+        showSection={setIsVisibleSection}
+        data={filteredData}
+        columns={unitTableHeader}
+      />
     </section>
   )
 }
