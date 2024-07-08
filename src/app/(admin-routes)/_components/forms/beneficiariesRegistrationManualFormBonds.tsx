@@ -6,6 +6,7 @@ import { useStore } from '@/store/formStore'
 import { Button } from '@/components/ui/button'
 import { ArrowRightIcon } from 'lucide-react'
 import { Input, FormSelect } from '@/components/form'
+import { RadioGroup } from '../radioGroupLinkedUnit'
 
 interface ManualFormProps {
   handleBack: () => void
@@ -90,49 +91,16 @@ export default function BeneficiariesRegistrationManualFormBonds({
             1. Selecione uma unidade de Cuidado:
           </span>
 
-          <div className="pb-10 border-b-[1px] border-gray-200">
-            <ul className="flex items-center gap-4">
-              {options.map((option) => (
-                <li
-                  key={option.id}
-                  className={`w-32 bg-white p-4 rounded-xl border-[1px] ${
-                    selected === option.id
-                      ? 'border-primary text-primary'
-                      : 'border-gray-200 text-gray-900'
-                  }`}
-                >
-                  <input
-                    type="radio"
-                    id={option.id}
-                    {...register('unitcare', {
-                      onChange: (e) => setSelected(e.target.value),
-                    })}
-                    value={option.id}
-                    checked={selected === option.id}
-                    className="hidden"
-                  />
-                  <label
-                    htmlFor={option.id}
-                    className="flex flex-col gap-6 cursor-pointer"
-                  >
-                    <span
-                      className={`w-5 h-5 block rounded-full shadow border ${
-                        selected === option.id
-                          ? 'bg-white border-primary border-[5px]'
-                          : 'bg-gray-100 border-[rgba(26,26,26,0.1)]'
-                      } shadow`}
-                    ></span>
-                    <span className="text-base font-medium">
-                      {option.label}
-                    </span>
-                  </label>
-                </li>
-              ))}
-            </ul>
-            {errors.unitcare && (
-              <span className="text-red-500">{errors.unitcare.message}</span>
-            )}
-          </div>
+          <RadioGroup
+            options={options}
+            name="unitcare"
+            selected={selected}
+            setSelected={setSelected}
+            error={errors.unitcare?.message}
+            register={register('unitcare', {
+              onChange: (e) => setSelected(e.target.value),
+            })}
+          />
         </div>
 
         <div className="flex flex-col gap-8">
