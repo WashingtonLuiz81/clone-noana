@@ -4,7 +4,7 @@ import {
   PersonalInfo,
   UnitBond,
 } from '@/app/(admin-routes)/types/types'
-import create from 'zustand'
+import { create } from 'zustand'
 
 interface State {
   payload: {
