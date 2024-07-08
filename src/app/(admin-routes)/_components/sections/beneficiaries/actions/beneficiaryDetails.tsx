@@ -8,7 +8,7 @@ import { PhoneIcon } from 'lucide-react'
 export default function BeneficiaryDetails() {
   return (
     <>
-      <section className="absolute right-0">
+      <section className="h-screen overflow-y-auto scrollbar-hide">
         <div className="bg-gray-100 p-10">
           <div className="flex justify-between items-center text-gray-900">
             <h1 className="text-2xl font-semibold">Detalhes do Beneficiário</h1>
