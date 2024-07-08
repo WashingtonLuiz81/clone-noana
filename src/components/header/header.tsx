@@ -1,14 +1,15 @@
 import React from 'react'
 import Image from 'next/image'
-import { getServerSession } from 'next-auth'
-import { nextAuthOptions } from '@/app/api/auth/[...nextauth]/route'
 import ProfileMenu from './profileMenu'
 import Notification from './notification'
 import { logoNoana, logoNoanaWhite } from '@/assets/img/icons'
+import { Session } from 'next-auth'
 
-const Header: React.FC = async () => {
-  const session = await getServerSession(nextAuthOptions)
+interface HeaderProps {
+  session: Session
+}
 
+const Header: React.FC<HeaderProps> = ({ session }) => {
   if (!session?.user) {
     return (
       <header className="h-16 bg-purple-800 text-white">
@@ -21,10 +22,6 @@ const Header: React.FC = async () => {
               height={25}
               alt="Logo Noana"
             />
-          </div>
-
-          <div className="w-full flex flex-1 items-center justify-between pr-8">
-            <Notification />
           </div>
         </div>
       </header>
@@ -45,7 +42,7 @@ const Header: React.FC = async () => {
         </div>
 
         <div className="w-full flex flex-1 items-center justify-between pr-8">
-          <Notification />
+          <Notification session={session} />
 
           <div className="flex items-center gap-4">
             <ProfileMenu user={session.user} />

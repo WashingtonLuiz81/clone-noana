@@ -37,7 +37,7 @@ export const refreshAccessToken = async (
 ): Promise<RefreshResult> => {
   try {
     const response = await fetch(
-      `${process.env.NEXT_APP_API_URL}/auth/refresh`,
+      `${process.env.NEXT_PUBLIC_API_URL}/auth/refresh`,
       {
         method: 'POST',
         headers: {
@@ -76,7 +76,7 @@ export const refreshAccessToken = async (
 }
 
 export const getUser = async (token: UserToken) => {
-  const res = await fetch(`${process.env.NEXT_APP_API_URL}/person/person`, {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/person/person`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',

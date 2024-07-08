@@ -5,10 +5,10 @@ import { useForm, useWatch } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 
-import { EyeClosedIcon, EyeOpenIcon } from '@radix-ui/react-icons'
+// import { EyeClosedIcon, EyeOpenIcon } from '@radix-ui/react-icons'
 import { Loader2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import Input from './FormInput'
+import { PasswordInput } from '@/components/form'
 import { getSession } from 'next-auth/react'
 import { toast } from 'react-toastify'
 import { Session } from 'next-auth'
@@ -37,19 +37,8 @@ const schema = z
 
 type FormData = z.infer<typeof schema>
 
-type VisiblePasswordState = {
-  currentPassword: boolean
-  newPassword: boolean
-  confirmNewPassword: boolean
-}
-
 export default function FirstAccessForm() {
   const router = useRouter()
-  const [visiblePassword, setVisiblePassword] = useState<VisiblePasswordState>({
-    currentPassword: false,
-    newPassword: false,
-    confirmNewPassword: false,
-  })
   const [loading, setLoading] = useState(false)
   const [authErrorMessage] = useState('')
   const form = useForm<FormData>({
@@ -104,13 +93,6 @@ export default function FirstAccessForm() {
     }, 4000)
   })
 
-  const toggleVisibility = (field: keyof VisiblePasswordState) => {
-    setVisiblePassword((prevState) => ({
-      ...prevState,
-      [field]: !prevState[field],
-    }))
-  }
-
   useEffect(() => {
     if (
       newPassword &&
@@ -128,93 +110,33 @@ export default function FirstAccessForm() {
 
   return (
     <form onSubmit={onSubmit} className="space-y-6 mt-10">
-      <div>
-        <div className="mt-1 relative">
-          <div className="relative">
-            <Input
-              placeholder="Senha Atual"
-              type={visiblePassword.currentPassword ? 'text' : 'password'}
-              className="h-14 rounded-xl"
-              {...register('currentPassword')}
-            />
-
-            {visiblePassword.currentPassword ? (
-              <EyeClosedIcon
-                className="absolute inset-y-0 right-0 mr-3 my-auto h-7 w-7 text-gray-400 cursor-pointer"
-                onClick={() => toggleVisibility('currentPassword')}
-              />
-            ) : (
-              <EyeOpenIcon
-                className="absolute inset-y-0 right-0 mr-3 my-auto h-7 w-7 text-gray-400 cursor-pointer"
-                onClick={() => toggleVisibility('currentPassword')}
-              />
-            )}
-          </div>
-          {errors.currentPassword && (
-            <p className="text-red-500 mt-2 text-sm font-medium">
-              {errors.currentPassword.message}
-            </p>
-          )}
+      <div className="mt-1 relative">
+        <div className="relative">
+          <PasswordInput
+            placeholder="Senha Atual"
+            error={errors.currentPassword?.message}
+            {...register('currentPassword')}
+          />
         </div>
       </div>
 
-      <div>
-        <div className="mt-1 relative">
-          <div className="relative">
-            <Input
-              placeholder="Nova Senha"
-              type={visiblePassword.newPassword ? 'text' : 'password'}
-              className="h-14 rounded-xl"
-              {...register('newPassword')}
-            />
-
-            {visiblePassword.newPassword ? (
-              <EyeClosedIcon
-                className="absolute inset-y-0 right-0 mr-3 my-auto h-7 w-7 text-gray-400 cursor-pointer"
-                onClick={() => toggleVisibility('newPassword')}
-              />
-            ) : (
-              <EyeOpenIcon
-                className="absolute inset-y-0 right-0 mr-3 my-auto h-7 w-7 text-gray-400 cursor-pointer"
-                onClick={() => toggleVisibility('newPassword')}
-              />
-            )}
-          </div>
-          {errors.newPassword && (
-            <p className="text-red-500 mt-2 text-sm font-medium">
-              {errors.newPassword.message}
-            </p>
-          )}
+      <div className="mt-1 relative">
+        <div className="relative">
+          <PasswordInput
+            placeholder="Nova Senha"
+            error={errors.newPassword?.message}
+            {...register('newPassword')}
+          />
         </div>
       </div>
 
-      <div>
-        <div className="mt-1 relative">
-          <div className="relative">
-            <Input
-              placeholder="Confirmar Nova Senha"
-              type={visiblePassword.confirmNewPassword ? 'text' : 'password'}
-              className="h-14 rounded-xl"
-              {...register('confirmNewPassword')}
-            />
-
-            {visiblePassword.confirmNewPassword ? (
-              <EyeClosedIcon
-                className="absolute inset-y-0 right-0 mr-3 my-auto h-7 w-7 text-gray-400 cursor-pointer"
-                onClick={() => toggleVisibility('confirmNewPassword')}
-              />
-            ) : (
-              <EyeOpenIcon
-                className="absolute inset-y-0 right-0 mr-3 my-auto h-7 w-7 text-gray-400 cursor-pointer"
-                onClick={() => toggleVisibility('confirmNewPassword')}
-              />
-            )}
-          </div>
-          {errors.confirmNewPassword && (
-            <p className="text-red-500 mt-2 text-sm font-medium">
-              {errors.confirmNewPassword.message}
-            </p>
-          )}
+      <div className="mt-1 relative">
+        <div className="relative">
+          <PasswordInput
+            placeholder="Confirmar Nova Senha"
+            error={errors.confirmNewPassword?.message}
+            {...register('confirmNewPassword')}
+          />
         </div>
       </div>
 

@@ -5,7 +5,6 @@ import { Session, User } from 'next-auth'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 
-import { EyeClosedIcon, EyeOpenIcon } from '@radix-ui/react-icons'
 import { Loader2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import Input from './FormInput'
@@ -13,6 +12,7 @@ import { useRouter } from 'next/navigation'
 
 import { toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
+import PasswordInput from './PasswordInput'
 
 const schema = z.object({
   username: z.string().nonempty('Usuário é obrigatório'),
@@ -35,7 +35,6 @@ interface LoginFormProps {
 
 export default function LoginForm({ showForm }: LoginFormProps) {
   const router = useRouter()
-  const [visiblePassword, setVisiblePassword] = useState(false)
   const [loading, setLoading] = useState(false)
   const form = useForm<FormData>({
     resolver: zodResolver(schema),
@@ -71,7 +70,6 @@ export default function LoginForm({ showForm }: LoginFormProps) {
     } else {
       router.replace('/usuario-mestre')
     }
-    setLoading(false)
   }
 
   return (
@@ -92,33 +90,14 @@ export default function LoginForm({ showForm }: LoginFormProps) {
       </div>
 
       <div>
-        <div className="mt-1 relative">
-          <div className="relative">
-            <Input
-              placeholder="Senha"
-              type={visiblePassword ? 'text' : 'password'}
-              className={`h-14 rounded-xl outline-none ${errors.password ? 'border border-red-500' : ''}`}
-              {...register('password')}
-            />
-
-            {visiblePassword ? (
-              <EyeClosedIcon
-                className="absolute inset-y-0 right-0 mr-3 my-auto h-7 w-7 text-gray-400 cursor-pointer"
-                onClick={() => setVisiblePassword(!visiblePassword)}
-              />
-            ) : (
-              <EyeOpenIcon
-                className="absolute inset-y-0 right-0 mr-3 my-auto h-7 w-7 text-gray-400 cursor-pointer"
-                onClick={() => setVisiblePassword(!visiblePassword)}
-              />
-            )}
-          </div>
-          {errors.password && (
-            <p className="text-red-500 mt-2 text-sm font-medium">
-              {errors.password.message}
-            </p>
-          )}
-        </div>
+        <PasswordInput
+          placeholder="Senha"
+          className={`h-14 rounded-xl outline-none ${
+            errors.password ? 'border border-red-500' : ''
+          }`}
+          error={errors.password?.message}
+          {...register('password')}
+        />
       </div>
 
       <div>

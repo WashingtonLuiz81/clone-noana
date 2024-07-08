@@ -38,8 +38,7 @@ const ProfileMenu: React.FC<{ user: User }> = ({ user }) => {
           <CircleUserIcon
             width={32}
             height={32}
-            color="#692B96"
-            className="-ml-1"
+            className="-ml-1 text-gray-400"
           />
         )}
 
@@ -68,8 +67,7 @@ const ProfileMenu: React.FC<{ user: User }> = ({ user }) => {
               <CircleUserIcon
                 width={36}
                 height={36}
-                color="#692B96"
-                className="-ml-1"
+                className="-ml-1 text-gray-400"
               />
             )}
 

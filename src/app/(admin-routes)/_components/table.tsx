@@ -192,7 +192,7 @@ const Table = <T,>({ data, columns }: TableProps<T>) => {
                 key={column.key as string}
                 className="px-6 py-4 whitespace-nowrap"
               >
-                <span className="text-gray-500 text-sm italic font-medium">
+                <span className="text-gray-500 text-sm font-medium">
                   {renderCell(item, column)}
                 </span>
               </td>

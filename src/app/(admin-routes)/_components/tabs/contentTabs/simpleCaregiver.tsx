@@ -159,7 +159,7 @@ export default function SimpleCaregiver() {
       <header className="flex items-center justify-between mb-6">
         <div className="flex flex-auto items-center gap-2">
           <UserRoundSearchIcon className="text-primary" />
-          <span className="flex-1 text-xl font-semibold italic text-[#1A1A1A]">
+          <span className="flex-1 text-xl font-semibold text-[#1A1A1A]">
             Cuidadores Simples
           </span>
         </div>

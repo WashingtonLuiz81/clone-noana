@@ -17,7 +17,7 @@ interface HeaderPageProps {
 export default function Header({ title, breadcrumb }: HeaderPageProps) {
   return (
     <div>
-      <span className="text-2xl font-bold text-[#1F2638] italic">{title}</span>
+      <span className="text-2xl font-bold text-[#1F2638]">{title}</span>
 
       <Breadcrumb>
         <BreadcrumbList>
