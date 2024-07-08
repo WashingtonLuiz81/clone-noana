@@ -40,7 +40,10 @@ export const RadioGroup: React.FC<RadioGroupProps> = ({
               {...register}
               value={option.id}
               checked={selected === option.id}
-              onChange={(e) => setSelected(e.target.value)}
+              onChange={(e) => {
+                setSelected(e.target.value)
+                register.onChange(e) // Chama a função onChange do react-hook-form
+              }}
               className="hidden"
             />
             <label

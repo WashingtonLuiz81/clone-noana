@@ -45,7 +45,7 @@ const StepperComponent: React.FC<StepperProps> = ({ activeStep, steps }) => {
             <div className="flex-1 mt-4">
               <div className="w-full h-1 rounded-[100px] bg-gray-300 flex items-center">
                 <div
-                  className={`rounded-[100px] h-1 ${index < activeStep ? 'bg-[#A96CD5] ' : 'bg-gray-300'}`}
+                  className={`rounded-[100px] h-1 ${index < activeStep ? 'bg-primary ' : 'bg-gray-300'}`}
                   style={{ width: '100%' }}
                 ></div>
               </div>

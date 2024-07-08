@@ -97,9 +97,7 @@ export default function BeneficiariesRegistrationManualFormBonds({
             selected={selected}
             setSelected={setSelected}
             error={errors.unitcare?.message}
-            register={register('unitcare', {
-              onChange: (e) => setSelected(e.target.value),
-            })}
+            register={register('unitcare')}
           />
         </div>
 
