@@ -11,7 +11,6 @@ import BeneficiaryDetails from '../../sections/beneficiaries/actions/beneficiary
 
 interface Person {
   Nome: string
-  'Text Label': string
   'E-mail': string
   Telefone: string
 }
@@ -25,121 +24,101 @@ export interface Column<T> {
 const data: Person[] = [
   {
     Nome: 'João',
-    'Text Label': 'Lorem ipsum',
     'E-mail': 'joao@example.com',
     Telefone: '(00) 1234-5678',
   },
   {
     Nome: 'Maria',
-    'Text Label': 'Dolor sit amet',
     'E-mail': 'maria@example.com',
     Telefone: '(11) 9876-5432',
   },
   {
     Nome: 'José',
-    'Text Label': 'Consectetur adipiscing elit',
     'E-mail': 'jose@example.com',
     Telefone: '(22) 2468-1357',
   },
   {
     Nome: 'Ana',
-    'Text Label': 'Sed do eiusmod',
     'E-mail': 'ana@example.com',
     Telefone: '(33) 1357-2468',
   },
   {
     Nome: 'Pedro',
-    'Text Label': 'Tempor incididunt',
     'E-mail': 'pedro@example.com',
     Telefone: '(44) 5555-1234',
   },
   {
     Nome: 'Mariana',
-    'Text Label': 'Ut labore et dolore',
     'E-mail': 'mariana@example.com',
     Telefone: '(55) 9876-5432',
   },
   {
     Nome: 'Carlos',
-    'Text Label': 'Excepteur sint occaecat',
     'E-mail': 'carlos@example.com',
     Telefone: '(66) 2222-4444',
   },
   {
     Nome: 'Patrícia',
-    'Text Label': 'Cupidatat non proident',
     'E-mail': 'patricia@example.com',
     Telefone: '(77) 7777-7777',
   },
   {
     Nome: 'Fernanda',
-    'Text Label': 'Sunt in culpa qui',
     'E-mail': 'fernanda@example.com',
     Telefone: '(88) 8888-8888',
   },
   {
     Nome: 'Rafael',
-    'Text Label': 'Deserunt mollit anim',
     'E-mail': 'rafael@example.com',
     Telefone: '(99) 9999-9999',
   },
   {
     Nome: 'João',
-    'Text Label': 'Lorem ipsum',
     'E-mail': 'joao@example.com',
     Telefone: '(00) 1234-5678',
   },
   {
     Nome: 'Maria',
-    'Text Label': 'Dolor sit amet',
     'E-mail': 'maria@example.com',
     Telefone: '(11) 9876-5432',
   },
   {
     Nome: 'José',
-    'Text Label': 'Consectetur adipiscing elit',
     'E-mail': 'jose@example.com',
     Telefone: '(22) 2468-1357',
   },
   {
     Nome: 'Ana',
-    'Text Label': 'Sed do eiusmod',
     'E-mail': 'ana@example.com',
     Telefone: '(33) 1357-2468',
   },
   {
     Nome: 'Pedro',
-    'Text Label': 'Tempor incididunt',
     'E-mail': 'pedro@example.com',
     Telefone: '(44) 5555-1234',
   },
   {
     Nome: 'Mariana',
-    'Text Label': 'Ut labore et dolore',
     'E-mail': 'mariana@example.com',
     Telefone: '(55) 9876-5432',
   },
   {
     Nome: 'Carlos',
-    'Text Label': 'Excepteur sint occaecat',
     'E-mail': 'carlos@example.com',
     Telefone: '(66) 2222-4444',
   },
   {
     Nome: 'Patrícia',
-    'Text Label': 'Cupidatat non proident',
     'E-mail': 'patricia@example.com',
     Telefone: '(77) 7777-7777',
   },
   {
     Nome: 'Fernanda',
-    'Text Label': 'Sunt in culpa qui',
     'E-mail': 'fernanda@example.com',
     Telefone: '(88) 8888-8888',
   },
   {
     Nome: 'Rafael',
-    'Text Label': 'Deserunt mollit anim',
     'E-mail': 'rafael@example.com',
     Telefone: '(99) 9999-9999',
   },
@@ -148,6 +127,7 @@ const data: Person[] = [
 export default function Recipient() {
   const [searchQuery, setSearchQuery] = useState('')
   const [isVisibleSection, setIsVisibleSection] = useState('')
+  const [visibleItems, setVisibleItems] = useState(8)
 
   const filteredData = useMemo(() => {
     return data.filter((item) =>
@@ -156,6 +136,10 @@ export default function Recipient() {
       ),
     )
   }, [searchQuery])
+
+  const handleShowMore = () => {
+    setVisibleItems((prev) => prev + 8)
+  }
 
   return (
     <section>
@@ -222,9 +206,20 @@ export default function Recipient() {
 
       <Table
         showSection={setIsVisibleSection}
-        data={filteredData}
+        data={filteredData.slice(0, visibleItems)}
         columns={unitTableHeader}
       />
+
+      {visibleItems < filteredData.length && (
+        <div className="flex justify-start mt-8">
+          <Button
+            className="bg-gray-100 hover:bg-gray-100 text-gray-900 font-semibold text-base border border-gray-200"
+            onClick={handleShowMore}
+          >
+            Ver mais
+          </Button>
+        </div>
+      )}
     </section>
   )
 }

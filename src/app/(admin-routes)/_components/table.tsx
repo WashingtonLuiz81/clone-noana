@@ -1,7 +1,6 @@
 'use client'
 
 import React, { useState, ReactNode } from 'react'
-
 import {
   PencilLineIcon,
   EyeIcon,
@@ -15,6 +14,7 @@ import TableArrow from '@/assets/img/table-arrow'
 import TableArrowUp from '@/assets/img/table-arrow-up'
 import TableArrowDown from '@/assets/img/table-arrow-down'
 import { unitTableActions } from '@/lib/config'
+import { Avatar, AvatarImage, AvatarFallback } from '@radix-ui/react-avatar'
 
 interface Column<T> {
   key: keyof T | 'Ações'
@@ -136,6 +136,23 @@ const Table = <T,>({ data, columns, showSection }: TableProps<T>) => {
     }
 
     const value = item[column.key as keyof T]
+
+    if (column.key === 'Nome' && typeof value === 'string') {
+      return (
+        <div className="flex items-center gap-3">
+          <Avatar>
+            <AvatarImage
+              src={`https://img.freepik.com/vetores-premium/ilustracao-de-avatar-de-empresario-retrato-de-usuario-de-desenho-animado-icone-de-perfil-de-usuario_118339-5507.jpg`}
+              className="w-8 h-8 rounded-full"
+              alt={`${value}`}
+            />
+            <AvatarFallback className="w-8 h-8 flex-1">CN</AvatarFallback>
+          </Avatar>
+          {value}
+        </div>
+      )
+    }
+
     if (typeof value === 'string' || typeof value === 'number') {
       return value
     }
@@ -176,18 +193,15 @@ const Table = <T,>({ data, columns, showSection }: TableProps<T>) => {
           ))}
         </tr>
       </thead>
-
-      <tbody className="bg-white ">
+      <tbody>
         {sortedData.map((item, index) => (
-          <tr className="even:bg-gray-50 border border-gray-200" key={index}>
+          <tr key={index} className="border-b border-gray-200">
             {columns.map((column) => (
               <td
                 key={column.key as string}
                 className="px-6 py-4 whitespace-nowrap"
               >
-                <span className="text-gray-500 text-sm font-medium">
-                  {renderCell(item, column)}
-                </span>
+                {renderCell(item, column)}
               </td>
             ))}
           </tr>

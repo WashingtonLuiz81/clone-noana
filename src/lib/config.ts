@@ -1,6 +1,5 @@
 interface Person {
   Nome: string
-  'Text Label': string
   'E-mail': string
   Telefone: string
 }
@@ -13,7 +12,6 @@ export interface Column<T> {
 
 const unitTableHeader: Column<Person>[] = [
   { key: 'Nome', label: 'Nome' },
-  { key: 'Text Label', label: 'Text Label' },
   { key: 'E-mail', label: 'E-mail' },
   { key: 'Telefone', label: 'Telefone' },
   { key: 'Ações', label: 'Ações', isAction: true },

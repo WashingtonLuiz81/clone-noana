@@ -38,6 +38,15 @@ export default function BeneficiariesRegistrationManualFormBonds({
 }: ManualFormProps) {
   const { payload, setBondsData } = useStore()
   const { bondsData } = payload
+
+  // Transform bondsData to ensure null values are converted to undefined
+  const transformedBondsData = bondsData
+    ? {
+        ...bondsData,
+        unitcare: bondsData.unitcare ?? undefined,
+      }
+    : {}
+
   const {
     control,
     handleSubmit,
@@ -46,7 +55,7 @@ export default function BeneficiariesRegistrationManualFormBonds({
     setValue,
   } = useForm<FormValuesProps>({
     resolver: zodResolver(formSchema),
-    defaultValues: bondsData || {},
+    defaultValues: transformedBondsData,
   })
 
   const [selected, setSelected] = useState<string>('')
