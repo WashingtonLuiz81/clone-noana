@@ -8,6 +8,8 @@ import { unitTableHeader } from '@/lib/config'
 import Table from '../../table'
 import BeneficiariesRegistration from '../../sections/beneficiaries/beneficiariesRegistration'
 import BeneficiaryDetails from '../../sections/beneficiaries/actions/beneficiaryDetails'
+import MonitorsList from '../../sections/beneficiaries/actions/monitorsList'
+import BeneficiaryLocation from '../../sections/beneficiaries/actions/beneficiaryLocation'
 
 interface Person {
   Nome: string
@@ -145,31 +147,30 @@ export default function Recipient() {
     <section>
       <div
         id="slideover-container"
-        className={`fixed inset-0 z-10 transition-opacity duration-500 ease-in-out ${
-          isVisibleSection !== ''
+        className={`fixed inset-0 z-10 transition-opacity duration-500 ease-in-out ${isVisibleSection !== ''
             ? 'opacity-100'
             : 'opacity-0 pointer-events-none'
-        }`}
+          }`}
       >
         <div
           id="slideover-bg"
-          className={`absolute inset-0 bg-black transition-opacity duration-500 ease-in-out ${
-            isVisibleSection !== '' ? 'opacity-50' : 'opacity-0'
-          }`}
+          className={`absolute inset-0 bg-black transition-opacity duration-500 ease-in-out ${isVisibleSection !== '' ? 'opacity-50' : 'opacity-0'
+            }`}
           onClick={() => setIsVisibleSection('')}
         ></div>
 
         <div
           id="slideover"
-          className={`absolute top-0 right-0 h-full max-w-[888px] w-full bg-gray-100 border transform transition-transform duration-500 ease-in-out ${
-            isVisibleSection !== '' ? 'translate-x-0' : 'translate-x-full'
-          }`}
+          className={`absolute top-0 right-0 h-full max-w-[888px] w-full bg-gray-100 border transform transition-transform duration-500 ease-in-out ${isVisibleSection !== '' ? 'translate-x-0' : 'translate-x-full'
+            }`}
         >
           {isVisibleSection === 'beneficiaries' && (
             <BeneficiariesRegistration closeSection={setIsVisibleSection} />
           )}
 
           {isVisibleSection === 'view' && <BeneficiaryDetails />}
+          {isVisibleSection === 'list' && <MonitorsList />}
+          {isVisibleSection === 'map' && <BeneficiaryLocation />}
         </div>
       </div>
 

@@ -6,4 +6,14 @@ import TableArrow from './table-arrow'
 import logoNoana from './logo-noana.svg'
 import logoNoanaWhite from './logo-noana-white.svg'
 
-export { UserHeart, Hospital, logoNoana, logoNoanaWhite, Magnifier, TableArrow }
+import ImageMap from './mapa.svg'
+
+export {
+  UserHeart,
+  Hospital,
+  logoNoana,
+  logoNoanaWhite,
+  Magnifier,
+  TableArrow,
+  ImageMap,
+}

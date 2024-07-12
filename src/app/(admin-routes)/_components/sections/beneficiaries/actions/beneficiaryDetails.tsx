@@ -20,8 +20,8 @@ export default function BeneficiaryDetails() {
 
           <div className="flex flex-col items-center mb-24 mt-24 relative">
             <div className="flex items-center absolute -bottom-44 justify-center">
-              <Avatar className="w-164 h-164">
-                <AvatarImage src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSX4Q1bSchycyDfEedz6fT960CJ7UHp_1WJhA&s" />
+              <Avatar className="w-56 h-56">
+                <AvatarImage src="https://img.freepik.com/vetores-premium/ilustracao-de-avatar-de-empresario-retrato-de-usuario-de-desenho-animado-icone-de-perfil-de-usuario_118339-5507.jpg" />
                 <AvatarFallback>LA</AvatarFallback>
               </Avatar>
             </div>
@@ -30,7 +30,7 @@ export default function BeneficiaryDetails() {
           <Card className="flex flex-col bg-white rounded-2xl shadow-md text-gray-900 p-8 mb-4">
             <CardHeader className="text-center">
               <CardTitle className="text-2xl pb-10 pt-16 text-center font-semibold">
-                Laís Alves
+                João
               </CardTitle>
             </CardHeader>
             <CardContent className="grid grid-cols-2 gap-4 p-0 text-sm">
