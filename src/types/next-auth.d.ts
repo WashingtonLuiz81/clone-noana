@@ -3,7 +3,7 @@ import 'next-auth'
 declare module 'next-auth' {
   interface User {
     UserId: string
-    IdToken: string
+    idToken: string
     AccessToken: string
     RefreshToken: string
     ExpiresIn: number
@@ -17,7 +17,7 @@ declare module 'next-auth' {
 
   interface JWT {
     UserId: string
-    IdToken: string
+    idToken: string
     AccessToken: string
     RefreshToken: string
     ExpiresIn: number

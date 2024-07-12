@@ -8,16 +8,16 @@ const nextConfig = {
   async rewrites() {
     return [
       {
+        source: '/api/notification/messages_totalizer/',
+        destination: `${process.env.NEXT_PUBLIC_API_URL}/notification/messages_totalizer/`,
+      },
+      {
         source: '/api/password_reset',
         destination: `${process.env.NEXT_PUBLIC_API_URL}/password_reset/`,
       },
       {
         source: '/api/change_password',
         destination: `${process.env.NEXT_PUBLIC_API_URL}/change_password/`,
-      },
-      {
-        source: '/api/notification/messages_totalizer/',
-        destination: `${process.env.NEXT_PUBLIC_API_URL}/notification/messages_totalizer/`,
       },
     ]
   },

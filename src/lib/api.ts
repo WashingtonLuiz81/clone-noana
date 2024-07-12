@@ -1,16 +1,16 @@
-type HttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH'
-
-interface FetchOptions {
-  method?: HttpMethod
-  token?: string | null
+export interface ApiClientOptions {
+  endpoint: string
+  method?: 'GET' | 'POST' | 'PUT' | 'DELETE'
+  body?: unknown
+  token?: string
 }
 
-const fetchApi = async <T>(
-  url: string,
-  options: FetchOptions = {},
-): Promise<T> => {
-  const { method = 'GET', token = null } = options
-
+export async function apiClient<T>({
+  endpoint,
+  method = 'GET',
+  body,
+  token,
+}: ApiClientOptions): Promise<T> {
   const headers: HeadersInit = {
     'Content-Type': 'application/json',
   }
@@ -19,25 +19,15 @@ const fetchApi = async <T>(
     headers.Authorization = `Bearer ${token}`
   }
 
-  try {
-    const response = await fetch(url, {
-      method,
-      headers,
-    })
+  const response = await fetch(endpoint, {
+    method,
+    headers,
+    body: body ? JSON.stringify(body) : undefined,
+  })
 
-    if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`)
-    }
-
-    const data: T = await response.json()
-    return data
-  } catch (error) {
-    console.error('Fetch API Error:', error)
-    throw error
+  if (!response.ok) {
+    throw new Error('Network response was not ok')
   }
-}
 
-// Uso da função para a URL fornecida:
-fetchApi('http://admin.hml.noana.link/v1/notification/messages_totalizer/')
-  .then((data) => console.log(data))
-  .catch((error) => console.error('Error:', error))
+  return response.json()
+}

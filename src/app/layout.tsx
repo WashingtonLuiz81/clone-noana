@@ -17,7 +17,7 @@ export default function RootLayout({
   return (
     <html lang="pt_BR">
       <Head />
-      <body className={poppins.className}>
+      <body className={`${poppins.className} antialiased`}>
         <NextAuthSessionProvider>{children}</NextAuthSessionProvider>
       </body>
     </html>

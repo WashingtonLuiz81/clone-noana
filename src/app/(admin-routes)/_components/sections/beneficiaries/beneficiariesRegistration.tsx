@@ -2,7 +2,6 @@ import * as React from 'react'
 import TabList from '../../tabs/tabList'
 import BeneficiariesRegistrationManual from './beneficiariesRegistrationManual'
 import { X } from 'lucide-react'
-// import Input from '@/components/form/FormInput'
 
 interface BeneficiariesRegistrationProps {
   closeSection: (isVisible: string) => void

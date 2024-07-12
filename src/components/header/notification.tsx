@@ -4,6 +4,7 @@ import { Session } from 'next-auth'
 import { Button } from '../ui/button'
 import { BellIcon } from '@radix-ui/react-icons'
 import { useEffect, useState } from 'react'
+// import { fetchNotificationMessagesTotalizer } from '@/app/services/notificationService'
 
 interface NotificationProps {
   session: Session | null
@@ -15,26 +16,36 @@ export default function Notification({ session }: NotificationProps) {
   } | null>(null)
 
   useEffect(() => {
+    console.log('session?.user?: ', session?.user?.idToken)
+    setNotificationData({ total: 2 })
     const fetchNotifications = async () => {
-      try {
-        console.log('API URL:', process.env.NEXT_PUBLIC_API_URL) // Adicione este log para depuração
-        const response = await fetch(`/api/notification/messages_totalizer/`, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${session?.user?.IdToken}`,
-          },
-        })
-        const fetchedNotification = await response.json()
-        setNotificationData(fetchedNotification)
-        console.log('Response: ', fetchedNotification)
-      } catch (error) {
-        console.error('Error fetching notification data:', error)
+      if (session?.user?.idToken) {
+        try {
+          const response = await fetch(
+            '/api/notification/messages_totalizer/',
+            {
+              method: 'GET',
+              headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${session.user.idToken}`,
+              },
+            },
+          )
+
+          console.log('response: ', response)
+          // console.log('API URL:', process.env.NEXT_PUBLIC_API_URL)
+          // const fetchedNotification = await fetchNotificationMessagesTotalizer(
+          //   session.user.idToken,
+          // )
+          // setNotificationData(fetchedNotification)
+          // console.log('Response: ', fetchedNotification)
+        } catch (error) {
+          console.error('Error fetching notification data:', error)
+        }
       }
     }
-
     fetchNotifications()
-  }, [session?.user?.IdToken])
+  }, [session?.user.idToken])
 
   return (
     <div className="w-full flex flex-1 items-center justify-between pr-8">

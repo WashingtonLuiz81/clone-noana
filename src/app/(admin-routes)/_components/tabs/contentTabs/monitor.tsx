@@ -4,6 +4,7 @@ import Magnifier from '@/assets/img/magnifier'
 import { Input } from '@/components/ui/input'
 import { PlusIcon } from '@radix-ui/react-icons'
 import { Button } from '@/components/ui/button'
+import MonitorRegistration from '../../sections/monitor/monitorRegistration'
 // import { unitTableHeader } from '@/lib/config'
 // import Table from '../../table'
 
@@ -145,7 +146,7 @@ import { Button } from '@/components/ui/button'
 
 export default function Monitor() {
   const [searchQuery, setSearchQuery] = useState('')
-  // const [isVisibleSection, setIsVisibleSection] = useState('')
+  const [isVisibleSection, setIsVisibleSection] = useState('')
 
   // const filteredData = useMemo(() => {
   //   return data.filter((item) =>
@@ -157,6 +158,34 @@ export default function Monitor() {
 
   return (
     <section>
+      <div
+        id="slideover-container"
+        className={`fixed inset-0 z-10 transition-opacity duration-500 ease-in-out ${
+          isVisibleSection !== ''
+            ? 'opacity-100'
+            : 'opacity-0 pointer-events-none'
+        }`}
+      >
+        <div
+          id="slideover-bg"
+          className={`absolute inset-0 bg-black transition-opacity duration-500 ease-in-out ${
+            isVisibleSection !== '' ? 'opacity-50' : 'opacity-0'
+          }`}
+          onClick={() => setIsVisibleSection('')}
+        ></div>
+
+        <div
+          id="slideover"
+          className={`absolute top-0 right-0 h-full max-w-[888px] w-full bg-gray-100 border transform transition-transform duration-500 ease-in-out ${
+            isVisibleSection !== '' ? 'translate-x-0' : 'translate-x-full'
+          }`}
+        >
+          {isVisibleSection === 'monitor' && (
+            <MonitorRegistration closeSection={setIsVisibleSection} />
+          )}
+        </div>
+      </div>
+
       <header className="flex items-center justify-between mb-6">
         <div className="flex flex-auto items-center gap-2">
           <UserRoundSearchIcon className="text-primary" />
@@ -178,7 +207,10 @@ export default function Monitor() {
             />
           </div>
 
-          <Button className="flex items-center gap-2 bg-primary text-gray-50 shadow-xl">
+          <Button
+            className="flex items-center gap-2 bg-primary text-gray-50 shadow-xl"
+            onClick={() => setIsVisibleSection('monitor')}
+          >
             <PlusIcon />
             <span className="text-white font-semibold">Adicionar</span>
           </Button>
