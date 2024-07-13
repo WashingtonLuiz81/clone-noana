@@ -26,6 +26,7 @@ interface TableProps<T> {
   data: T[]
   columns: Column<T>[]
   showSection: (section: string) => void
+  onActionClick: (id: number, action: string) => void
 }
 
 interface SortConfig<T> {
@@ -37,63 +38,71 @@ interface IconMap {
   [key: string]: JSX.Element
 }
 
-const Table = <T,>({ data, columns, showSection }: TableProps<T>) => {
+const Table = <T extends { id: number }>({
+  data,
+  columns,
+  showSection,
+  onActionClick,
+}: TableProps<T>) => {
   const [sortConfig, setSortConfig] = useState<SortConfig<T> | null>(null)
   const styleButtonAction = 'text-primary cursor-pointer'
 
-  const iconMap: IconMap = {
+  const handleActionClick = (id: number, action: string) => {
+    onActionClick(id, action)
+    showSection(action)
+  }
+
+  const createIconMap = (id: number): IconMap => ({
     view: (
       <EyeIcon
         className={styleButtonAction}
         width="20"
-        onClick={() => showSection('view')}
+        onClick={() => handleActionClick(id, 'view')}
       />
     ),
     list: (
       <UserCheckIcon
         className={styleButtonAction}
         width="20"
-        onClick={() => showSection('list')}
+        onClick={() => handleActionClick(id, 'list')}
       />
     ),
     edit: (
       <PencilLineIcon
         className={styleButtonAction}
         width="20"
-        onClick={() => showSection('edit')}
+        onClick={() => handleActionClick(id, 'edit')}
       />
     ),
     call: (
       <PhoneCallIcon
         className={styleButtonAction}
         width="20"
-        onClick={() => showSection('call')}
+        onClick={() => handleActionClick(id, 'call')}
       />
     ),
     map: (
       <MapPinIcon
         className={styleButtonAction}
         width="20"
-        onClick={() => showSection('map')}
+        onClick={() => handleActionClick(id, 'map')}
       />
     ),
     trash: (
       <Trash2Icon
         className={styleButtonAction}
         width="20"
-        onClick={() => showSection('delete')}
+        onClick={() => handleActionClick(id, 'delete')}
       />
     ),
     lock: (
       <LockKeyholeIcon
         className={styleButtonAction}
         width="20"
-        onClick={() => showSection('lock')}
+        onClick={() => handleActionClick(id, 'lock')}
       />
     ),
-  }
-
-  const filteredIcons = unitTableActions.map((action) => iconMap[action])
+  })
 
   const sortedData = [...data]
   if (sortConfig !== null && sortConfig.key !== 'Ações') {
@@ -126,10 +135,11 @@ const Table = <T,>({ data, columns, showSection }: TableProps<T>) => {
 
   const renderCell = (item: T, column: Column<T>): ReactNode => {
     if (column.key === 'Ações') {
+      const iconMap = createIconMap(item.id)
       return (
         <div className="flex items-center gap-3">
-          {filteredIcons.map((icon, index) => (
-            <React.Fragment key={index}>{icon}</React.Fragment>
+          {unitTableActions.map((action, index) => (
+            <React.Fragment key={index}>{iconMap[action]}</React.Fragment>
           ))}
         </div>
       )

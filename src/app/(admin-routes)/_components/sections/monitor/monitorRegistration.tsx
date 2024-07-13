@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { X } from 'lucide-react'
-import MonitorRegistrationFormData from '../../forms/monitorRegistrationFormData'
 import StepperComponent from '@/components/stepper'
+import { MonitorRegistrationFormData } from '../../forms'
 
 interface BeneficiariesRegistrationProps {
   closeSection: (isVisible: string) => void

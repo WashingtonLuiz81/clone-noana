@@ -10,9 +10,10 @@ interface RadioGroupProps {
   options: Option[]
   name: string
   selected: string
-  setSelected: (value: string) => void
+  setSelected?: (value: string) => void
   error?: string
-  register: UseFormRegisterReturn
+  register?: UseFormRegisterReturn
+  readOnly?: boolean // Adiciona a prop readOnly
 }
 
 export const RadioGroup: React.FC<RadioGroupProps> = ({
@@ -21,6 +22,7 @@ export const RadioGroup: React.FC<RadioGroupProps> = ({
   setSelected,
   error,
   register,
+  readOnly = false, // Valor padrão é false
 }) => {
   return (
     <div className="pb-10 border-b-[1px] border-gray-200">
@@ -28,7 +30,7 @@ export const RadioGroup: React.FC<RadioGroupProps> = ({
         {options.map((option) => (
           <li
             key={option.id}
-            className={`w-32 bg-white p-4 rounded-xl border-[1px] ${
+            className={`min-w-32 bg-white p-4 rounded-xl border-[1px] ${
               selected === option.id
                 ? 'border-primary text-primary'
                 : 'border-gray-200 text-gray-900'
@@ -41,14 +43,17 @@ export const RadioGroup: React.FC<RadioGroupProps> = ({
               value={option.id}
               checked={selected === option.id}
               onChange={(e) => {
-                setSelected(e.target.value)
-                register.onChange(e) // Chama a função onChange do react-hook-form
+                if (!readOnly && setSelected) {
+                  setSelected(e.target.value)
+                  register?.onChange(e) // Chama a função onChange do react-hook-form, se register for fornecido
+                }
               }}
               className="hidden"
+              disabled={readOnly} // Desabilita o input se readOnly for true
             />
             <label
               htmlFor={option.id}
-              className="flex flex-col gap-6 cursor-pointer"
+              className={`flex flex-col gap-6 ${readOnly ? '' : 'cursor-pointer'}`}
             >
               <span
                 className={`w-5 h-5 block rounded-full shadow border ${
@@ -62,7 +67,7 @@ export const RadioGroup: React.FC<RadioGroupProps> = ({
           </li>
         ))}
       </ul>
-      {error && <span className="text-red-500">{error}</span>}
+      {!readOnly && error && <span className="text-red-500">{error}</span>}
     </div>
   )
 }
