@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useForm } from 'react-hook-form'
+import { Controller, useForm } from 'react-hook-form'
 import { Button } from '@/components/ui/button'
 import { ArrowRightIcon } from 'lucide-react'
 import { toast } from 'react-toastify'
@@ -8,6 +8,7 @@ import { PersonalInfo } from '../../types/types'
 import { useStore } from '@/store/formStore'
 import * as z from 'zod'
 import { Input } from '@/components/form'
+import InputMask from 'react-input-mask'
 
 const schema = z.object({
   nomeCompleto: z.string().nonempty('Nome Completo é obrigatório'),
@@ -15,7 +16,10 @@ const schema = z.object({
     message: 'CPF inválido',
   }),
   dataNascimento: z.string().nonempty('Data de Nascimento é obrigatória'),
-  telefone: z.string().refine((value) => /^\d{11}$/.test(value), {
+  ddd: z.string().refine((value) => /^\d{2}$/.test(value), {
+    message: 'Erro',
+  }),
+  telefone: z.string().refine((value) => /^\d{9}$/.test(value), {
     message: 'Telefone inválido',
   }),
   cep: z.string().refine((value) => /^\d{8}$/.test(value), {
@@ -23,6 +27,7 @@ const schema = z.object({
   }),
   logradouro: z.string(),
   bairro: z.string(),
+  numero: z.string().nonempty('Erro'),
   complemento: z.string(),
   cidade: z.string(),
   estado: z.string(),
@@ -46,6 +51,7 @@ const BeneficiariesRegistrationManualFormData: React.FC<ManualFormProps> = ({
 
   const {
     register,
+    control,
     handleSubmit,
     setValue,
     formState: { errors },
@@ -102,7 +108,7 @@ const BeneficiariesRegistrationManualFormData: React.FC<ManualFormProps> = ({
 
   const onSubmit = async (data: PersonalInfo) => {
     try {
-      await schema.parseAsync(data) // Validar os dados usando zod
+      await schema.parseAsync(data)
       setBeneficiaryData(data)
       nextStep()
     } catch (error) {
@@ -130,7 +136,7 @@ const BeneficiariesRegistrationManualFormData: React.FC<ManualFormProps> = ({
       <div className="flex flex-col gap-6">
         <div className="flex flex-col space-y-4 sm:flex-row sm:space-y-0 sm:space-x-6">
           <div className="flex-1">
-            <label htmlFor="nomeCompleto">Nome Completo</label>
+            <label htmlFor="nomeCompleto">Nome Completo*</label>
             <Input
               {...register('nomeCompleto', {
                 required: 'Nome Completo é obrigatório',
@@ -142,7 +148,7 @@ const BeneficiariesRegistrationManualFormData: React.FC<ManualFormProps> = ({
           </div>
 
           <div className="flex-1">
-            <label htmlFor="cpf">CPF</label>
+            <label htmlFor="cpf">CPF*</label>
             <Input
               type="text"
               className="w-full mt-3 mb-1"
@@ -162,7 +168,7 @@ const BeneficiariesRegistrationManualFormData: React.FC<ManualFormProps> = ({
 
         <div className="flex flex-col space-y-4 sm:flex-row sm:space-y-0 sm:space-x-6">
           <div className="flex-1">
-            <label htmlFor="dataNascimento">Data de Nascimento</label>
+            <label htmlFor="dataNascimento">Data de Nascimento*</label>
             <Input
               {...register('dataNascimento', {
                 required: 'Data de Nascimento é obrigatória',
@@ -173,28 +179,61 @@ const BeneficiariesRegistrationManualFormData: React.FC<ManualFormProps> = ({
             />
           </div>
 
-          <div className="flex-1">
-            <label htmlFor="telefone">Telefone</label>
-            <Input
-              {...register('telefone', {
-                required: 'Telefone é obrigatório',
-                pattern: {
-                  value: /^\d{11}$/,
-                  message: 'Telefone inválido',
-                },
-              })}
-              type="text"
-              className="w-full mt-3 mb-1"
-              maxLength={11}
-              onChange={handleNumericInputChange} // Trata apenas números
-              error={errors.telefone?.message}
-            />
+          <div className="flex-1 flex items-start gap-3">
+            <div className="w-16">
+              <label htmlFor="ddd">DDD*</label>
+
+              <Input
+                {...register('ddd', {
+                  required: 'Erro',
+                  pattern: {
+                    value: /^\d{2}$/,
+                    message: 'DDD inválido',
+                  },
+                })}
+                type="text"
+                className="w-full mt-3 mb-1"
+                maxLength={3}
+                onChange={handleNumericInputChange}
+                error={errors.ddd?.message}
+              />
+            </div>
+
+            <div className="flex-1">
+              <label htmlFor="telefone">Telefone*</label>
+              <Controller
+                name="telefone"
+                control={control}
+                render={({ field }) => (
+                  <InputMask
+                    {...field}
+                    mask="9999-9999"
+                    maskPlaceholder=""
+                    className="input"
+                  />
+                )}
+              />
+              {/* <Input
+                {...register('telefone', {
+                  required: 'Telefone é obrigatório',
+                  pattern: {
+                    value: /^\d{9}$/,
+                    message: 'Telefone inválido',
+                  },
+                })}
+                type="text"
+                className="w-full mt-3 mb-1"
+                maxLength={9}
+                onChange={handleNumericInputChange}
+                error={errors.telefone?.message}
+              /> */}
+            </div>
           </div>
         </div>
 
         <div className="flex flex-col space-y-4 sm:flex-row sm:space-y-0 sm:space-x-6">
           <div className="flex-1">
-            <label htmlFor="cep">CEP</label>
+            <label htmlFor="cep">CEP*</label>
             <Input
               {...register('cep', {
                 required: 'CEP é obrigatório',
@@ -236,13 +275,27 @@ const BeneficiariesRegistrationManualFormData: React.FC<ManualFormProps> = ({
             />
           </div>
 
-          <div className="flex-1">
-            <label htmlFor="complemento">Complemento</label>
-            <Input
-              {...register('complemento')}
-              type="text"
-              className="w-full mt-3 mb-1"
-            />
+          <div className="flex-1 flex items-start  gap-3">
+            <div className="w-20">
+              <label htmlFor="numero">Número*</label>
+              <Input
+                {...register('numero', {
+                  required: 'Erro',
+                })}
+                type="text"
+                className="w-full mt-3 mb-1"
+                error={errors.numero?.message}
+              />
+            </div>
+
+            <div className="flex-1">
+              <label htmlFor="complemento">Complemento</label>
+              <Input
+                {...register('complemento')}
+                type="text"
+                className="w-full mt-3 mb-1"
+              />
+            </div>
           </div>
         </div>
 

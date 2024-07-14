@@ -145,12 +145,19 @@ const BeneficiariesRegistrationManualFormContractor: React.FC<
           </div>
 
           <div className="flex-1">
+            <label htmlFor="telefone">Telefone*</label>
             <Input
-              {...register('telefone', { required: 'Campo obrigatório' })}
+              {...register('telefone', {
+                required: 'Telefone é obrigatório',
+                pattern: {
+                  value: /^\d{9}$/,
+                  message: 'Telefone inválido',
+                },
+              })}
               type="text"
-              label="Telefone"
-              error={errors?.telefone?.message}
-              maxLength={11}
+              className="w-full mt-3 mb-1"
+              maxLength={9}
+              error={errors.telefone?.message}
             />
           </div>
         </div>
@@ -188,12 +195,27 @@ const BeneficiariesRegistrationManualFormContractor: React.FC<
             />
           </div>
 
-          <div className="flex-1">
-            <Input
-              {...register('complemento')}
-              type="text"
-              label="Complemento"
-            />
+          <div className="flex-1 flex items-start  gap-3">
+            <div className="w-20">
+              <label htmlFor="numero">Número*</label>
+              <Input
+                {...register('numero', {
+                  required: 'Erro',
+                })}
+                type="text"
+                className="w-full mt-3 mb-1"
+                error={errors.numero?.message}
+              />
+            </div>
+
+            <div className="flex-1">
+              <label htmlFor="complemento">Complemento</label>
+              <Input
+                {...register('complemento')}
+                type="text"
+                className="w-full mt-3 mb-1"
+              />
+            </div>
           </div>
         </div>
 

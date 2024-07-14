@@ -59,10 +59,14 @@ const config = {
           '800': '#27272A',
           '900': '#202024',
         },
+        status: {
+          error: '#DC2828',
+        },
         shadowAvatar: 'rgba(0, 0, 0, 0.14)',
       },
       boxShadow: {
         avatar: '0px 1.75px 4px -1px',
+        button: '0px 1px 2px 0px',
       },
       borderRadius: {},
       keyframes: {

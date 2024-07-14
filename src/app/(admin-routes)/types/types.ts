@@ -2,12 +2,14 @@ export interface PersonalInfo {
   nomeCompleto: string
   cpf: string
   dataNascimento: string
+  ddd: string
   telefone: string
   cep: string
   logradouro: string
   bairro: string
   cidade: string
   estado: string
+  numero: string
   complemento?: string
 }
 

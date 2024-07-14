@@ -30,7 +30,7 @@ export const RadioGroup: React.FC<RadioGroupProps> = ({
         {options.map((option) => (
           <li
             key={option.id}
-            className={`min-w-32 bg-white p-4 rounded-xl border-[1px] ${
+            className={`min-w-32 bg-white p-4 rounded-xl border-[1px] hover:border-primary ${
               selected === option.id
                 ? 'border-primary text-primary'
                 : 'border-gray-200 text-gray-900'

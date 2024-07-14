@@ -307,7 +307,6 @@ export default function Recipient() {
           className={`absolute inset-0 bg-black transition-opacity duration-500 ease-in-out ${
             isVisibleSection !== '' ? 'opacity-50' : 'opacity-0'
           }`}
-          onClick={() => setIsVisibleSection('')}
         ></div>
 
         <div
