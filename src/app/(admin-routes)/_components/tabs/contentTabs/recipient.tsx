@@ -8,8 +8,10 @@ import { unitTableHeader } from '@/lib/config'
 import Table from '../../table'
 import BeneficiariesRegistration from '../../sections/beneficiaries/beneficiariesRegistration'
 import BeneficiaryDetails from '../../sections/beneficiaries/actions/beneficiaryDetails'
-import MonitorsList from '../../sections/beneficiaries/actions/monitorsList'
+import BeneficiaryMonitorsList from '../../sections/beneficiaries/actions/beneficiaryMonitorsList'
 import BeneficiaryLocation from '../../sections/beneficiaries/actions/beneficiaryLocation'
+import BeneficiaryCall from '../../sections/beneficiaries/actions/beneficiaryCall'
+import BeneficiaryDelete from '../../sections/beneficiaries/actions/beneficiaryDelete'
 
 interface Person {
   Nome: string
@@ -169,8 +171,10 @@ export default function Recipient() {
           )}
 
           {isVisibleSection === 'view' && <BeneficiaryDetails />}
-          {isVisibleSection === 'list' && <MonitorsList />}
+          {isVisibleSection === 'list' && <BeneficiaryMonitorsList />}
+          {isVisibleSection === 'call' && <BeneficiaryCall />}
           {isVisibleSection === 'map' && <BeneficiaryLocation />}
+          {isVisibleSection === 'delete' && <BeneficiaryDelete />}
         </div>
       </div>
 
