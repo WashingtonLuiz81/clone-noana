@@ -3,7 +3,7 @@ import { getServerSession } from 'next-auth'
 import { redirect } from 'next/navigation'
 import NavigationBar from '@/components/navbar'
 import Header from '@/components/header/header'
-import { ToastContainer, Bounce } from 'react-toastify'
+
 import { authOptions } from '@/lib/auth'
 
 interface PrivateLayouProps {
@@ -24,19 +24,6 @@ export default async function PrivateLayout({ children }: PrivateLayouProps) {
       <div className="flex flex-1">
         <NavigationBar />
         {children}
-        <ToastContainer
-          position="top-right"
-          autoClose={5000}
-          hideProgressBar={false}
-          newestOnTop={false}
-          closeOnClick
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-          theme="colored"
-          transition={Bounce}
-        />
       </div>
     </div>
   )

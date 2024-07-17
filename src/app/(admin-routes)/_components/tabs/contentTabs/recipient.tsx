@@ -10,6 +10,7 @@ import BeneficiariesRegistration from '../../sections/beneficiaries/beneficiarie
 import BeneficiaryDetails from '../../sections/beneficiaries/actions/beneficiaryDetails'
 import MonitorsList from '../../sections/beneficiaries/actions/monitorsList'
 import BeneficiaryLocation from '../../sections/beneficiaries/actions/beneficiaryLocation'
+import { toast } from 'react-toastify'
 
 interface Dispositivo {
   imei: string
@@ -350,7 +351,10 @@ export default function Recipient() {
 
           <Button
             className="flex items-center gap-2 bg-primary text-gray-50 shadow-xl"
-            onClick={() => setIsVisibleSection('beneficiaries')}
+            onClick={() => {
+              setIsVisibleSection('beneficiaries')
+              toast.error('Chamei o Toast')
+            }}
           >
             <PlusIcon />
             <span className="text-white font-semibold">Adicionar</span>
