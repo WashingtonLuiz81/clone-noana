@@ -308,7 +308,6 @@ export default function Recipient() {
           className={`absolute inset-0 bg-black transition-opacity duration-500 ease-in-out ${
             isVisibleSection !== '' ? 'opacity-50' : 'opacity-0'
           }`}
-          onClick={() => setIsVisibleSection('')}
         ></div>
 
         <div
@@ -353,7 +352,9 @@ export default function Recipient() {
 
           <Button
             className="flex items-center gap-2 bg-primary text-gray-50 shadow-xl"
-            onClick={() => setIsVisibleSection('beneficiaries')}
+            onClick={() => {
+              setIsVisibleSection('beneficiaries')
+            }}
           >
             <PlusIcon />
             <span className="text-white font-semibold">Adicionar</span>

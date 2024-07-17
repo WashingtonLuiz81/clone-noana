@@ -1,38 +1,45 @@
 import React, { useEffect, useState } from 'react'
-import { useForm } from 'react-hook-form'
 import { Button } from '@/components/ui/button'
 import { ArrowRightIcon } from 'lucide-react'
-import { toast } from 'react-toastify'
 import { stateAbbreviations } from '@/lib/config'
 import { PersonalInfo } from '../../types/types'
 import { useStore } from '@/store/formStore'
 import * as z from 'zod'
 import { Input } from '@/components/form'
+import {
+  insertMaskInCep,
+  insertMaskInCpf,
+  insertMaskInPhone,
+} from '@/lib/functions'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
 
 const schema = z.object({
   nomeCompleto: z.string().nonempty('Nome Completo é obrigatório'),
-  cpf: z.string().refine((value) => isValidCPF(value), {
-    message: 'CPF inválido',
-  }),
+  cpf: z
+    .string()
+    .min(11, 'CPF deve ter no mínimo 11 caracteres')
+    .max(14, 'CPF deve ter no máximo 14 caracteres')
+    .regex(/^\d{3}\.\d{3}\.\d{3}-\d{2}$/, 'CPF inválido'),
   dataNascimento: z.string().nonempty('Data de Nascimento é obrigatória'),
-  telefone: z.string().refine((value) => /^\d{11}$/.test(value), {
-    message: 'Telefone inválido',
+  ddd: z.string().refine((value) => /^\d{2}$/.test(value), {
+    message: 'Erro',
   }),
-  cep: z.string().refine((value) => /^\d{8}$/.test(value), {
+  telefone: z
+    .string()
+    .min(10, 'Telefone deve ter no mínimo 10 caracteres')
+    .max(10, 'Telefone deve ter no máximo 10 caracteres')
+    .regex(/^\d{5}-\d{4}$/, 'Telefone inválido'),
+  cep: z.string().refine((value) => /^\d{5}-?\d{3}$/.test(value), {
     message: 'CEP inválido',
   }),
   logradouro: z.string(),
   bairro: z.string(),
+  numero: z.string().nonempty('Erro'),
   complemento: z.string(),
   cidade: z.string(),
   estado: z.string(),
 })
-
-function isValidCPF(cpf: string): boolean {
-  console.log(cpf)
-
-  return true
-}
 
 interface ManualFormProps {
   nextStep: () => void
@@ -48,9 +55,12 @@ const BeneficiariesRegistrationManualFormData: React.FC<ManualFormProps> = ({
     register,
     handleSubmit,
     setValue,
+    setError,
+    clearErrors,
     formState: { errors },
   } = useForm<PersonalInfo>({
     defaultValues: beneficiaryData || {},
+    resolver: zodResolver(schema),
   })
 
   const [address, setAddress] = useState({
@@ -65,50 +75,76 @@ const BeneficiariesRegistrationManualFormData: React.FC<ManualFormProps> = ({
   }, [])
 
   const handleCEPChange = async (cep: string) => {
-    try {
-      const response = await fetch(`https://viacep.com.br/ws/${cep}/json/`)
-      const data = await response.json()
+    const formattedCEP = cep.replace(/\D/g, '')
+    setValue('cep', insertMaskInCep({ cep: formattedCEP }))
 
-      if (!data.erro) {
-        setValue('logradouro', data.logradouro || '')
-        setValue('bairro', data.bairro || '')
-        setValue('cidade', data.localidade || '')
-        setValue(
-          'estado',
-          stateAbbreviations[data.uf as keyof typeof stateAbbreviations] || '',
+    if (formattedCEP.length === 8) {
+      try {
+        const response = await fetch(
+          `https://viacep.com.br/ws/${formattedCEP}/json/`,
         )
+        const data = await response.json()
 
-        setAddress({
-          logradouro: data.logradouro || '',
-          bairro: data.bairro || '',
-          cidade: data.localidade || '',
-          estado:
+        if (!data.erro) {
+          clearErrors('cep')
+          setValue('logradouro', data.logradouro || '')
+          setValue('bairro', data.bairro || '')
+          setValue('cidade', data.localidade || '')
+          setValue(
+            'estado',
             stateAbbreviations[data.uf as keyof typeof stateAbbreviations] ||
-            '',
+              '',
+          )
+
+          setAddress({
+            logradouro: data.logradouro || '',
+            bairro: data.bairro || '',
+            cidade: data.localidade || '',
+            estado:
+              stateAbbreviations[data.uf as keyof typeof stateAbbreviations] ||
+              '',
+          })
+        } else {
+          setValue('logradouro', '')
+          setValue('bairro', '')
+          setValue('cidade', '')
+          setValue('estado', '')
+          setError('cep', {
+            type: 'manual',
+            message: 'CEP não encontrado',
+          })
+        }
+      } catch (error) {
+        console.error('Falha ao buscar endereço pelo CEP:', error)
+        setError('cep', {
+          type: 'manual',
+          message: 'Falha ao buscar endereço pelo CEP',
         })
-      } else {
-        setValue('logradouro', '')
-        setValue('bairro', '')
-        setValue('cidade', '')
-        setValue('estado', '')
-        console.error('CEP não encontrado')
-        toast.error('CEP não encontrado')
       }
-    } catch (error) {
-      console.error('Falha ao buscar endereço pelo CEP:', error)
-      toast.error('Falha ao buscar endereço pelo CEP')
+    } else {
+      setAddress({
+        logradouro: '',
+        bairro: '',
+        cidade: '',
+        estado: '',
+      })
     }
   }
 
   const onSubmit = async (data: PersonalInfo) => {
     try {
-      await schema.parseAsync(data) // Validar os dados usando zod
+      await schema.parseAsync(data)
       setBeneficiaryData(data)
       nextStep()
     } catch (error) {
       if (error instanceof z.ZodError) {
         console.error('Validation errors:', error.errors)
-        toast.error('Por favor, preencha o formulário corretamente')
+        error.errors.forEach((e) => {
+          setError(e.path[0] as keyof PersonalInfo, {
+            type: 'manual',
+            message: e.message,
+          })
+        })
       }
     }
   }
@@ -117,8 +153,18 @@ const BeneficiariesRegistrationManualFormData: React.FC<ManualFormProps> = ({
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
     const { name, value } = event.target
-    const onlyNums = value.replace(/[^0-9]/g, '')
-    setValue(name as keyof PersonalInfo, onlyNums)
+    const onlyNums = value.replace(/\D/g, '')
+
+    let maskedValue = onlyNums
+    if (name === 'cpf') {
+      maskedValue = insertMaskInCpf({ cpf: onlyNums })
+    } else if (name === 'telefone') {
+      maskedValue = insertMaskInPhone({ phone: onlyNums })
+    } else if (name === 'cep') {
+      maskedValue = insertMaskInCep({ cep: onlyNums })
+    }
+
+    setValue(name as keyof PersonalInfo, maskedValue)
   }
 
   return (
@@ -130,31 +176,27 @@ const BeneficiariesRegistrationManualFormData: React.FC<ManualFormProps> = ({
       <div className="flex flex-col gap-6">
         <div className="flex flex-col space-y-4 sm:flex-row sm:space-y-0 sm:space-x-6">
           <div className="flex-1">
-            <label htmlFor="nomeCompleto">Nome Completo</label>
             <Input
               {...register('nomeCompleto', {
                 required: 'Nome Completo é obrigatório',
               })}
               type="text"
               className="w-full mt-3 mb-1"
+              label="Nome Completo*"
               error={errors.nomeCompleto?.message}
             />
           </div>
 
           <div className="flex-1">
-            <label htmlFor="cpf">CPF</label>
             <Input
-              type="text"
-              className="w-full mt-3 mb-1"
               {...register('cpf', {
                 required: 'CPF é obrigatório',
-                pattern: {
-                  value: /^\d{11}$/,
-                  message: 'CPF inválido',
-                },
               })}
+              type="text"
+              className="w-full mt-3 mb-1"
               onChange={handleNumericInputChange}
-              maxLength={11}
+              maxLength={14}
+              label="CPF*"
               error={errors.cpf?.message}
             />
           </div>
@@ -162,63 +204,83 @@ const BeneficiariesRegistrationManualFormData: React.FC<ManualFormProps> = ({
 
         <div className="flex flex-col space-y-4 sm:flex-row sm:space-y-0 sm:space-x-6">
           <div className="flex-1">
-            <label htmlFor="dataNascimento">Data de Nascimento</label>
             <Input
               {...register('dataNascimento', {
                 required: 'Data de Nascimento é obrigatória',
               })}
               type="date"
               className="w-full mt-3 mb-1"
+              label="Data de Nascimento*"
               error={errors.dataNascimento?.message}
             />
           </div>
 
-          <div className="flex-1">
-            <label htmlFor="telefone">Telefone</label>
-            <Input
-              {...register('telefone', {
-                required: 'Telefone é obrigatório',
-                pattern: {
-                  value: /^\d{11}$/,
-                  message: 'Telefone inválido',
-                },
-              })}
-              type="text"
-              className="w-full mt-3 mb-1"
-              maxLength={11}
-              onChange={handleNumericInputChange} // Trata apenas números
-              error={errors.telefone?.message}
-            />
+          <div className="flex-1 flex items-start gap-3">
+            <div className="w-16">
+              <Input
+                {...register('ddd', {
+                  required: 'Erro',
+                  pattern: {
+                    value: /^\d{2}$/,
+                    message: 'DDD inválido',
+                  },
+                })}
+                type="text"
+                className="w-full mt-3 mb-1"
+                maxLength={2}
+                onChange={handleNumericInputChange}
+                label="DDD*"
+                error={errors.ddd?.message}
+              />
+            </div>
+
+            <div className="flex-1">
+              <Input
+                {...register('telefone', {
+                  required: 'Telefone é obrigatório',
+                  pattern: {
+                    value: /^\d{5}-\d{4}$/,
+                    message: 'Telefone inválido',
+                  },
+                })}
+                type="text"
+                className="w-full mt-3 mb-1"
+                maxLength={10}
+                onChange={handleNumericInputChange}
+                label="Telefone*"
+                error={errors.telefone?.message}
+              />
+            </div>
           </div>
         </div>
 
         <div className="flex flex-col space-y-4 sm:flex-row sm:space-y-0 sm:space-x-6">
           <div className="flex-1">
-            <label htmlFor="cep">CEP</label>
             <Input
               {...register('cep', {
                 required: 'CEP é obrigatório',
                 pattern: {
-                  value: /^\d{8}$/,
+                  value: /^\d{5}-?\d{3}$/,
                   message: 'CEP inválido',
                 },
               })}
               type="text"
               className="w-full mt-3 mb-1"
               onBlur={(e) => handleCEPChange(e.target.value)}
-              onChange={handleNumericInputChange} // Trata apenas números
-              maxLength={8}
+              onChange={handleNumericInputChange}
+              maxLength={9}
+              label="CEP*"
               error={errors.cep?.message}
             />
           </div>
 
           <div className="flex-1">
-            <label htmlFor="logradouro">Endereço</label>
             <Input
               {...register('logradouro')}
               type="text"
-              className={`w-full mt-3 mb-1 ${address.bairro ? '' : 'readonly-input'}`}
+              className={`w-full mt-3 mb-1 ${address.logradouro ? '' : 'readonly-input'}`}
               value={address.logradouro}
+              label="Logradouro"
               readOnly
             />
           </div>
@@ -226,45 +288,59 @@ const BeneficiariesRegistrationManualFormData: React.FC<ManualFormProps> = ({
 
         <div className="flex flex-col space-y-4 sm:flex-row sm:space-y-0 sm:space-x-6">
           <div className="flex-1">
-            <label htmlFor="bairro">Bairro</label>
             <Input
               {...register('bairro')}
               type="text"
               className={`w-full mt-3 mb-1 ${address.bairro ? '' : 'readonly-input'}`}
               value={address.bairro}
+              label="Bairro"
               readOnly
             />
           </div>
 
-          <div className="flex-1">
-            <label htmlFor="complemento">Complemento</label>
-            <Input
-              {...register('complemento')}
-              type="text"
-              className="w-full mt-3 mb-1"
-            />
+          <div className="flex-1 flex items-start gap-3">
+            <div className="w-20">
+              <Input
+                {...register('numero', {
+                  required: 'Erro',
+                })}
+                type="text"
+                className="w-full mt-3 mb-1"
+                label="Número*"
+                error={errors.numero?.message}
+              />
+            </div>
+
+            <div className="flex-1">
+              <Input
+                {...register('complemento')}
+                type="text"
+                className="w-full mt-3 mb-1"
+                label="Complemento"
+              />
+            </div>
           </div>
         </div>
 
         <div className="flex flex-col space-y-4 sm:flex-row sm:space-y-0 sm:space-x-6">
           <div className="flex-1">
-            <label htmlFor="cidade">Cidade</label>
             <Input
               {...register('cidade')}
               type="text"
               className={`w-full mt-3 mb-1 ${address.bairro ? '' : 'readonly-input'}`}
               value={address.cidade}
+              label="Cidade"
               readOnly
             />
           </div>
 
           <div className="flex-1">
-            <label htmlFor="estado">Estado</label>
             <Input
               {...register('estado')}
               type="text"
               className={`w-full mt-3 mb-1 ${address.bairro ? '' : 'readonly-input'}`}
               value={address.estado}
+              label="Estado"
               readOnly
             />
           </div>
