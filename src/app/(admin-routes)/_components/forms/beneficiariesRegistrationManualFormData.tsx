@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button'
 import { ArrowRightIcon } from 'lucide-react'
 import { stateAbbreviations } from '@/lib/config'
 import { PersonalInfo } from '../../types/types'
-import { useStore } from '@/store/formStore'
+import { useStore } from '@/store/beneficiaryStore'
 import * as z from 'zod'
 import { Input } from '@/components/form'
 import {

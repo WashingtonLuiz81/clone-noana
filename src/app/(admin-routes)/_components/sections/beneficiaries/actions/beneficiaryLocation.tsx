@@ -16,6 +16,7 @@ export default function BeneficiaryLocation() {
         <Card className="flex flex-col items-start gap-4 rounded-2xl bg-gray-50 p-8 mb-4 text-gray-900">
           <CardContent className="flex flex-col text-sm p-0 w-full">
             <MapComponent apiKey={apiKey} lat={lat} lng={lng} />
+
             <Button className="flex items-center gap-4 p-3 mt-6 text-lg font-semibold text-white">
               <PhoneIcon width={20} height={20} />
               Ligar
