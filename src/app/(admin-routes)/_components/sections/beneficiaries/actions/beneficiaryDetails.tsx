@@ -1,14 +1,14 @@
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar'
 import { Progress } from '@/components/ui/progress'
 
-import { PhoneIcon } from 'lucide-react'
+import { X } from 'lucide-react'
 import { User } from '../../../tabs/contentTabs/recipient'
 import { RadioGroup } from '../../../radioGroupLinkedUnit'
 
 interface BeneficiaryDetailsProps {
   selectedUser: User
+  closeSection: (isVisible: string) => void
 }
 
 interface Option {
@@ -24,6 +24,7 @@ const options: Option[] = [
 
 export default function BeneficiaryDetails({
   selectedUser,
+  closeSection,
 }: BeneficiaryDetailsProps) {
   console.log('user Id', selectedUser)
   return (
@@ -32,11 +33,10 @@ export default function BeneficiaryDetails({
         <div className="bg-gray-100 p-10">
           <div className="flex justify-between items-center text-gray-900">
             <h1 className="text-2xl font-semibold">Detalhes do Beneficiário</h1>
-
-            <Button className="flex items-center gap-4 text-white">
-              <PhoneIcon width={20} height={20} />
-              Ligar
-            </Button>
+            <X
+              className="cursor-pointer text-gray-900 mb-6"
+              onClick={() => closeSection('')}
+            />
           </div>
 
           <div className="flex flex-col items-center mb-24 mt-24 relative">
