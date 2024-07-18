@@ -13,7 +13,7 @@ import {
 import TableArrow from '@/assets/img/table-arrow'
 import TableArrowUp from '@/assets/img/table-arrow-up'
 import TableArrowDown from '@/assets/img/table-arrow-down'
-import { unitTableActions } from '@/lib/config'
+import { monitorTableActions, unitTableActions } from '@/lib/config'
 import { Avatar, AvatarImage, AvatarFallback } from '@radix-ui/react-avatar'
 
 interface Column<T> {
@@ -25,6 +25,7 @@ interface Column<T> {
 interface TableProps<T> {
   data: T[]
   columns: Column<T>[]
+  persona?: string
   showSection: (section: string) => void
   onActionClick: (id: number, action: string) => void
 }
@@ -43,9 +44,13 @@ const Table = <T extends { id: number }>({
   columns,
   showSection,
   onActionClick,
+  persona,
 }: TableProps<T>) => {
   const [sortConfig, setSortConfig] = useState<SortConfig<T> | null>(null)
   const styleButtonAction = 'text-primary cursor-pointer'
+
+  const actionsSorted =
+    persona === 'monitor' ? monitorTableActions : unitTableActions
 
   const handleActionClick = (id: number, action: string) => {
     onActionClick(id, action)
@@ -138,7 +143,7 @@ const Table = <T extends { id: number }>({
       const iconMap = createIconMap(item.id)
       return (
         <div className="flex items-center gap-3">
-          {unitTableActions.map((action, index) => (
+          {actionsSorted.map((action, index) => (
             <React.Fragment key={index}>{iconMap[action]}</React.Fragment>
           ))}
         </div>
