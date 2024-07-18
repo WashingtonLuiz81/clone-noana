@@ -49,10 +49,12 @@ const stateAbbreviations: Record<string, string> = {
 
 const unitTableActions = ['view', 'list', 'edit', 'call', 'map', 'trash']
 const usersTableActions = ['view', 'edit', 'trash', 'lock']
+const monitorTableActions = ['view', 'edit', 'trash']
 
 export {
   unitTableHeader,
   unitTableActions,
   usersTableActions,
+  monitorTableActions,
   stateAbbreviations,
 }
