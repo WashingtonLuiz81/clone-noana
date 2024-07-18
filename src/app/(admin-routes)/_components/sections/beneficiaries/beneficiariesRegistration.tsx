@@ -2,7 +2,7 @@ import * as React from 'react'
 import TabList from '../../tabs/tabList'
 import BeneficiariesRegistrationManual from './beneficiariesRegistrationManual'
 import { X } from 'lucide-react'
-import { useStore } from '@/store/formStore'
+import { useStore } from '@/store/beneficiaryStore'
 import { AlertCloseSection } from '../../alertCloseSection'
 
 interface BeneficiariesRegistrationProps {

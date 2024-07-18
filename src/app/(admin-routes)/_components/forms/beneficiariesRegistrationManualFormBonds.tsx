@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useForm, Controller } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useStore } from '@/store/formStore'
+import { useStore } from '@/store/beneficiaryStore'
 import { Button } from '@/components/ui/button'
 import { ArrowRightIcon } from 'lucide-react'
 import { Input, FormSelect } from '@/components/form'
@@ -39,7 +39,6 @@ export default function BeneficiariesRegistrationManualFormBonds({
   const { payload, setBondsData } = useStore()
   const { bondsData } = payload
 
-  // Transform bondsData to ensure null values are converted to undefined
   const transformedBondsData = bondsData
     ? {
         ...bondsData,
@@ -95,7 +94,7 @@ export default function BeneficiariesRegistrationManualFormBonds({
       </span>
 
       <div className="flex flex-col gap-10">
-        <div className="flex flex-col gap-8">
+        <div className="flex flex-col gap-8 pb-10 border-b-[1px] border-gray-200">
           <span className="text-base font-semibold text-gray-600">
             1. Selecione uma unidade de Cuidado:
           </span>

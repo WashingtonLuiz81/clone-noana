@@ -25,7 +25,7 @@ export const RadioGroup: React.FC<RadioGroupProps> = ({
   readOnly = false, // Valor padrão é false
 }) => {
   return (
-    <div className="pb-10 border-b-[1px] border-gray-200">
+    <div>
       <ul className="flex items-center gap-4">
         {options.map((option) => (
           <li

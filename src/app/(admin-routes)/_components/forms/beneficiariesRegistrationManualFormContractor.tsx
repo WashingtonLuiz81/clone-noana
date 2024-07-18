@@ -6,7 +6,7 @@ import { stateAbbreviations } from '@/lib/config'
 import { PersonalInfo } from '../../types/types'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useStore } from '@/store/formStore'
+import { useStore } from '@/store/beneficiaryStore'
 import { Input } from '@/components/form'
 import {
   insertMaskInCpf,
