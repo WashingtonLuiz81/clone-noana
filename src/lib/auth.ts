@@ -78,7 +78,7 @@ export const authOptions = {
       if (user) {
         const userToken: Omit<UserToken, 'user'> = {
           UserId: user.UserId,
-          IdToken: user.idToken,
+          IdToken: user.IdToken,
           AccessToken: user.AccessToken,
           RefreshToken: user.RefreshToken,
           ExpiresIn: Date.now() + user.ExpiresIn * 1000,
