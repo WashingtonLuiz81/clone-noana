@@ -61,6 +61,7 @@ const config = {
         },
         status: {
           error: '#DC2828',
+          success: '#1AC057',
         },
         shadowAvatar: 'rgba(0, 0, 0, 0.14)',
       },

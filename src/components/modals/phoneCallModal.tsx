@@ -6,9 +6,13 @@ import {
 } from '@/components/ui/dialog'
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar'
 
-export const CallBeneficiaryModal: React.FC = () => {
+interface CallBeneficiaryModalProps {
+  onClose: () => void
+}
+
+const PhoneCallModal = ({ onClose }: CallBeneficiaryModalProps) => {
   return (
-    <Dialog defaultOpen>
+    <Dialog defaultOpen onOpenChange={(open) => !open && onClose()}>
       <DialogContent className="max-w-[390px] h-60 p-10 bg-gradient-to-b from-purple-900 to-purple-800 text-white rounded-lg border-none">
         <div className="flex items-center p-2 gap-9 ">
           <Avatar className="w-20 h-20">
@@ -31,3 +35,5 @@ export const CallBeneficiaryModal: React.FC = () => {
     </Dialog>
   )
 }
+
+export default PhoneCallModal

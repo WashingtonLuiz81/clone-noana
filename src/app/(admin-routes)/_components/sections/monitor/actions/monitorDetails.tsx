@@ -1,9 +1,11 @@
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar'
 import { X } from 'lucide-react'
+import { User } from '../../../tabs/contentTabs/recipient'
 
 interface MonitorDetailsProps {
   closeSection: (isVisible: string) => void
+  selectedUser: User
 }
 
 export default function MonitorDetails({ closeSection }: MonitorDetailsProps) {

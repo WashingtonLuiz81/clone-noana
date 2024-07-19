@@ -67,6 +67,7 @@ export default function BeneficiariesRegistrationManualFormCaregiver({
 
   const onSubmit = (data: FormValuesProps) => {
     setCaregiverData(data.caregivers)
+    console.log('Data: ', data)
 
     // Se após chamar a API a resposta for sucesso (200), chamar a função abaixo
     clearPayload()

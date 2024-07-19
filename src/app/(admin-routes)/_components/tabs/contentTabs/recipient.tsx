@@ -6,13 +6,14 @@ import { PlusIcon } from '@radix-ui/react-icons'
 import { Button } from '@/components/ui/button'
 import { unitTableHeader } from '@/lib/config'
 import Table from '../../table'
-import BeneficiariesRegistration from '../../sections/beneficiaries/beneficiariesRegistration'
-import BeneficiaryDetails from '../../sections/beneficiaries/actions/beneficiaryDetails'
-import BeneficiaryLocation from '../../sections/beneficiaries/actions/beneficiaryLocation'
-import BeneficiaryDelete from '../../sections/beneficiaries/actions/beneficiaryDelete'
-import MonitorsList from '../../sections/beneficiaries/actions/beneficiaryMonitorsList'
-import BeneficiaryCall from '../../sections/beneficiaries/actions/beneficiaryCall'
-import { BeneficiaryEdit } from '../../sections/beneficiaries/actions/beneficiaryEdit'
+import {
+  BeneficiariesRegistration,
+  BeneficiaryDetails,
+  BeneficiaryLocation,
+  BeneficiaryMonitorsList,
+  BeneficiaryEdit,
+} from '../../sections/beneficiaries'
+import { DeleteConfirmationModal, PhoneCallModal } from '@/components/modals'
 
 interface Address {
   cep: string
@@ -311,6 +312,10 @@ export default function Recipient() {
   const [isVisibleSection, setIsVisibleSection] = useState('')
   const [visibleItems, setVisibleItems] = useState(8)
   const [selectedUser, setSelectedUser] = useState<User | null>(null)
+  const [openDialog, setOpenDialog] = useState({
+    phoneCall: false,
+    delete: false,
+  })
 
   const filteredData = useMemo(() => {
     return data.filter((item) =>
@@ -368,14 +373,12 @@ export default function Recipient() {
             />
           )}
           {isVisibleSection === 'list' && (
-            <MonitorsList closeSection={setIsVisibleSection} />
+            <BeneficiaryMonitorsList closeSection={setIsVisibleSection} />
           )}
-          {isVisibleSection === 'call' && <BeneficiaryCall />}
+
           {isVisibleSection === 'map' && (
             <BeneficiaryLocation closeSection={setIsVisibleSection} />
           )}
-
-          {isVisibleSection === 'list' && <MonitorsList />}
 
           {isVisibleSection === 'edit' && (
             <BeneficiaryEdit
@@ -383,9 +386,6 @@ export default function Recipient() {
               closeSection={setIsVisibleSection}
             />
           )}
-
-          {isVisibleSection === 'map' && <BeneficiaryLocation />}
-          {isVisibleSection === 'delete' && <BeneficiaryDelete />}
         </div>
       </div>
 
@@ -427,6 +427,22 @@ export default function Recipient() {
         data={filteredData.slice(0, visibleItems)}
         columns={unitTableHeader}
         onActionClick={handleActionClick}
+        openModal={(action) => {
+          if (action === 'call') {
+            setOpenDialog((prevState) => ({
+              ...prevState,
+              phoneCall: true,
+            }))
+            return
+          }
+
+          if (action === 'delete') {
+            setOpenDialog((prevState) => ({
+              ...prevState,
+              delete: true,
+            }))
+          }
+        }}
       />
 
       {visibleItems < filteredData.length && (
@@ -438,6 +454,28 @@ export default function Recipient() {
             Ver mais
           </Button>
         </div>
+      )}
+
+      {openDialog.phoneCall && (
+        <PhoneCallModal
+          onClose={() =>
+            setOpenDialog((prevState) => ({
+              ...prevState,
+              phoneCall: false,
+            }))
+          }
+        />
+      )}
+
+      {openDialog.delete && (
+        <DeleteConfirmationModal
+          onClose={() =>
+            setOpenDialog((prevState) => ({
+              ...prevState,
+              delete: false,
+            }))
+          }
+        />
       )}
     </section>
   )

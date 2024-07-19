@@ -13,7 +13,7 @@ interface RadioGroupProps {
   setSelected?: (value: string) => void
   error?: string
   register?: UseFormRegisterReturn
-  readOnly?: boolean // Adiciona a prop readOnly
+  readOnly?: boolean
 }
 
 export const RadioGroup: React.FC<RadioGroupProps> = ({
@@ -22,7 +22,7 @@ export const RadioGroup: React.FC<RadioGroupProps> = ({
   setSelected,
   error,
   register,
-  readOnly = false, // Valor padrão é false
+  readOnly = false,
 }) => {
   return (
     <div>
@@ -30,7 +30,7 @@ export const RadioGroup: React.FC<RadioGroupProps> = ({
         {options.map((option) => (
           <li
             key={option.id}
-            className={`min-w-32 bg-white p-4 rounded-xl border-[1px] hover:border-primary ${
+            className={`min-w-32 bg-white p-4 rounded-xl border-[1px]  ${!readOnly && 'hover:border-primary'} ${
               selected === option.id
                 ? 'border-primary text-primary'
                 : 'border-gray-200 text-gray-900'
@@ -45,11 +45,11 @@ export const RadioGroup: React.FC<RadioGroupProps> = ({
               onChange={(e) => {
                 if (!readOnly && setSelected) {
                   setSelected(e.target.value)
-                  register?.onChange(e) // Chama a função onChange do react-hook-form, se register for fornecido
+                  register?.onChange(e)
                 }
               }}
               className="hidden"
-              disabled={readOnly} // Desabilita o input se readOnly for true
+              disabled={readOnly}
             />
             <label
               htmlFor={option.id}

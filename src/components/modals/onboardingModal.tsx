@@ -1,7 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import Slider from 'react-slick'
-import './Modal.css'
 
 import Image from 'next/image'
 
@@ -12,7 +11,7 @@ type ModalProps = {
   onClose?: () => void
 }
 
-const Modal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
+const OnboardingModal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
   if (!isOpen) return null
 
   const settings = {
@@ -58,4 +57,4 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
   )
 }
 
-export default Modal
+export default OnboardingModal

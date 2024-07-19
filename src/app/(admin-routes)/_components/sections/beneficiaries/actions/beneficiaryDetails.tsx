@@ -1,10 +1,13 @@
+import { useState } from 'react'
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar'
 import { Progress } from '@/components/ui/progress'
 
-import { X } from 'lucide-react'
+import { PhoneIcon, X } from 'lucide-react'
 import { User } from '../../../tabs/contentTabs/recipient'
 import { RadioGroup } from '../../../radioGroupLinkedUnit'
+import { Button } from '@/components/ui/button'
+import { PhoneCallModal } from '@/components/modals'
 
 interface BeneficiaryDetailsProps {
   selectedUser: User
@@ -26,17 +29,29 @@ export default function BeneficiaryDetails({
   selectedUser,
   closeSection,
 }: BeneficiaryDetailsProps) {
-  console.log('user Id', selectedUser)
+  const [phoneCallModal, setPhoneCallModal] = useState(false)
+
   return (
     <>
       <section className="h-screen overflow-y-auto scrollbar-hide">
         <div className="bg-gray-100 p-10">
           <div className="flex justify-between items-center text-gray-900">
             <h1 className="text-2xl font-semibold">Detalhes do Beneficiário</h1>
-            <X
-              className="cursor-pointer text-gray-900 mb-6"
-              onClick={() => closeSection('')}
-            />
+
+            <div className="flex items-center gap-4">
+              <Button
+                className="flex items-center gap-4 text-sm font-semibold text-white"
+                onClick={() => setPhoneCallModal(true)}
+              >
+                <PhoneIcon width={20} height={20} />
+                Ligar
+              </Button>
+
+              <X
+                className="cursor-pointer text-gray-900"
+                onClick={() => closeSection('')}
+              />
+            </div>
           </div>
 
           <div className="flex flex-col items-center mb-24 mt-24 relative">
@@ -51,7 +66,7 @@ export default function BeneficiaryDetails({
           <Card className="flex flex-col bg-white rounded-2xl shadow-md text-gray-900 p-8 mb-4">
             <CardHeader className="text-center">
               <CardTitle className="text-2xl pb-10 pt-16 text-center font-semibold">
-                {selectedUser.nome}
+                {selectedUser.nomeCompleto}
               </CardTitle>
             </CardHeader>
             <CardContent className="grid grid-cols-2 gap-4 p-0 text-sm">
@@ -61,7 +76,9 @@ export default function BeneficiaryDetails({
               </div>
               <div className="flex gap-9 text-sm font-medium">
                 <span className="w-[120px] text-gray-500">Endereço: </span>
-                <span className="text-left">{selectedUser.endereco}</span>
+                <span className="text-left">
+                  {selectedUser.address.logradouro}
+                </span>
               </div>
               <div className="flex gap-9 text-sm font-medium">
                 <span className="w-[160px] text-gray-500">
@@ -73,7 +90,7 @@ export default function BeneficiaryDetails({
                 <span className="w-[120px] text-gray-500">
                   Cidade / Estado:
                 </span>
-                <span className="text-left">{`${selectedUser.cidade}/${selectedUser.estado}`}</span>
+                <span className="text-left">{`${selectedUser.address.cidade}/${selectedUser.address.estado}`}</span>
               </div>
               <div className="flex gap-9 text-sm font-medium">
                 <span className="w-[160px] text-gray-500">Sexo: </span>
@@ -189,14 +206,14 @@ export default function BeneficiaryDetails({
               <div className="flex gap-9 text-sm font-medium text-gray-900">
                 <span className="w-[150px] text-gray-500">Endereço: </span>
                 <span className="text-left">
-                  {selectedUser.contratante.endereco}
+                  {selectedUser.contratante.address.logradouro}
                 </span>
               </div>
               <div className="flex gap-9 text-sm font-medium text-gray-900">
                 <span className="w-[150px] text-gray-500">
                   Cidade / Estado:
                 </span>
-                <span className="text-left">{`${selectedUser.contratante.cidade}/${selectedUser.contratante.estado}`}</span>
+                <span className="text-left">{`${selectedUser.contratante.address.cidade}/${selectedUser.contratante.address.estado}`}</span>
               </div>
             </CardContent>
           </Card>
@@ -236,6 +253,10 @@ export default function BeneficiaryDetails({
             </CardContent>
           </Card>
         </div>
+
+        {phoneCallModal && (
+          <PhoneCallModal onClose={() => setPhoneCallModal(false)} />
+        )}
       </section>
     </>
   )

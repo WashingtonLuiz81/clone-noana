@@ -9,6 +9,7 @@ import { unitTableHeader } from '@/lib/config'
 import Table from '../../table'
 
 import MonitorDetails from '../../sections/monitor/actions/monitorDetails'
+import { User } from './recipient'
 
 interface Person {
   id: number
@@ -181,16 +182,23 @@ const usuarios: User[] = [
     id: 1,
     avatar:
       'https://img.freepik.com/vetores-premium/ilustracao-de-avatar-de-empresario-retrato-de-usuario-de-desenho-animado-icone-de-perfil-de-usuario_118339-5507.jpg',
-    nome: 'João Silva',
+    nomeCompleto: 'João Silva',
     cpf: '123.456.789-00',
-    endereco: 'Rua A, 123',
     dataNascimento: '01-01-1990',
-    cidade: 'São Paulo',
-    estado: 'SP',
     sexo: 'Masculino',
-    telefone: '(11) 98765-4321',
+    ddd: '21',
+    telefone: '98765-4321',
     modelo: 'Samsung Galaxy S10',
     imei: '123456789012345',
+    address: {
+      cep: '12283-865',
+      logradouro: 'Rua Benedito Sa de Araujo',
+      bairro: 'Parque Residencial Santo André',
+      numero: '1002',
+      complemento: 'Apartamento 101',
+      cidade: 'Caçapava',
+      estado: 'São Paulo',
+    },
     dispositivo: {
       imei: '123456789012345',
       modelo: 'Modelo A',
@@ -201,14 +209,22 @@ const usuarios: User[] = [
       cpf: '987.654.321-00',
       sexo: 'Masculino',
       dataNascimento: '05-10-1970',
-      telefone: '(11) 91234-5678',
-      endereco: 'Rua B, 456',
-      cidade: 'São Paulo',
-      estado: 'SP',
+      ddd: '21',
+      telefone: '91234-5678',
+      address: {
+        cep: '12283-865',
+        logradouro: 'Rua B, 456',
+        bairro: 'Parque Residencial Santo André',
+        numero: '1002',
+        complemento: 'Apartamento 101',
+        cidade: 'São Paulo',
+        estado: 'SP',
+      },
     },
     monitor: {
       nome: 'Maria Silva',
-      telefone: '(11) 99876-5432',
+      ddd: '21',
+      telefone: '99876-5432',
       email: 'maria@example.com',
       grauParentesco: 'Irmã',
     },
@@ -217,16 +233,23 @@ const usuarios: User[] = [
     id: 2,
     avatar:
       'https://img.freepik.com/vetores-premium/ilustracao-de-avatar-de-empresario-retrato-de-usuario-de-desenho-animado-icone-de-perfil-de-usuario_118339-5507.jpg',
-    nome: 'Ana Souza',
+    nomeCompleto: 'Ana Souza',
     cpf: '321.654.987-00',
-    endereco: 'Avenida C, 789',
     dataNascimento: '1985-02-15',
-    cidade: 'Rio de Janeiro',
-    estado: 'RJ',
     sexo: 'Feminino',
-    telefone: '(21) 98765-4321',
+    ddd: '21',
+    telefone: '98765-4321',
     modelo: 'Samsung Galaxy S10',
     imei: '123456789012345',
+    address: {
+      cep: '12283-865',
+      logradouro: 'Rua Benedito Sa de Araujo',
+      bairro: 'Parque Residencial Santo André',
+      numero: '1002',
+      complemento: 'Apartamento 101',
+      cidade: 'Caçapava',
+      estado: 'São Paulo',
+    },
     dispositivo: {
       imei: '543216789012345',
       modelo: 'Modelo B',
@@ -237,14 +260,22 @@ const usuarios: User[] = [
       cpf: '789.456.123-00',
       sexo: 'Feminino',
       dataNascimento: '1965-08-20',
+      ddd: '21',
       telefone: '(21) 91234-5678',
-      endereco: 'Avenida D, 101',
-      cidade: 'Rio de Janeiro',
-      estado: 'RJ',
+      address: {
+        cep: '12283-865',
+        logradouro: 'Rua B, 456',
+        bairro: 'Parque Residencial Santo André',
+        numero: '1002',
+        complemento: 'Apartamento 101',
+        cidade: 'São Paulo',
+        estado: 'SP',
+      },
     },
     monitor: {
       nome: 'Carlos Souza',
-      telefone: '(21) 99876-5432',
+      ddd: '21',
+      telefone: '99876-5432',
       email: 'carlos@example.com',
       grauParentesco: 'Pai',
     },
@@ -254,7 +285,7 @@ const usuarios: User[] = [
 export default function Monitor() {
   const [searchQuery, setSearchQuery] = useState('')
   const [isVisibleSection, setIsVisibleSection] = useState('')
-  const [selectedUser, setSelectedUser] = useState<Monitor | null>(null)
+  const [selectedUser, setSelectedUser] = useState<User | null>(null)
 
   const filteredData = useMemo(() => {
     return data.filter((item) =>
@@ -278,28 +309,34 @@ export default function Monitor() {
     <section>
       <div
         id="slideover-container"
-        className={`fixed inset-0 z-10 transition-opacity duration-500 ease-in-out ${isVisibleSection !== ''
+        className={`fixed inset-0 z-10 transition-opacity duration-500 ease-in-out ${
+          isVisibleSection !== ''
             ? 'opacity-100'
             : 'opacity-0 pointer-events-none'
-          }`}
+        }`}
       >
         <div
           id="slideover-bg"
-          className={`absolute inset-0 bg-black transition-opacity duration-500 ease-in-out ${isVisibleSection !== '' ? 'opacity-50' : 'opacity-0'
-            }`}
+          className={`absolute inset-0 bg-black transition-opacity duration-500 ease-in-out ${
+            isVisibleSection !== '' ? 'opacity-50' : 'opacity-0'
+          }`}
           onClick={() => setIsVisibleSection('')}
         ></div>
 
         <div
           id="slideover"
-          className={`absolute top-0 right-0 h-full max-w-[888px] w-full bg-gray-100 border transform transition-transform duration-500 ease-in-out ${isVisibleSection !== '' ? 'translate-x-0' : 'translate-x-full'
-            }`}
+          className={`absolute top-0 right-0 h-full max-w-[888px] w-full bg-gray-100 border transform transition-transform duration-500 ease-in-out ${
+            isVisibleSection !== '' ? 'translate-x-0' : 'translate-x-full'
+          }`}
         >
           {isVisibleSection === 'monitor' && (
             <MonitorRegistration closeSection={setIsVisibleSection} />
           )}
           {isVisibleSection === 'view' && (
-            <MonitorDetails closeSection={setIsVisibleSection} />
+            <MonitorDetails
+              closeSection={setIsVisibleSection}
+              selectedUser={selectedUser!}
+            />
           )}
         </div>
       </div>

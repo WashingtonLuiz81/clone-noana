@@ -71,7 +71,7 @@ const schema = z.object({
 
 type FormValuesProps = z.infer<typeof schema>
 
-export function BeneficiaryEdit({
+export default function BeneficiaryEdit({
   selectedUser,
   closeSection,
 }: BeneficiaryDetailsProps) {

@@ -27,6 +27,7 @@ interface TableProps<T> {
   columns: Column<T>[]
   persona?: string
   showSection: (section: string) => void
+  openModal?: (section: string) => void
   onActionClick: (id: number, action: string) => void
 }
 
@@ -45,6 +46,7 @@ const Table = <T extends { id: number }>({
   showSection,
   onActionClick,
   persona,
+  openModal,
 }: TableProps<T>) => {
   const [sortConfig, setSortConfig] = useState<SortConfig<T> | null>(null)
   const styleButtonAction = 'text-primary cursor-pointer'
@@ -54,7 +56,11 @@ const Table = <T extends { id: number }>({
 
   const handleActionClick = (id: number, action: string) => {
     onActionClick(id, action)
-    showSection(action)
+    if (action === 'call') {
+      openModal && openModal(action)
+    } else {
+      showSection(action)
+    }
   }
 
   const createIconMap = (id: number): IconMap => ({
@@ -83,7 +89,7 @@ const Table = <T extends { id: number }>({
       <PhoneCallIcon
         className={styleButtonAction}
         width="20"
-        onClick={() => handleActionClick(id, 'call')}
+        onClick={() => openModal && openModal('call')}
       />
     ),
     map: (
@@ -97,7 +103,7 @@ const Table = <T extends { id: number }>({
       <Trash2Icon
         className={styleButtonAction}
         width="20"
-        onClick={() => handleActionClick(id, 'delete')}
+        onClick={() => openModal && openModal('delete')}
       />
     ),
     lock: (
