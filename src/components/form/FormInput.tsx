@@ -28,7 +28,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           ref={ref}
           {...props}
           readOnly={isReadOnly}
-          className={`w-full mt-1 px-3 py-2 rounded-md border focus:outline-none focus:ring focus:border-blue-300 ${
+          className={`w-full px-3 py-2 rounded-md border focus:outline-none focus:ring focus:border-blue-300 ${props.className} ${
             isReadOnly ? 'bg-gray-100 text-gray-400 cursor-not-allowed' : ''
           } ${error ? 'border border-red-500' : ''}`}
         />

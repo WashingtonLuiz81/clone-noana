@@ -56,7 +56,7 @@ export default function BeneficiaryDetails({
 
           <div className="flex flex-col items-center mb-24 mt-24 relative">
             <div className="flex items-center absolute -bottom-44 justify-center">
-              <Avatar className="w-56 h-56">
+              <Avatar className="w-40 h-40">
                 <AvatarImage src={selectedUser.avatar} />
                 <AvatarFallback>LA</AvatarFallback>
               </Avatar>

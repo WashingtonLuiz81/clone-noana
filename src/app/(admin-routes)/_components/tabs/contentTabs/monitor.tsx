@@ -10,6 +10,8 @@ import Table from '../../table'
 
 import MonitorDetails from '../../sections/monitor/actions/monitorDetails'
 import { User } from './recipient'
+import { DeleteConfirmationModal } from '@/components/modals'
+import MonitorEdit from '../../sections/monitor/actions/monitorEdit'
 
 interface Person {
   id: number
@@ -186,10 +188,12 @@ const usuarios: User[] = [
     cpf: '123.456.789-00',
     dataNascimento: '01-01-1990',
     sexo: 'Masculino',
+    email: 'joao@example.com',
     ddd: '21',
     telefone: '98765-4321',
     modelo: 'Samsung Galaxy S10',
     imei: '123456789012345',
+    grauParentesco: 'Filho',
     address: {
       cep: '12283-865',
       logradouro: 'Rua Benedito Sa de Araujo',
@@ -237,10 +241,12 @@ const usuarios: User[] = [
     cpf: '321.654.987-00',
     dataNascimento: '1985-02-15',
     sexo: 'Feminino',
+    email: 'joao@example.com',
     ddd: '21',
     telefone: '98765-4321',
     modelo: 'Samsung Galaxy S10',
     imei: '123456789012345',
+    grauParentesco: 'Filho',
     address: {
       cep: '12283-865',
       logradouro: 'Rua Benedito Sa de Araujo',
@@ -286,6 +292,7 @@ export default function Monitor() {
   const [searchQuery, setSearchQuery] = useState('')
   const [isVisibleSection, setIsVisibleSection] = useState('')
   const [selectedUser, setSelectedUser] = useState<User | null>(null)
+  const [openDialog, setOpenDialog] = useState(false)
 
   const filteredData = useMemo(() => {
     return data.filter((item) =>
@@ -320,7 +327,6 @@ export default function Monitor() {
           className={`absolute inset-0 bg-black transition-opacity duration-500 ease-in-out ${
             isVisibleSection !== '' ? 'opacity-50' : 'opacity-0'
           }`}
-          onClick={() => setIsVisibleSection('')}
         ></div>
 
         <div
@@ -332,8 +338,16 @@ export default function Monitor() {
           {isVisibleSection === 'monitor' && (
             <MonitorRegistration closeSection={setIsVisibleSection} />
           )}
+
           {isVisibleSection === 'view' && (
             <MonitorDetails
+              closeSection={setIsVisibleSection}
+              selectedUser={selectedUser!}
+            />
+          )}
+
+          {isVisibleSection === 'edit' && (
+            <MonitorEdit
               closeSection={setIsVisibleSection}
               selectedUser={selectedUser!}
             />
@@ -379,8 +393,20 @@ export default function Monitor() {
           columns={unitTableHeader}
           persona="monitor"
           onActionClick={handleActionClick}
+          openModal={(action) => {
+            if (action === 'delete') {
+              setOpenDialog(true)
+            }
+          }}
         />
       }
+
+      {openDialog && (
+        <DeleteConfirmationModal
+          label="Monitor"
+          onClose={() => setOpenDialog(false)}
+        />
+      )}
     </section>
   )
 }

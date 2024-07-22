@@ -57,9 +57,11 @@ export interface User {
   dataNascimento: string
   sexo: string
   ddd: string
+  email: string
   telefone: string
   modelo: string
   imei: string
+  grauParentesco: string
   address: Address
   dispositivo: Dispositivo
   contratante: Contratante
@@ -75,10 +77,12 @@ const usuarios: User[] = [
     cpf: '123.456.789-00',
     dataNascimento: '01-01-1990',
     sexo: 'Masculino',
+    email: 'joao@example.com',
     ddd: '21',
     telefone: '98765-4321',
     modelo: 'Samsung Galaxy S10',
     imei: '123456789012345',
+    grauParentesco: 'Irmão',
     address: {
       cep: '12283-865',
       logradouro: 'Rua Benedito Sa de Araujo',
@@ -126,10 +130,12 @@ const usuarios: User[] = [
     cpf: '321.654.987-00',
     dataNascimento: '1985-02-15',
     sexo: 'Feminino',
+    email: 'joao@example.com',
     ddd: '21',
     telefone: '98765-4321',
     modelo: 'Samsung Galaxy S10',
     imei: '123456789012345',
+    grauParentesco: 'Tio',
     address: {
       cep: '12283-865',
       logradouro: 'Rua Benedito Sa de Araujo',
@@ -469,6 +475,7 @@ export default function Recipient() {
 
       {openDialog.delete && (
         <DeleteConfirmationModal
+          label="Beneficiário"
           onClose={() =>
             setOpenDialog((prevState) => ({
               ...prevState,

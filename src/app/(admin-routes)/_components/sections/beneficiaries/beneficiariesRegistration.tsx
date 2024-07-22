@@ -4,6 +4,7 @@ import BeneficiariesRegistrationManual from './beneficiariesRegistrationManual'
 import { X } from 'lucide-react'
 import { useStore } from '@/store/beneficiaryStore'
 import { AlertCloseSection } from '../../alertCloseSection'
+import { useState } from 'react'
 
 interface BeneficiariesRegistrationProps {
   closeSection: (isVisible: string) => void
@@ -12,8 +13,8 @@ interface BeneficiariesRegistrationProps {
 export default function BeneficiariesRegistration({
   closeSection,
 }: BeneficiariesRegistrationProps) {
-  const [tabTitle, setTabTitle] = React.useState('Manual')
-  const [showAlert, setShowAlert] = React.useState(false)
+  const [tabTitle, setTabTitle] = useState('Manual')
+  const [showAlert, setShowAlert] = useState(false)
 
   const { clearPayload } = useStore()
 
@@ -40,7 +41,7 @@ export default function BeneficiariesRegistration({
 
           <X
             className="cursor-pointer text-gray-900"
-            onClick={() => setShowAlert(!showAlert)}
+            onClick={() => setShowAlert(true)}
           />
         </div>
 

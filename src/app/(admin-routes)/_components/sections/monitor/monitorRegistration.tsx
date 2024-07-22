@@ -1,7 +1,12 @@
 import * as React from 'react'
 import { X } from 'lucide-react'
 import StepperComponent from '@/components/stepper'
-import { MonitorRegistrationFormData } from '../../forms'
+import {
+  MonitorRegistrationFormData,
+  MonitorRegistrationManualFormBonds,
+} from '../../forms'
+import { AlertCloseSection } from '../../alertCloseSection'
+import { useState } from 'react'
 
 interface BeneficiariesRegistrationProps {
   closeSection: (isVisible: string) => void
@@ -10,11 +15,26 @@ interface BeneficiariesRegistrationProps {
 export default function MonitorRegistration({
   closeSection,
 }: BeneficiariesRegistrationProps) {
-  const [activeStep, setActiveStep] = React.useState(0)
+  const [activeStep, setActiveStep] = useState(0)
+  const [showAlert, setShowAlert] = useState(false)
   const steps = ['Dados', 'Vínculos']
 
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1)
+  }
+
+  const handleBack = () => {
+    setActiveStep((prevActiveStep) => prevActiveStep - 1)
+  }
+
+  function handleExitAction(status: boolean): boolean {
+    if (status) {
+      closeSection('')
+      return true
+    } else {
+      setShowAlert(false)
+      return false
+    }
   }
 
   return (
@@ -27,7 +47,7 @@ export default function MonitorRegistration({
 
           <X
             className="cursor-pointer text-gray-900"
-            onClick={() => closeSection('')}
+            onClick={() => setShowAlert(true)}
           />
         </div>
       </header>
@@ -41,8 +61,14 @@ export default function MonitorRegistration({
           {activeStep === 0 && (
             <MonitorRegistrationFormData nextStep={handleNext} />
           )}
+
+          {activeStep === 1 && (
+            <MonitorRegistrationManualFormBonds handleBack={handleBack} />
+          )}
         </div>
       </div>
+
+      {showAlert && <AlertCloseSection handleExitAction={handleExitAction} />}
     </div>
   )
 }

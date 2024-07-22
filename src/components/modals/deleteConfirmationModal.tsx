@@ -10,11 +10,13 @@ import { Button } from '@/components/ui/button'
 import { Trash2Icon } from 'lucide-react'
 
 interface DeleteConfirmationModalProps {
+  label: string
   onClose: () => void
 }
 
 export default function DeleteConfirmationModal({
   onClose,
+  label,
 }: DeleteConfirmationModalProps) {
   return (
     <Dialog defaultOpen onOpenChange={(open) => !open && onClose()}>
@@ -25,7 +27,7 @@ export default function DeleteConfirmationModal({
 
         <DialogHeader>
           <DialogTitle className="text-2xl font-semibold">
-            Deletar Beneficiário?
+            Deletar {label}?
           </DialogTitle>
 
           <DialogDescription className="mt-2 text-lg font-medium text-gray-950/70">

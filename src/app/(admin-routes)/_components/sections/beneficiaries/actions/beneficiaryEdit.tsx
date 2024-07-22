@@ -23,7 +23,7 @@ import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { RadioGroup } from '../../../radioGroupLinkedUnit'
 
-interface BeneficiaryDetailsProps {
+interface BeneficiaryEditProps {
   selectedUser: User
   closeSection: (isVisible: string) => void
 }
@@ -74,7 +74,7 @@ type FormValuesProps = z.infer<typeof schema>
 export default function BeneficiaryEdit({
   selectedUser,
   closeSection,
-}: BeneficiaryDetailsProps) {
+}: BeneficiaryEditProps) {
   const [address, setAddress] = useState({
     cep: selectedUser.address.cep,
     logradouro: selectedUser.address.logradouro,
