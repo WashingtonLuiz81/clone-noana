@@ -217,41 +217,6 @@ export default function BeneficiaryDetails({
               </div>
             </CardContent>
           </Card>
-
-          <Card className="flex flex-col gap-7 bg-white rounded-2xl shadow-md p-8 mb-4">
-            <CardHeader className="p-0">
-              <CardTitle className="flex text-base font-semibold text-gray-900">
-                Dados do Monitor
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="flex flex-col gap-4 text-sm p-0">
-              <div className="flex gap-9 text-sm font-medium text-gray-900">
-                <span className="w-[150px] text-gray-500">Nome: </span>
-                <span className="text-left">{selectedUser.monitor.nome}</span>
-              </div>
-
-              <div className="flex gap-9 text-sm font-medium text-gray-900">
-                <span className="w-[150px] text-gray-500">Telefone: </span>
-                <span className="text-left">
-                  {selectedUser.monitor.telefone}
-                </span>
-              </div>
-
-              <div className="flex gap-9 text-sm font-medium text-gray-900">
-                <span className="w-[150px] text-gray-500">E-mail: </span>
-                <span className="text-left">{selectedUser.monitor.email}</span>
-              </div>
-
-              <div className="flex gap-9 text-sm font-medium text-gray-900">
-                <span className="w-[150px] text-gray-500">
-                  Grau de Parentesco:
-                </span>
-                <span className="text-left">
-                  {selectedUser.monitor.grauParentesco}
-                </span>
-              </div>
-            </CardContent>
-          </Card>
         </div>
 
         {phoneCallModal && (

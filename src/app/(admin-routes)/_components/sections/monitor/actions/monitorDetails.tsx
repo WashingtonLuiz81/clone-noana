@@ -13,10 +13,17 @@ interface MonitorDetailsProps {
 
 export default function MonitorDetails({ closeSection }: MonitorDetailsProps) {
   const [phoneCallModal, setPhoneCallModal] = useState(false)
+  const [showAll, setShowAll] = useState(false)
+  const beneficiaries = Array.from({ length: 16 }, (_, index) => ({
+    id: index,
+    name: 'Laís Alves',
+    avatarSrc:
+      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSX4Q1bSchycyDfEedz6fT960CJ7UHp_1WJhA&s',
+  }))
 
   return (
     <>
-      <section className="ViewCareUnit absolute right-0 w-full">
+      <section className="h-screen overflow-y-auto scrollbar-hide">
         <div className="bg-gray-100 p-10">
           <div className="flex justify-between items-center text-gray-900">
             <h1 className="text-2xl font-semibold">Detalhes do Monitor</h1>
@@ -85,6 +92,42 @@ export default function MonitorDetails({ closeSection }: MonitorDetailsProps) {
                   </span>
                 </div>
               </div>
+            </CardContent>
+          </Card>
+
+          <Card className="relative flex flex-col justify-center bg-white rounded-2xl shadow-md text-gray-900 px-8 py-6">
+            <CardHeader className="p-0 mb-3">
+              <CardTitle className="flex items-center justify-between text-base font-semibold">
+                Beneficiários Vinculados ao Monitor
+                <Button
+                  type="button"
+                  className="flex items-center font-semibold text-sm bg-gray-100 border border-gray-200 text-gray-900 hover:bg-gray-100"
+                  onClick={() => setShowAll(!showAll)}
+                >
+                  <span>{showAll ? 'Ver Menos' : 'Ver Todos'}</span>
+                </Button>
+              </CardTitle>
+            </CardHeader>
+
+            <CardContent className="w-full p-0">
+              <ul className="grid grid-cols-2 gap-3">
+                {beneficiaries
+                  .slice(0, showAll ? beneficiaries.length : 6)
+                  .map((beneficiary) => (
+                    <li
+                      key={beneficiary.id}
+                      className="flex items-center gap-2 rounded-2xl border border-gray-200 p-2 shadow-sm"
+                    >
+                      <Avatar className="w-5 h-5">
+                        <AvatarImage src={beneficiary.avatarSrc} />
+                        <AvatarFallback>LA</AvatarFallback>
+                      </Avatar>
+                      <span className="text-sm font-medium text-gray-900">
+                        {beneficiary.name}
+                      </span>
+                    </li>
+                  ))}
+              </ul>
             </CardContent>
           </Card>
         </div>

@@ -1,4 +1,4 @@
-import { X } from 'lucide-react'
+import { Check, X } from 'lucide-react'
 import { User } from '../../../tabs/contentTabs/recipient'
 import { Input } from '@/components/form'
 import { Button } from '@/components/ui/button'
@@ -16,6 +16,9 @@ import {
   insertMaskInCpf,
   insertMaskInPhone,
 } from '@/lib/functions'
+import Magnifier from '@/assets/img/magnifier'
+import { Avatar, AvatarImage, AvatarFallback } from '@radix-ui/react-avatar'
+import { useState } from 'react'
 
 const formSchema = z.object({
   nomeCompleto: z.string().min(1, 'Campo obrigatório'),
@@ -32,10 +35,86 @@ interface MonitorEditProps {
   closeSection: (isVisible: string) => void
 }
 
+const users = [
+  {
+    id: 1,
+    name: 'Laís Alves',
+    email: 'lais@cork89.com',
+    avatar:
+      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSX4Q1bSchycyDfEedz6fT960CJ7UHp_1WJhA&s',
+  },
+  {
+    id: 2,
+    name: 'Davi Lima',
+    email: 'davi@cork89.com',
+    avatar:
+      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSX4Q1bSchycyDfEedz6fT960CJ7UHp_1WJhA&s',
+  },
+  {
+    id: 3,
+    name: 'Ana Silva',
+    email: 'ana@cork89.com',
+    avatar:
+      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSX4Q1bSchycyDfEedz6fT960CJ7UHp_1WJhA&s',
+  },
+  {
+    id: 4,
+    name: 'Carlos Santos',
+    email: 'carlos@cork89.com',
+    avatar:
+      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSX4Q1bSchycyDfEedz6fT960CJ7UHp_1WJhA&s',
+  },
+  {
+    id: 5,
+    name: 'Mariana Costa',
+    email: 'mariana@cork89.com',
+    avatar:
+      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSX4Q1bSchycyDfEedz6fT960CJ7UHp_1WJhA&s',
+  },
+  {
+    id: 6,
+    name: 'Bruno Pereira',
+    email: 'bruno@cork89.com',
+    avatar:
+      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSX4Q1bSchycyDfEedz6fT960CJ7UHp_1WJhA&s',
+  },
+  {
+    id: 7,
+    name: 'Gabriela Oliveira',
+    email: 'gabriela@cork89.com',
+    avatar:
+      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSX4Q1bSchycyDfEedz6fT960CJ7UHp_1WJhA&s',
+  },
+  {
+    id: 8,
+    name: 'João Fernandes',
+    email: 'joao@cork89.com',
+    avatar:
+      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSX4Q1bSchycyDfEedz6fT960CJ7UHp_1WJhA&s',
+  },
+  {
+    id: 9,
+    name: 'Lucas Martins',
+    email: 'lucas@cork89.com',
+    avatar:
+      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSX4Q1bSchycyDfEedz6fT960CJ7UHp_1WJhA&s',
+  },
+  {
+    id: 10,
+    name: 'Fernanda Souza',
+    email: 'fernanda@cork89.com',
+    avatar:
+      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSX4Q1bSchycyDfEedz6fT960CJ7UHp_1WJhA&s',
+  },
+]
+
 export default function MonitorEdit({
   closeSection,
   selectedUser,
 }: MonitorEditProps) {
+  const [selectedUsers, setSelectedUsers] = useState<number[]>([])
+  const [searchTerm, setSearchTerm] = useState('')
+
   const {
     handleSubmit,
     register,
@@ -45,6 +124,20 @@ export default function MonitorEdit({
     defaultValues: selectedUser || {},
     resolver: zodResolver(formSchema),
   })
+
+  const handleCheckboxChange = (id: number) => {
+    setSelectedUsers((prevSelectedUsers) =>
+      prevSelectedUsers.includes(id)
+        ? prevSelectedUsers.filter((userId) => userId !== id)
+        : [...prevSelectedUsers, id],
+    )
+  }
+
+  const filteredUsers = users.filter(
+    (user) =>
+      user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      user.email.toLowerCase().includes(searchTerm.toLowerCase()),
+  )
 
   const onSubmit = async () => {
     console.log('Teste')
@@ -71,7 +164,7 @@ export default function MonitorEdit({
   return (
     <section className="h-screen overflow-y-auto scrollbar-hide">
       <div className="bg-gray-100 p-10">
-        <div className="flex justify-between items-center text-gray-900 mb-12">
+        <div className="flex justify-between items-center text-gray-900">
           <h1 className="text-2xl font-semibold">Editar Dados</h1>
 
           <X
@@ -81,7 +174,10 @@ export default function MonitorEdit({
         </div>
       </div>
 
-      <form onSubmit={handleSubmit(onSubmit)} className="px-10">
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="flex flex-col gap-8 px-10"
+      >
         <Accordion
           type="single"
           collapsible
@@ -166,6 +262,122 @@ export default function MonitorEdit({
                       label="Grau de Parentesco*"
                       error={errors.grauParentesco?.message}
                     />
+                  </div>
+                </div>
+              </div>
+            </AccordionContent>
+          </AccordionItem>
+        </Accordion>
+
+        <Accordion
+          type="single"
+          collapsible
+          className="w-full flex flex-col gap-8"
+        >
+          <AccordionItem
+            value="item-1"
+            className="bg-gray-50 px-6 rounded-xl border border-gray-200 shadow"
+          >
+            <AccordionTrigger className="text-lg font-semibold text-gray-900 hover:no-underline">
+              Vínculo
+            </AccordionTrigger>
+
+            <AccordionContent className="mt-4">
+              <div className="py-6 px-8 rounded-xl border bg-gray-50 border-gray-200 shadow-sm">
+                <div className="flex flex-col gap-3">
+                  {selectedUsers.length > 0 && (
+                    <span className="text-lg font-medium text-gray-400 opacity-40">
+                      Beneficiários selecionados
+                    </span>
+                  )}
+
+                  <div className="flex flex-col gap-6">
+                    {selectedUsers.length > 0 && (
+                      <ul className="flex flex-wrap gap-3">
+                        {selectedUsers.map((userId) => {
+                          const user = users.find((u) => u.id === userId)
+                          return (
+                            user && (
+                              <li
+                                key={user.id}
+                                className="flex items-center gap-2 rounded-2xl border border-gray-200 p-2 shadow-sm"
+                              >
+                                <Avatar className="w-5 h-5">
+                                  <AvatarImage src={user.avatar} />
+                                  <AvatarFallback>
+                                    {user.name.charAt(0) +
+                                      user.name.split(' ')[1].charAt(0)}
+                                  </AvatarFallback>
+                                </Avatar>
+
+                                <span className="text-sm font-medium text-gray-900">
+                                  {user.name}
+                                </span>
+
+                                <X
+                                  className="w-5 cursor-pointer text-gray-400"
+                                  onClick={() => handleCheckboxChange(user.id)}
+                                />
+                              </li>
+                            )
+                          )
+                        })}
+                      </ul>
+                    )}
+
+                    <div className="relative">
+                      <Magnifier className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+
+                      <Input
+                        placeholder="Digite e-mail, nome ou cpf"
+                        type="text"
+                        className="border rounded-lg text-sm pl-10"
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                      />
+                    </div>
+
+                    <div className="py-3 pl-4 pr-2 bg-white rounded-xl border border-gray-200 shadow-sm">
+                      <ul className="h-72 flex flex-col gap-4 overflow-y-auto">
+                        {filteredUsers.map((user) => (
+                          <li key={user.id} className="flex items-center gap-2">
+                            <label className="flex items-center gap-2 cursor-pointer">
+                              <input
+                                type="checkbox"
+                                checked={selectedUsers.includes(user.id)}
+                                onChange={() => handleCheckboxChange(user.id)}
+                                className="hidden"
+                              />
+                              {selectedUsers.includes(user.id) ? (
+                                <div className="relative w-5 h-5 bg-primary border rounded-full flex items-center justify-center">
+                                  <Check className="w-3 h-3 text-white" />
+                                </div>
+                              ) : (
+                                <div className="relative w-5 h-5 border rounded-full flex items-center justify-center"></div>
+                              )}
+
+                              <Avatar className="w-9 h-9">
+                                <AvatarImage src={user.avatar} />
+
+                                <AvatarFallback>
+                                  {user.name.charAt(0) +
+                                    user.name.split(' ')[1].charAt(0)}
+                                </AvatarFallback>
+                              </Avatar>
+
+                              <div className="flex flex-col">
+                                <span className="text-base font-medium text-gray-900">
+                                  {user.name}
+                                </span>
+                                <span className="font-medium text-sm text-gray-400 text-opacity-40">
+                                  {user.email}
+                                </span>
+                              </div>
+                            </label>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
                   </div>
                 </div>
               </div>

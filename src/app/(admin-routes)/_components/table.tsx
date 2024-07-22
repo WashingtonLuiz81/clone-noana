@@ -13,7 +13,11 @@ import {
 import TableArrow from '@/assets/img/table-arrow'
 import TableArrowUp from '@/assets/img/table-arrow-up'
 import TableArrowDown from '@/assets/img/table-arrow-down'
-import { monitorTableActions, unitTableActions } from '@/lib/config'
+import {
+  monitorTableActions,
+  unitTableActions,
+  usersTableActions,
+} from '@/lib/config'
 import { Avatar, AvatarImage, AvatarFallback } from '@radix-ui/react-avatar'
 
 interface Column<T> {
@@ -52,7 +56,11 @@ const Table = <T extends { id: number }>({
   const styleButtonAction = 'text-primary cursor-pointer'
 
   const actionsSorted =
-    persona === 'monitor' ? monitorTableActions : unitTableActions
+    persona === 'monitor'
+      ? monitorTableActions
+      : persona === 'masterCaregiver'
+        ? usersTableActions
+        : unitTableActions
 
   const handleActionClick = (id: number, action: string) => {
     onActionClick(id, action)

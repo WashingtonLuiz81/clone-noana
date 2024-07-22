@@ -187,6 +187,7 @@ export default function MonitorRegistrationManualFormBonds({
 
                       <Avatar className="w-9 h-9">
                         <AvatarImage src={user.avatar} />
+
                         <AvatarFallback>
                           {user.name.charAt(0) +
                             user.name.split(' ')[1].charAt(0)}
@@ -206,10 +207,6 @@ export default function MonitorRegistrationManualFormBonds({
                 ))}
               </ul>
             </div>
-
-            <Button className="text-white text-base font-semibold">
-              Adicionar Beneficiário
-            </Button>
           </div>
         </div>
       </div>
