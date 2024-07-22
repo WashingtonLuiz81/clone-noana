@@ -86,6 +86,7 @@ export default function MonitorRegistrationManualFormBonds({
   handleBack,
 }: MonitorRegistrationManualFormBondsProps) {
   const [selectedUsers, setSelectedUsers] = useState<number[]>([])
+  const [searchTerm, setSearchTerm] = useState('')
 
   const handleCheckboxChange = (id: number) => {
     setSelectedUsers((prevSelectedUsers) =>
@@ -98,6 +99,12 @@ export default function MonitorRegistrationManualFormBonds({
   const onSubmit = () => {
     console.log('Formulário enviado!')
   }
+
+  const filteredUsers = users.filter(
+    (user) =>
+      user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      user.email.toLowerCase().includes(searchTerm.toLowerCase()),
+  )
 
   return (
     <form onSubmit={onSubmit}>
@@ -154,12 +161,14 @@ export default function MonitorRegistrationManualFormBonds({
                 placeholder="Digite e-mail, nome ou cpf"
                 type="text"
                 className="border rounded-lg text-sm pl-10"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
               />
             </div>
 
             <div className="py-3 pl-4 pr-2 bg-white rounded-xl border border-gray-200 shadow-sm">
               <ul className="h-72 flex flex-col gap-4 overflow-y-auto">
-                {users.map((user) => (
+                {filteredUsers.map((user) => (
                   <li key={user.id} className="flex items-center gap-2">
                     <label className="flex items-center gap-2 cursor-pointer">
                       <input
