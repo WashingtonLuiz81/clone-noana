@@ -344,7 +344,7 @@ export default function BeneficiaryEdit({
                         type="text"
                         className={`w-full mt-3 mb-1 ${address.logradouro ? '' : 'readonly-input'}`}
                         value={address.logradouro}
-                        label="Logradouro"
+                        label="Endereço"
                         readOnly
                       />
                     </div>
@@ -592,7 +592,7 @@ export default function BeneficiaryEdit({
                         type="text"
                         className={`w-full mt-3 mb-1 ${address.logradouro ? '' : 'readonly-input'}`}
                         value={address.logradouro}
-                        label="Logradouro"
+                        label="Endereço"
                         readOnly
                       />
                     </div>

@@ -118,7 +118,7 @@ const Table = <T extends { id: number }>({
       <LockKeyholeIcon
         className={styleButtonAction}
         width="20"
-        onClick={() => handleActionClick(id, 'lock')}
+        onClick={() => openModal && openModal('lock')}
       />
     ),
   })

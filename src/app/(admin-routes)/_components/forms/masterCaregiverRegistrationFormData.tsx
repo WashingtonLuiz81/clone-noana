@@ -1,27 +1,25 @@
-import React, { useEffect, useState } from 'react'
-import { Button } from '@/components/ui/button'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useForm } from 'react-hook-form'
+import { z } from 'zod'
 import { ArrowRightIcon } from 'lucide-react'
-import { stateAbbreviations } from '@/lib/config'
-import { PersonalInfo } from '../../types/types'
-import { useStore } from '@/store/beneficiaryStore'
-import * as z from 'zod'
 import { Input } from '@/components/form'
+import { Button } from '@/components/ui/button'
 import {
   insertMaskInCep,
   insertMaskInCpf,
   insertMaskInPhone,
 } from '@/lib/functions'
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
+import { useState } from 'react'
+import { stateAbbreviations } from '@/lib/config'
 
 const schema = z.object({
-  nomeCompleto: z.string().nonempty('Nome Completo é obrigatório'),
+  nomeCompleto: z.string().nonempty('Campo obrigatório'),
   cpf: z
     .string()
     .min(11, 'CPF deve ter no mínimo 11 caracteres')
     .max(14, 'CPF deve ter no máximo 14 caracteres')
     .regex(/^\d{3}\.\d{3}\.\d{3}-\d{2}$/, 'CPF inválido'),
-  dataNascimento: z.string().nonempty('Data de Nascimento é obrigatória'),
+  dataNascimento: z.string().nonempty('Campo obrigatório'),
   ddd: z.string().refine((value) => /^\d{2}$/.test(value), {
     message: 'Erro',
   }),
@@ -41,25 +39,23 @@ const schema = z.object({
   estado: z.string(),
 })
 
-interface ManualFormProps {
+type FormValuesProps = z.infer<typeof schema>
+
+interface masterCaregiverRegistrationFormDataProps {
   nextStep: () => void
 }
 
-const BeneficiariesRegistrationManualFormData: React.FC<ManualFormProps> = ({
+export default function MasterCaregiverRegistrationFormData({
   nextStep,
-}) => {
-  const { payload, setBeneficiaryData } = useStore()
-  const { beneficiaryData } = payload
-
+}: masterCaregiverRegistrationFormDataProps) {
   const {
-    register,
     handleSubmit,
-    setValue,
     setError,
+    register,
+    setValue,
     clearErrors,
     formState: { errors },
-  } = useForm<PersonalInfo>({
-    defaultValues: beneficiaryData || {},
+  } = useForm<FormValuesProps>({
     resolver: zodResolver(schema),
   })
 
@@ -69,10 +65,6 @@ const BeneficiariesRegistrationManualFormData: React.FC<ManualFormProps> = ({
     cidade: '',
     estado: '',
   })
-
-  useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'smooth' })
-  }, [])
 
   const handleCEPChange = async (cep: string) => {
     const formattedCEP = cep.replace(/\D/g, '')
@@ -131,22 +123,9 @@ const BeneficiariesRegistrationManualFormData: React.FC<ManualFormProps> = ({
     }
   }
 
-  const onSubmit = async (data: PersonalInfo) => {
-    try {
-      await schema.parseAsync(data)
-      setBeneficiaryData(data)
-      nextStep()
-    } catch (error) {
-      if (error instanceof z.ZodError) {
-        console.error('Validation errors:', error.errors)
-        error.errors.forEach((e) => {
-          setError(e.path[0] as keyof PersonalInfo, {
-            type: 'manual',
-            message: e.message,
-          })
-        })
-      }
-    }
+  const onSubmit = (data: FormValuesProps) => {
+    console.log('Data: ', data)
+    nextStep()
   }
 
   const handleNumericInputChange = (
@@ -164,22 +143,20 @@ const BeneficiariesRegistrationManualFormData: React.FC<ManualFormProps> = ({
       maskedValue = insertMaskInCep({ cep: onlyNums })
     }
 
-    setValue(name as keyof PersonalInfo, maskedValue)
+    setValue(name as keyof FormValuesProps, maskedValue)
   }
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <span className="text-gray-900 text-xl font-semibold mb-8 block">
-        Para iniciar, preencha os dados do Beneficiário!
+        Para iniciar, preencha os dados do Cuidador Mestre!
       </span>
 
       <div className="flex flex-col gap-6">
         <div className="flex flex-col space-y-4 sm:flex-row sm:space-y-0 sm:space-x-6">
           <div className="flex-1">
             <Input
-              {...register('nomeCompleto', {
-                required: 'Nome Completo é obrigatório',
-              })}
+              {...register('nomeCompleto')}
               type="text"
               className="w-full mt-3 mb-1"
               label="Nome Completo*"
@@ -359,5 +336,3 @@ const BeneficiariesRegistrationManualFormData: React.FC<ManualFormProps> = ({
     </form>
   )
 }
-
-export default BeneficiariesRegistrationManualFormData

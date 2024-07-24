@@ -2,8 +2,8 @@ import * as React from 'react'
 import { X } from 'lucide-react'
 import StepperComponent from '@/components/stepper'
 import {
-  MonitorRegistrationFormData,
-  MonitorRegistrationFormBonds,
+  MasterCaregiverRegistrationFormData,
+  MasterRegistrationFormBonds,
 } from '../../forms'
 import { AlertCloseSection } from '../../alertCloseSection'
 import { useState } from 'react'
@@ -12,7 +12,7 @@ interface BeneficiariesRegistrationProps {
   closeSection: (isVisible: string) => void
 }
 
-export default function MonitorRegistration({
+export default function MasterCaregiverRegistration({
   closeSection,
 }: BeneficiariesRegistrationProps) {
   const [activeStep, setActiveStep] = useState(0)
@@ -42,7 +42,7 @@ export default function MonitorRegistration({
       <header className="flex flex-col gap-6 mb-8">
         <div className="flex items-center justify-between">
           <span className="text-[#1A1A1A] text-2xl font-semibold">
-            Cadastrar Monitor
+            Cadastrar Cuidador Mestre
           </span>
 
           <X
@@ -59,11 +59,11 @@ export default function MonitorRegistration({
 
         <div className="py-8 px-6">
           {activeStep === 0 && (
-            <MonitorRegistrationFormData nextStep={handleNext} />
+            <MasterCaregiverRegistrationFormData nextStep={handleNext} />
           )}
 
           {activeStep === 1 && (
-            <MonitorRegistrationFormBonds handleBack={handleBack} />
+            <MasterRegistrationFormBonds handleBack={handleBack} />
           )}
         </div>
       </div>

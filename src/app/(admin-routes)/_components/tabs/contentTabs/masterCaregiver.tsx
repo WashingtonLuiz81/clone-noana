@@ -4,14 +4,15 @@ import Magnifier from '@/assets/img/magnifier'
 import { Input } from '@/components/ui/input'
 import { PlusIcon } from '@radix-ui/react-icons'
 import { Button } from '@/components/ui/button'
-import MonitorRegistration from '../../sections/monitor/monitorRegistration'
 import { unitTableHeader } from '@/lib/config'
 import Table from '../../table'
 
-import MonitorDetails from '../../sections/monitor/actions/monitorDetails'
 import { User } from './recipient'
 import { DeleteConfirmationModal } from '@/components/modals'
 import MonitorEdit from '../../sections/monitor/actions/monitorEdit'
+import ChangePasswordModal from '@/components/modals/changePasswordModal'
+import MasterCaregiverDetails from '../../sections/masterCaregiver/actions/masterCaregiverDetails'
+import MasterCaregiverRegistration from '../../sections/masterCaregiver/masterCaregiverRegistration'
 
 interface Person {
   id: number
@@ -292,7 +293,10 @@ export default function MasterCaregiver() {
   const [searchQuery, setSearchQuery] = useState('')
   const [isVisibleSection, setIsVisibleSection] = useState('')
   const [selectedUser, setSelectedUser] = useState<User | null>(null)
-  const [openDialog, setOpenDialog] = useState(false)
+  const [openDialog, setOpenDialog] = useState({
+    changePassword: false,
+    delete: false,
+  })
 
   const filteredData = useMemo(() => {
     return data.filter((item) =>
@@ -336,11 +340,11 @@ export default function MasterCaregiver() {
           }`}
         >
           {isVisibleSection === 'monitor' && (
-            <MonitorRegistration closeSection={setIsVisibleSection} />
+            <MasterCaregiverRegistration closeSection={setIsVisibleSection} />
           )}
 
           {isVisibleSection === 'view' && (
-            <MonitorDetails
+            <MasterCaregiverDetails
               closeSection={setIsVisibleSection}
               selectedUser={selectedUser!}
             />
@@ -394,17 +398,44 @@ export default function MasterCaregiver() {
           persona="masterCaregiver"
           onActionClick={handleActionClick}
           openModal={(action) => {
+            if (action === 'lock') {
+              setOpenDialog((prevState) => ({
+                ...prevState,
+                changePassword: true,
+              }))
+              return
+            }
+
             if (action === 'delete') {
-              setOpenDialog(true)
+              setOpenDialog((prevState) => ({
+                ...prevState,
+                delete: true,
+              }))
             }
           }}
         />
       }
 
-      {openDialog && (
+      {openDialog.delete && (
         <DeleteConfirmationModal
-          label="Monitor"
-          onClose={() => setOpenDialog(false)}
+          label="Cuidador Mestre"
+          onClose={() =>
+            setOpenDialog((prevState) => ({
+              ...prevState,
+              delete: false,
+            }))
+          }
+        />
+      )}
+
+      {openDialog.changePassword && (
+        <ChangePasswordModal
+          onClose={() =>
+            setOpenDialog((prevState) => ({
+              ...prevState,
+              changePassword: false,
+            }))
+          }
         />
       )}
     </section>

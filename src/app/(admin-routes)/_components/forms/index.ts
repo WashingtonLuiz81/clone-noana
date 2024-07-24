@@ -3,7 +3,9 @@ import BeneficiariesRegistrationManualFormBonds from './beneficiariesRegistratio
 import BeneficiariesRegistrationManualFormContractor from './beneficiariesRegistrationManualFormContractor'
 import BeneficiariesRegistrationManualFormCaregiver from './beneficiariesRegistrationManualFormCaregiver'
 import MonitorRegistrationFormData from './monitorRegistrationFormData'
-import MonitorRegistrationManualFormBonds from './monitorRegistrationManualFormBonds'
+import MonitorRegistrationFormBonds from './monitorRegistrationFormBonds'
+import MasterCaregiverRegistrationFormData from './masterCaregiverRegistrationFormData'
+import MasterRegistrationFormBonds from './masterRegistrationFormBonds'
 
 export {
   BeneficiariesRegistrationManualFormData,
@@ -11,5 +13,7 @@ export {
   BeneficiariesRegistrationManualFormContractor,
   BeneficiariesRegistrationManualFormCaregiver,
   MonitorRegistrationFormData,
-  MonitorRegistrationManualFormBonds,
+  MonitorRegistrationFormBonds,
+  MasterCaregiverRegistrationFormData,
+  MasterRegistrationFormBonds,
 }

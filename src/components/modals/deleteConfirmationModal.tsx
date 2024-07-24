@@ -35,17 +35,17 @@ export default function DeleteConfirmationModal({
           </DialogDescription>
         </DialogHeader>
 
-        <DialogFooter className="flex gap-2 mt-4">
+        <DialogFooter className="flex gap-2 mt-4" onClick={() => onClose()}>
           <Button
             variant="outline"
-            className="flex-1 p-6 bg-gray-100 text-lg font-semibold"
+            className="flex-1 p-6 bg-gray-100 text-lg font-semibold border-gray-200"
           >
             Cancelar
           </Button>
 
           <Button
             variant="destructive"
-            className="flex-1 p-6 bg-red-600 text-white text-lg font-semibold"
+            className="flex-1 p-6 bg-status-error text-white text-lg font-semibold"
           >
             Sim, Deletar Agora
           </Button>
