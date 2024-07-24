@@ -67,7 +67,9 @@ export const RadioGroup: React.FC<RadioGroupProps> = ({
           </li>
         ))}
       </ul>
-      {!readOnly && error && <span className="text-red-500">{error}</span>}
+      {!readOnly && error && (
+        <span className="block text-red-500 mt-2">{error}</span>
+      )}
     </div>
   )
 }
