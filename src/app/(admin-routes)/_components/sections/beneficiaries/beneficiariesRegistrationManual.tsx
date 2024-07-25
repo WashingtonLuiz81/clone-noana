@@ -9,7 +9,7 @@ import StepperComponent from '@/components/stepper'
 
 export default function BeneficiariesRegistrationManual() {
   const [activeStep, setActiveStep] = useState(0)
-  const steps = ['Dados', 'Vínculos', 'Contratante', 'Cuidador']
+  const steps = ['Dados', 'Vínculos', 'Contratante', 'Monitor']
 
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1)

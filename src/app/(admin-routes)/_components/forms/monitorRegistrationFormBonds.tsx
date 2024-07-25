@@ -166,7 +166,7 @@ export default function MonitorRegistrationFormBonds({
               />
             </div>
 
-            <div className="py-3 pl-4 pr-2 bg-white rounded-xl border border-gray-200 shadow-sm">
+            <div className="py-2 pl-4 pr-2 bg-white rounded-xl border border-gray-200 shadow-sm">
               <ul className="h-72 flex flex-col gap-4 overflow-y-auto">
                 {filteredUsers.map((user) => (
                   <li key={user.id} className="flex items-center gap-2">

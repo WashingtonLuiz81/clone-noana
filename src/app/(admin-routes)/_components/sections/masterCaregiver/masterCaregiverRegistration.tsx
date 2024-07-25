@@ -3,7 +3,7 @@ import { X } from 'lucide-react'
 import StepperComponent from '@/components/stepper'
 import {
   MasterCaregiverRegistrationFormData,
-  MasterRegistrationFormBonds,
+  MasterCaregiverRegistrationFormBonds,
 } from '../../forms'
 import { AlertCloseSection } from '../../alertCloseSection'
 import { useState } from 'react'
@@ -63,7 +63,7 @@ export default function MasterCaregiverRegistration({
           )}
 
           {activeStep === 1 && (
-            <MasterRegistrationFormBonds handleBack={handleBack} />
+            <MasterCaregiverRegistrationFormBonds handleBack={handleBack} />
           )}
         </div>
       </div>

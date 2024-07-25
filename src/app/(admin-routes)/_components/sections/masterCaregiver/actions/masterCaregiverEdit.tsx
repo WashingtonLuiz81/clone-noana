@@ -1,4 +1,4 @@
-import { Check, X } from 'lucide-react'
+import { ArrowRightIcon, Check, X } from 'lucide-react'
 import { User } from '../../../tabs/contentTabs/recipient'
 import { Input } from '@/components/form'
 import { Button } from '@/components/ui/button'
@@ -19,13 +19,40 @@ import {
 import Magnifier from '@/assets/img/magnifier'
 import { Avatar, AvatarImage, AvatarFallback } from '@radix-ui/react-avatar'
 import { useState } from 'react'
+import { RadioGroup } from '../../../radioGroupLinkedUnit'
+import { stateAbbreviations } from '@/lib/config'
+
+interface Option {
+  id: string
+  label: string
+}
 
 const formSchema = z.object({
-  nomeCompleto: z.string().min(1, 'Campo obrigatório'),
-  ddd: z.string().min(2, 'Erro').max(2, 'Erro'),
-  telefone: z.string().min(10, 'Campo obrigatório'),
-  email: z.string().email('Campo obrigatório'),
-  grauParentesco: z.string().min(1, 'Campo obrigatório'),
+  nomeCompleto: z.string().nonempty('Campo obrigatório'),
+  cpf: z
+    .string()
+    .min(11, 'CPF deve ter no mínimo 11 caracteres')
+    .max(14, 'CPF deve ter no máximo 14 caracteres')
+    .regex(/^\d{3}\.\d{3}\.\d{3}-\d{2}$/, 'CPF inválido'),
+  dataNascimento: z.string().nonempty('Campo obrigatório'),
+  ddd: z.string().refine((value) => /^\d{2}$/.test(value), {
+    message: 'Erro',
+  }),
+  telefone: z
+    .string()
+    .min(10, 'Telefone deve ter no mínimo 10 caracteres')
+    .max(10, 'Telefone deve ter no máximo 10 caracteres')
+    .regex(/^\d{5}-\d{4}$/, 'Telefone inválido'),
+  cep: z.string().refine((value) => /^\d{5}-?\d{3}$/.test(value), {
+    message: 'CEP inválido',
+  }),
+  logradouro: z.string(),
+  bairro: z.string(),
+  numero: z.string().nonempty('Erro'),
+  complemento: z.string(),
+  cidade: z.string(),
+  estado: z.string(),
+  unitcare: z.string().nonempty('Selecione uma unidade de cuidado'),
 })
 
 type FormValuesProps = z.infer<typeof formSchema>
@@ -108,17 +135,26 @@ const users = [
   },
 ]
 
-export default function MonitorEdit({
+export default function MasterCaregiverEdit({
   closeSection,
   selectedUser,
 }: MonitorEditProps) {
   const [selectedUsers, setSelectedUsers] = useState<number[]>([])
   const [searchTerm, setSearchTerm] = useState('')
+  const [selected, setSelected] = useState<string>('')
+  const [address, setAddress] = useState({
+    logradouro: '',
+    bairro: '',
+    cidade: '',
+    estado: '',
+  })
 
   const {
     handleSubmit,
     register,
     setValue,
+    setError,
+    clearErrors,
     formState: { errors },
   } = useForm<FormValuesProps>({
     defaultValues: selectedUser || {},
@@ -139,9 +175,72 @@ export default function MonitorEdit({
       user.email.toLowerCase().includes(searchTerm.toLowerCase()),
   )
 
+  const handleCEPChange = async (cep: string) => {
+    const formattedCEP = cep.replace(/\D/g, '')
+    setValue('cep', insertMaskInCep({ cep: formattedCEP }))
+
+    if (formattedCEP.length === 8) {
+      try {
+        const response = await fetch(
+          `https://viacep.com.br/ws/${formattedCEP}/json/`,
+        )
+        const data = await response.json()
+
+        if (!data.erro) {
+          clearErrors('cep')
+          setValue('logradouro', data.logradouro || '')
+          setValue('bairro', data.bairro || '')
+          setValue('cidade', data.localidade || '')
+          setValue(
+            'estado',
+            stateAbbreviations[data.uf as keyof typeof stateAbbreviations] ||
+              '',
+          )
+
+          setAddress({
+            logradouro: data.logradouro || '',
+            bairro: data.bairro || '',
+            cidade: data.localidade || '',
+            estado:
+              stateAbbreviations[data.uf as keyof typeof stateAbbreviations] ||
+              '',
+          })
+        } else {
+          setValue('logradouro', '')
+          setValue('bairro', '')
+          setValue('cidade', '')
+          setValue('estado', '')
+          setError('cep', {
+            type: 'manual',
+            message: 'CEP não encontrado',
+          })
+        }
+      } catch (error) {
+        console.error('Falha ao buscar endereço pelo CEP:', error)
+        setError('cep', {
+          type: 'manual',
+          message: 'Falha ao buscar endereço pelo CEP',
+        })
+      }
+    } else {
+      setAddress({
+        logradouro: '',
+        bairro: '',
+        cidade: '',
+        estado: '',
+      })
+    }
+  }
+
   const onSubmit = async () => {
     console.log('Teste')
   }
+
+  const options: Option[] = [
+    { id: 'barigui', label: 'Barigui' },
+    { id: 'cajuru', label: 'Cajurú' },
+    { id: 'unidade03', label: 'Unidade 03' },
+  ]
 
   const handleNumericInputChange = (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -189,7 +288,7 @@ export default function MonitorEdit({
             className="bg-gray-50 px-6 rounded-xl border border-gray-200 shadow"
           >
             <AccordionTrigger className="text-lg font-semibold text-gray-900 hover:no-underline">
-              Dados do Monitor
+              Dados do Cuidador Mestre
             </AccordionTrigger>
 
             <AccordionContent className="mt-4">
@@ -201,6 +300,36 @@ export default function MonitorEdit({
                       type="text"
                       className="w-full mt-3 mb-1"
                       label="Nome Completo*"
+                      error={errors.nomeCompleto?.message}
+                    />
+                  </div>
+
+                  <div className="flex-1">
+                    <Input
+                      {...register('cpf', {
+                        required: 'CPF é obrigatório',
+                      })}
+                      type="text"
+                      className="w-full mt-3 mb-1"
+                      onChange={handleNumericInputChange}
+                      maxLength={14}
+                      label="CPF*"
+                      error={errors.cpf?.message}
+                      readOnly
+                    />
+                  </div>
+                </div>
+
+                <div className="flex flex-col space-y-4 sm:flex-row sm:space-y-0 sm:space-x-6">
+                  <div className="flex-1">
+                    <Input
+                      {...register('dataNascimento', {
+                        required: 'Data de Nascimento é obrigatória',
+                      })}
+                      type="date"
+                      className="w-full mt-3 mb-1"
+                      label="Data de Nascimento*"
+                      error={errors.dataNascimento?.message}
                     />
                   </div>
 
@@ -246,23 +375,103 @@ export default function MonitorEdit({
                 <div className="flex flex-col space-y-4 sm:flex-row sm:space-y-0 sm:space-x-6">
                   <div className="flex-1">
                     <Input
-                      {...register('email')}
+                      {...register('cep', {
+                        required: 'CEP é obrigatório',
+                        pattern: {
+                          value: /^\d{5}-?\d{3}$/,
+                          message: 'CEP inválido',
+                        },
+                      })}
                       type="text"
                       className="w-full mt-3 mb-1"
-                      label="E-mail*"
-                      error={errors.email?.message}
+                      onBlur={(e) => handleCEPChange(e.target.value)}
+                      onChange={handleNumericInputChange}
+                      maxLength={9}
+                      label="CEP*"
+                      error={errors.cep?.message}
                     />
                   </div>
 
                   <div className="flex-1">
                     <Input
-                      {...register('grauParentesco')}
+                      {...register('logradouro')}
                       type="text"
-                      className="w-full mt-3 mb-1"
-                      label="Grau de Parentesco*"
-                      error={errors.grauParentesco?.message}
+                      className={`w-full mt-3 mb-1 ${address.logradouro ? '' : 'readonly-input'}`}
+                      value={address.logradouro}
+                      label="Endereço"
+                      readOnly
                     />
                   </div>
+                </div>
+
+                <div className="flex flex-col space-y-4 sm:flex-row sm:space-y-0 sm:space-x-6">
+                  <div className="flex-1">
+                    <Input
+                      {...register('bairro')}
+                      type="text"
+                      className={`w-full mt-3 mb-1 ${address.bairro ? '' : 'readonly-input'}`}
+                      value={address.bairro}
+                      label="Bairro"
+                      readOnly
+                    />
+                  </div>
+
+                  <div className="flex-1 flex items-start gap-3">
+                    <div className="w-20">
+                      <Input
+                        {...register('numero', {
+                          required: 'Erro',
+                        })}
+                        type="text"
+                        className="w-full mt-3 mb-1"
+                        label="Número*"
+                        error={errors.numero?.message}
+                      />
+                    </div>
+
+                    <div className="flex-1">
+                      <Input
+                        {...register('complemento')}
+                        type="text"
+                        className="w-full mt-3 mb-1"
+                        label="Complemento"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="flex flex-col space-y-4 sm:flex-row sm:space-y-0 sm:space-x-6">
+                  <div className="flex-1">
+                    <Input
+                      {...register('cidade')}
+                      type="text"
+                      className={`w-full mt-3 mb-1 ${address.bairro ? '' : 'readonly-input'}`}
+                      value={address.cidade}
+                      label="Cidade"
+                      readOnly
+                    />
+                  </div>
+
+                  <div className="flex-1">
+                    <Input
+                      {...register('estado')}
+                      type="text"
+                      className={`w-full mt-3 mb-1 ${address.bairro ? '' : 'readonly-input'}`}
+                      value={address.estado}
+                      label="Estado"
+                      readOnly
+                    />
+                  </div>
+                </div>
+
+                <div className="flex justify-end">
+                  <Button
+                    type="submit"
+                    className="flex items-center space-x-2 text-white"
+                  >
+                    <span>Continuar</span>
+                    <ArrowRightIcon className="w-4 h-4" />
+                  </Button>
                 </div>
               </div>
             </AccordionContent>
@@ -270,6 +479,38 @@ export default function MonitorEdit({
 
           <AccordionItem
             value="item-2"
+            className="bg-gray-50 px-6 rounded-xl border border-gray-200 shadow"
+          >
+            <AccordionTrigger className="text-lg font-semibold text-gray-900 hover:no-underline">
+              Unidade Vinculada
+            </AccordionTrigger>
+
+            <AccordionContent className="mt-4">
+              <div className="flex flex-col gap-7 pb-10 mb-10 border-b border-gray-200">
+                <span className="text-base font-semibold text-gray-600">
+                  1. Selecione uma unidade de Cuidado:
+                </span>
+
+                <RadioGroup
+                  options={options}
+                  name="unitcare"
+                  selected={selected}
+                  setSelected={(value: string) => {
+                    setSelected(value)
+                    setValue('unitcare', value)
+                  }}
+                  error={
+                    errors.unitcare?.message === 'Required'
+                      ? 'Selecione uma unidade de cuidado'
+                      : ''
+                  }
+                />
+              </div>
+            </AccordionContent>
+          </AccordionItem>
+
+          <AccordionItem
+            value="item-3"
             className="bg-gray-50 px-6 rounded-xl border border-gray-200 shadow"
           >
             <AccordionTrigger className="text-lg font-semibold text-gray-900 hover:no-underline">

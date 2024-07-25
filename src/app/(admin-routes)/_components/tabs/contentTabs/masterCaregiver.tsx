@@ -9,10 +9,10 @@ import Table from '../../table'
 
 import { User } from './recipient'
 import { DeleteConfirmationModal } from '@/components/modals'
-import MonitorEdit from '../../sections/monitor/actions/monitorEdit'
 import ChangePasswordModal from '@/components/modals/changePasswordModal'
 import MasterCaregiverDetails from '../../sections/masterCaregiver/actions/masterCaregiverDetails'
 import MasterCaregiverRegistration from '../../sections/masterCaregiver/masterCaregiverRegistration'
+import MasterCaregiverEdit from '../../sections/masterCaregiver/actions/masterCaregiverEdit'
 
 interface Person {
   id: number
@@ -351,7 +351,7 @@ export default function MasterCaregiver() {
           )}
 
           {isVisibleSection === 'edit' && (
-            <MonitorEdit
+            <MasterCaregiverEdit
               closeSection={setIsVisibleSection}
               selectedUser={selectedUser!}
             />

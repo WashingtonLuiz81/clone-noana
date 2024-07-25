@@ -147,6 +147,7 @@ export default function MasterCaregiverDetails({
                   name="unitcare"
                   selected={selected}
                   setSelected={setSelected}
+                  readOnly
                 />
               </CardContent>
             </Card>
