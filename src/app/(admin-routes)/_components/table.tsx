@@ -60,7 +60,9 @@ const Table = <T extends { id: number }>({
       ? monitorTableActions
       : persona === 'masterCaregiver'
         ? usersTableActions
-        : unitTableActions
+        : persona === 'simpleCaregiver'
+          ? usersTableActions
+          : unitTableActions
 
   const handleActionClick = (id: number, action: string) => {
     onActionClick(id, action)
