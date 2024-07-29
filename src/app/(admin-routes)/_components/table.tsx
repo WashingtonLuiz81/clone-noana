@@ -174,7 +174,7 @@ const Table = <T extends { id: number }>({
           <Avatar>
             <AvatarImage
               src={`https://img.freepik.com/vetores-premium/ilustracao-de-avatar-de-empresario-retrato-de-usuario-de-desenho-animado-icone-de-perfil-de-usuario_118339-5507.jpg`}
-              className="rounded-full"
+              className="rounded-full w-8 h-8 max-w-8"
               alt={`${value}`}
               width={32}
               height={32}
