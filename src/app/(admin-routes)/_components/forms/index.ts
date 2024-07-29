@@ -6,6 +6,8 @@ import MonitorRegistrationFormData from './monitorRegistrationFormData'
 import MonitorRegistrationFormBonds from './monitorRegistrationFormBonds'
 import MasterCaregiverRegistrationFormData from './masterCaregiverRegistrationFormData'
 import MasterCaregiverRegistrationFormBonds from './masterCaregiverRegistrationFormBonds'
+import BeneficiariesRegistrationBatchFormFile from './beneficiariesRegistrationBatchFormFile'
+import BeneficiariesRegistrationBatchFormBonds from './beneficiariesRegistrationBatchFormBonds'
 
 export {
   BeneficiariesRegistrationManualFormData,
@@ -16,4 +18,6 @@ export {
   MonitorRegistrationFormBonds,
   MasterCaregiverRegistrationFormData,
   MasterCaregiverRegistrationFormBonds,
+  BeneficiariesRegistrationBatchFormFile,
+  BeneficiariesRegistrationBatchFormBonds,
 }

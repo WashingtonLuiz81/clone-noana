@@ -5,6 +5,7 @@ import { X } from 'lucide-react'
 import { useStore } from '@/store/beneficiaryStore'
 import { AlertCloseSection } from '../../alertCloseSection'
 import { useState } from 'react'
+import BatchBeneficiaryRegistration from './batchBeneficiaryRegistration'
 
 interface BeneficiariesRegistrationProps {
   closeSection: (isVisible: string) => void
@@ -56,7 +57,11 @@ export default function BeneficiariesRegistration({
         </div>
       </header>
 
-      <div>{tabTitle === 'Manual' && <BeneficiariesRegistrationManual />}</div>
+      <div>
+        {tabTitle === 'Manual' && <BeneficiariesRegistrationManual />}
+
+        {tabTitle === 'Em Lote' && <BatchBeneficiaryRegistration />}
+      </div>
     </div>
   )
 }

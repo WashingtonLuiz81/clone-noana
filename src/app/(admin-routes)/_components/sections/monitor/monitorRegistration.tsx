@@ -53,7 +53,7 @@ export default function MonitorRegistration({
       </header>
 
       <div className="bg-gray-50 rounded-2xl">
-        <div className="flex items-center justify-center px-6 py-8 border-b-[1px] border-gray-300">
+        <div className="flex items-center justify-center px-6 pt-8 pb-11 border-b-[1px] border-gray-300">
           <StepperComponent activeStep={activeStep} steps={steps} />
         </div>
 
