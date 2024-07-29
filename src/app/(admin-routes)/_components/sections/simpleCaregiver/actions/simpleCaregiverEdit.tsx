@@ -187,7 +187,7 @@ export default function SimpleCaregiverEdit({
           setValue(
             'estado',
             stateAbbreviations[data.uf as keyof typeof stateAbbreviations] ||
-            '',
+              '',
           )
 
           setAddress({

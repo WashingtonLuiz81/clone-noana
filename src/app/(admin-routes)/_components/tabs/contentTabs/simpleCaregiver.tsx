@@ -312,21 +312,24 @@ export default function SimpleCaregiver() {
     <section>
       <div
         id="slideover-container"
-        className={`fixed inset-0 z-10 transition-opacity duration-500 ease-in-out ${isVisibleSection !== ''
+        className={`fixed inset-0 z-10 transition-opacity duration-500 ease-in-out ${
+          isVisibleSection !== ''
             ? 'opacity-100'
             : 'opacity-0 pointer-events-none'
-          }`}
+        }`}
       >
         <div
           id="slideover-bg"
-          className={`absolute inset-0 bg-black transition-opacity duration-500 ease-in-out ${isVisibleSection !== '' ? 'opacity-50' : 'opacity-0'
-            }`}
+          className={`absolute inset-0 bg-black transition-opacity duration-500 ease-in-out ${
+            isVisibleSection !== '' ? 'opacity-50' : 'opacity-0'
+          }`}
         ></div>
 
         <div
           id="slideover"
-          className={`absolute top-0 right-0 h-full max-w-[888px] w-full bg-gray-100 border transform transition-transform duration-500 ease-in-out ${isVisibleSection !== '' ? 'translate-x-0' : 'translate-x-full'
-            }`}
+          className={`absolute top-0 right-0 h-full max-w-[888px] w-full bg-gray-100 border transform transition-transform duration-500 ease-in-out ${
+            isVisibleSection !== '' ? 'translate-x-0' : 'translate-x-full'
+          }`}
         >
           {isVisibleSection === 'monitor' && (
             <SimpleCaregiverRegistration closeSection={setIsVisibleSection} />

@@ -94,10 +94,7 @@ type FormData = z.infer<typeof schema>
 export default function SimpleCaregiverRegistrationFormBonds({
   handleBack,
 }: SimpleRegistrationFormBondsProps) {
-  const {
-    handleSubmit,
-    formState: { errors },
-  } = useForm<FormData>({
+  const { handleSubmit } = useForm<FormData>({
     resolver: zodResolver(schema),
   })
 
@@ -128,13 +125,9 @@ export default function SimpleCaregiverRegistrationFormBonds({
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <span className="text-gray-900 text-xl font-semibold mb-8 block">
-        Para finalizar, vincule à um benificiário!
-      </span>
-
       <div className="flex flex-col gap-7">
         <span className="text-base font-semibold text-gray-600">
-          2. Víncule um Beneficiário:
+          Víncule à um Beneficiário:
         </span>
 
         <div className="py-6 px-8 rounded-xl border bg-gray-50 border-gray-200 shadow-sm">

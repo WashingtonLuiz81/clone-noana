@@ -85,7 +85,7 @@ export default function SimpleCaregiverRegistrationFormData({
           setValue(
             'estado',
             stateAbbreviations[data.uf as keyof typeof stateAbbreviations] ||
-            '',
+              '',
           )
 
           setAddress({
