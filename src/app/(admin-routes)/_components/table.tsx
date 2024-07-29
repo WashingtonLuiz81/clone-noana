@@ -174,8 +174,10 @@ const Table = <T extends { id: number }>({
           <Avatar>
             <AvatarImage
               src={`https://img.freepik.com/vetores-premium/ilustracao-de-avatar-de-empresario-retrato-de-usuario-de-desenho-animado-icone-de-perfil-de-usuario_118339-5507.jpg`}
-              className="w-8 h-8 rounded-full"
+              className="rounded-full"
               alt={`${value}`}
+              width={32}
+              height={32}
             />
             <AvatarFallback className="w-8 h-8 flex-1">CN</AvatarFallback>
           </Avatar>
