@@ -284,6 +284,7 @@ const usuarios: User[] = [
 export default function SimpleCaregiver() {
   const [searchQuery, setSearchQuery] = useState('')
   const [isVisibleSection, setIsVisibleSection] = useState('')
+  const [visibleItems, setVisibleItems] = useState(8)
   const [selectedUser, setSelectedUser] = useState<User | null>(null)
   const [openDialog, setOpenDialog] = useState({
     changePassword: false,
@@ -297,6 +298,10 @@ export default function SimpleCaregiver() {
       ),
     )
   }, [searchQuery])
+
+  const handleShowMore = () => {
+    setVisibleItems((prev) => prev + 8)
+  }
 
   const handleActionClick = (id: number, action: string) => {
     const selectedUser = usuarios.find((user) => user.id === id)
@@ -380,31 +385,40 @@ export default function SimpleCaregiver() {
         </div>
       </header>
 
-      {
-        <Table
-          showSection={setIsVisibleSection}
-          data={filteredData}
-          columns={unitTableHeader}
-          persona="simpleCaregiver"
-          onActionClick={handleActionClick}
-          openModal={(action) => {
-            if (action === 'lock') {
-              setOpenDialog((prevState) => ({
-                ...prevState,
-                changePassword: true,
-              }))
-              return
-            }
+      <Table
+        showSection={setIsVisibleSection}
+        data={filteredData.slice(0, visibleItems)}
+        columns={unitTableHeader}
+        persona="simpleCaregiver"
+        onActionClick={handleActionClick}
+        openModal={(action) => {
+          if (action === 'lock') {
+            setOpenDialog((prevState) => ({
+              ...prevState,
+              changePassword: true,
+            }))
+            return
+          }
 
-            if (action === 'delete') {
-              setOpenDialog((prevState) => ({
-                ...prevState,
-                delete: true,
-              }))
-            }
-          }}
-        />
-      }
+          if (action === 'delete') {
+            setOpenDialog((prevState) => ({
+              ...prevState,
+              delete: true,
+            }))
+          }
+        }}
+      />
+
+      {visibleItems < filteredData.length && (
+        <div className="flex justify-start mt-8">
+          <Button
+            className="bg-gray-100 hover:bg-gray-100 text-gray-900 font-semibold text-base border border-gray-200"
+            onClick={handleShowMore}
+          >
+            Ver mais
+          </Button>
+        </div>
+      )}
 
       {openDialog.delete && (
         <DeleteConfirmationModal

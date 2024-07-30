@@ -291,6 +291,7 @@ const usuarios: User[] = [
 export default function Monitor() {
   const [searchQuery, setSearchQuery] = useState('')
   const [isVisibleSection, setIsVisibleSection] = useState('')
+  const [visibleItems, setVisibleItems] = useState(8)
   const [selectedUser, setSelectedUser] = useState<User | null>(null)
   const [openDialog, setOpenDialog] = useState(false)
 
@@ -301,6 +302,10 @@ export default function Monitor() {
       ),
     )
   }, [searchQuery])
+
+  const handleShowMore = () => {
+    setVisibleItems((prev) => prev + 8)
+  }
 
   const handleActionClick = (id: number, action: string) => {
     const selectedUser = usuarios.find((user) => user.id === id)
@@ -386,20 +391,29 @@ export default function Monitor() {
         </div>
       </header>
 
-      {
-        <Table
-          showSection={setIsVisibleSection}
-          data={filteredData}
-          columns={unitTableHeader}
-          persona="monitor"
-          onActionClick={handleActionClick}
-          openModal={(action) => {
-            if (action === 'delete') {
-              setOpenDialog(true)
-            }
-          }}
-        />
-      }
+      <Table
+        showSection={setIsVisibleSection}
+        data={filteredData.slice(0, visibleItems)}
+        columns={unitTableHeader}
+        persona="monitor"
+        onActionClick={handleActionClick}
+        openModal={(action) => {
+          if (action === 'delete') {
+            setOpenDialog(true)
+          }
+        }}
+      />
+
+      {visibleItems < filteredData.length && (
+        <div className="flex justify-start mt-8">
+          <Button
+            className="bg-gray-100 hover:bg-gray-100 text-gray-900 font-semibold text-base border border-gray-200"
+            onClick={handleShowMore}
+          >
+            Ver mais
+          </Button>
+        </div>
+      )}
 
       {openDialog && (
         <DeleteConfirmationModal
