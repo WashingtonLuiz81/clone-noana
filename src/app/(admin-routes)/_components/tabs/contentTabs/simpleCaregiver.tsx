@@ -408,7 +408,7 @@ export default function SimpleCaregiver() {
 
       {openDialog.delete && (
         <DeleteConfirmationModal
-          label="Cuidador Mestre"
+          label="Cuidador Simples"
           onClose={() =>
             setOpenDialog((prevState) => ({
               ...prevState,

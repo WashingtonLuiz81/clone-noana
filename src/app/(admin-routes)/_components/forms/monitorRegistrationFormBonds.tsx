@@ -109,7 +109,7 @@ export default function MonitorRegistrationFormBonds({
   return (
     <form onSubmit={onSubmit}>
       <span className="text-gray-900 text-xl font-semibold mb-8 block">
-        Vincule à um benificiário!
+        Vincule a um beneficiário!
       </span>
 
       <div className="py-6 px-8 rounded-xl border bg-gray-50 border-gray-200 shadow-sm">

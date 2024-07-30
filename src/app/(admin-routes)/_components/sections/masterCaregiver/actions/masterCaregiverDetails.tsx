@@ -73,10 +73,10 @@ export default function MasterCaregiverDetails({
                 </CardTitle>
               </CardHeader>
 
-              <CardContent className="flex justify-between p-0 text-sm">
+              <CardContent className="grid grid-cols-2 gap-8 p-0 text-sm">
                 <div className="flex flex-col gap-2">
                   <div className="grid grid-cols-[auto_1fr] gap-6 text-sm font-medium">
-                    <span className="text-gray-500 overflow-hidden text-ellipsis whitespace-nowrap">
+                    <span className="text-gray-500 overflow-hidden text-ellipsis whitespace-nowrap w-16">
                       CPF
                     </span>
                     <span className="text-left text-gray-900 overflow-hidden text-ellipsis whitespace-nowrap">
@@ -85,7 +85,7 @@ export default function MasterCaregiverDetails({
                   </div>
 
                   <div className="grid grid-cols-[auto_1fr] gap-6 text-sm font-medium">
-                    <span className="text-gray-500 overflow-hidden text-ellipsis whitespace-nowrap">
+                    <span className="text-gray-500 overflow-hidden text-ellipsis whitespace-nowrap w-16">
                       E-mail
                     </span>
                     <span className="text-left text-gray-900 overflow-hidden text-ellipsis whitespace-nowrap">
@@ -94,7 +94,7 @@ export default function MasterCaregiverDetails({
                   </div>
 
                   <div className="grid grid-cols-[auto_1fr] gap-6 text-sm font-medium">
-                    <span className="text-gray-500 overflow-hidden text-ellipsis whitespace-nowrap">
+                    <span className="text-gray-500 overflow-hidden text-ellipsis whitespace-nowrap w-16">
                       Telefone
                     </span>
                     <span className="text-left text-gray-900 overflow-hidden text-ellipsis whitespace-nowrap">
@@ -103,7 +103,7 @@ export default function MasterCaregiverDetails({
                   </div>
 
                   <div className="grid grid-cols-[auto_1fr] gap-6 text-sm font-medium">
-                    <span className="text-gray-500 overflow-hidden text-ellipsis whitespace-nowrap">
+                    <span className="text-gray-500 overflow-hidden text-ellipsis whitespace-nowrap w-16">
                       CEP
                     </span>
                     <span className="text-left text-gray-900 overflow-hidden text-ellipsis whitespace-nowrap">
@@ -114,7 +114,7 @@ export default function MasterCaregiverDetails({
 
                 <div className="flex flex-col gap-2">
                   <div className="grid grid-cols-[auto_1fr] gap-6 text-sm font-medium">
-                    <span className="text-gray-500 overflow-hidden text-ellipsis whitespace-nowrap">
+                    <span className="text-gray-500 overflow-hidden text-ellipsis whitespace-nowrap w-[116px]">
                       Endereço
                     </span>
                     <span className="text-left text-gray-900 overflow-hidden text-ellipsis whitespace-nowrap">
@@ -123,7 +123,7 @@ export default function MasterCaregiverDetails({
                   </div>
 
                   <div className="grid grid-cols-[auto_1fr] gap-6 text-sm font-medium">
-                    <span className="text-gray-500 overflow-hidden text-ellipsis whitespace-nowrap">
+                    <span className="text-gray-500 overflow-hidden text-ellipsis whitespace-nowrap w-[116px]">
                       Cidade / Estado
                     </span>
                     <span className="text-left text-gray-900 overflow-hidden text-ellipsis whitespace-nowrap">

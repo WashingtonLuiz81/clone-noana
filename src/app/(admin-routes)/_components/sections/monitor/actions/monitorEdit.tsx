@@ -176,7 +176,7 @@ export default function MonitorEdit({
 
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="flex flex-col gap-8 px-10"
+        className="flex flex-col gap-8 px-10 pb-10"
       >
         <Accordion
           type="single"
@@ -379,7 +379,7 @@ export default function MonitorEdit({
           </AccordionItem>
         </Accordion>
 
-        <div className="flex gap-6 justify-end mt-8">
+        <div className="flex gap-6 justify-end">
           <Button
             type="button"
             className="flex items-center font-semibold text-base space-x-2 bg-gray-100 border border-gray-200 text-gray-900 hover:bg-gray-100"

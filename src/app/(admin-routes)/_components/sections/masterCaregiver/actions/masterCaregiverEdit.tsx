@@ -1,4 +1,4 @@
-import { ArrowRightIcon, Check, X } from 'lucide-react'
+import { Check, X } from 'lucide-react'
 import { User } from '../../../tabs/contentTabs/recipient'
 import { Input } from '@/components/form'
 import { Button } from '@/components/ui/button'
@@ -275,7 +275,7 @@ export default function MasterCaregiverEdit({
 
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="flex flex-col gap-8 px-10"
+        className="flex flex-col gap-8 px-10 pb-10"
       >
         <Accordion
           type="single"
@@ -463,16 +463,6 @@ export default function MasterCaregiverEdit({
                     />
                   </div>
                 </div>
-
-                <div className="flex justify-end">
-                  <Button
-                    type="submit"
-                    className="flex items-center space-x-2 text-white"
-                  >
-                    <span>Continuar</span>
-                    <ArrowRightIcon className="w-4 h-4" />
-                  </Button>
-                </div>
               </div>
             </AccordionContent>
           </AccordionItem>
@@ -486,7 +476,7 @@ export default function MasterCaregiverEdit({
             </AccordionTrigger>
 
             <AccordionContent className="mt-4">
-              <div className="flex flex-col gap-7 pb-10 mb-10 border-b border-gray-200">
+              <div className="flex flex-col gap-7">
                 <span className="text-base font-semibold text-gray-600">
                   1. Selecione uma unidade de Cuidado:
                 </span>
@@ -620,7 +610,7 @@ export default function MasterCaregiverEdit({
           </AccordionItem>
         </Accordion>
 
-        <div className="flex gap-6 justify-end mt-8">
+        <div className="flex gap-6 justify-end">
           <Button
             type="button"
             className="flex items-center font-semibold text-base space-x-2 bg-gray-100 border border-gray-200 text-gray-900 hover:bg-gray-100"

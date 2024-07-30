@@ -60,70 +60,50 @@ export default function SimpleCaregiverDetail({
                 </CardTitle>
               </CardHeader>
 
-              <CardContent className="flex justify-between p-0 text-sm">
+              <CardContent className="grid grid-cols-2 gap-8 p-0 text-sm">
                 <div className="flex flex-col gap-2">
-                  <div className="grid grid-cols-[auto_1fr] gap-6 text-sm font-medium">
-                    <span className="text-gray-500 overflow-hidden text-ellipsis whitespace-nowrap">
-                      CPF
-                    </span>
-                    <span className="text-left text-gray-900 overflow-hidden text-ellipsis whitespace-nowrap">
-                      102.335.678-78
-                    </span>
+                  <div className="flex">
+                    <span className="font-medium text-gray-500 w-20">CPF:</span>
+                    <span className="text-gray-900">102.335.678-78</span>
                   </div>
-
-                  <div className="grid grid-cols-[auto_1fr] gap-6 text-sm font-medium">
-                    <span className="text-gray-500 overflow-hidden text-ellipsis whitespace-nowrap">
-                      E-mail
+                  <div className="flex">
+                    <span className="font-medium text-gray-500 w-20">
+                      E-mail:
                     </span>
-                    <span className="text-left text-gray-900 overflow-hidden text-ellipsis whitespace-nowrap">
-                      arthur@gmail.com
-                    </span>
+                    <span className="text-gray-900">arthur@gmail.com</span>
                   </div>
-
-                  <div className="grid grid-cols-[auto_1fr] gap-6 text-sm font-medium">
-                    <span className="text-gray-500 overflow-hidden text-ellipsis whitespace-nowrap">
-                      Telefone
+                  <div className="flex">
+                    <span className="font-medium text-gray-500 w-20">
+                      Telefone:
                     </span>
-                    <span className="text-left text-gray-900 overflow-hidden text-ellipsis whitespace-nowrap">
-                      11 9876-5643
-                    </span>
+                    <span className="text-gray-900">11 9876-5643</span>
                   </div>
-
-                  <div className="grid grid-cols-[auto_1fr] gap-6 text-sm font-medium">
-                    <span className="text-gray-500 overflow-hidden text-ellipsis whitespace-nowrap">
-                      Unidade
+                  <div className="flex">
+                    <span className="font-medium text-gray-500 w-20">
+                      Unidade:
                     </span>
-                    <span className="text-left text-gray-900 overflow-hidden text-ellipsis whitespace-nowrap">
-                      Nome da Unidade
-                    </span>
+                    <span className="text-gray-900">Nome da Unidade</span>
                   </div>
                 </div>
 
                 <div className="flex flex-col gap-2">
-                  <div className="grid grid-cols-[auto_1fr] gap-6 text-sm font-medium">
-                    <span className="text-gray-500 overflow-hidden text-ellipsis whitespace-nowrap">
-                      CEP
-                    </span>
-                    <span className="text-left text-gray-900 overflow-hidden text-ellipsis whitespace-nowrap">
-                      20780-200
-                    </span>
+                  <div className="flex">
+                    <span className="font-medium text-gray-500 w-32">CEP:</span>
+                    <span className="text-gray-900">20780-200</span>
                   </div>
-                  <div className="grid grid-cols-[auto_1fr] gap-6 text-sm font-medium">
-                    <span className="text-gray-500 overflow-hidden text-ellipsis whitespace-nowrap">
-                      Endereço
+                  <div className="flex">
+                    <span className="font-medium text-gray-500 w-32">
+                      Endereço:
                     </span>
-                    <span className="text-left text-gray-900 overflow-hidden text-ellipsis whitespace-nowrap">
+                    <span className="text-gray-900">
                       Joaquim Sale, 876 - Morumbi
                     </span>
                   </div>
-
-                  <div className="grid grid-cols-[auto_1fr] gap-6 text-sm font-medium">
-                    <span className="text-gray-500 overflow-hidden text-ellipsis whitespace-nowrap">
-                      Cidade / Estado
+                  <div className="flex">
+                    <span className="font-medium text-gray-500 w-32">
+                      Cidade / Estado:
                     </span>
-                    <span className="text-left text-gray-900 overflow-hidden text-ellipsis whitespace-nowrap">
-                      São Paulo / SP
-                    </span>
+                    <span className="text-gray-900">São Paulo / SP</span>
                   </div>
                 </div>
               </CardContent>
