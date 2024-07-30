@@ -2,9 +2,6 @@
 
 import Header from '../_components/header'
 import CareUnits from '../_components/tabs/contentTabs/careUnits'
-// import CareUnitList from '../_components/sections/careUnit/actions/careUnitList'
-
-import MonitorsList from '../_components/sections/careUnit/actions/monitorsList'
 
 export default function Dashboard() {
   return (
@@ -17,7 +14,6 @@ export default function Dashboard() {
 
         <CareUnits />
       </div>
-      <MonitorsList />
     </>
   )
 }

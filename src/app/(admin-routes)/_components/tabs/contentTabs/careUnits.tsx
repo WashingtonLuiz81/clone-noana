@@ -1,160 +1,349 @@
-import { useState } from 'react'
-import Hospital from '@/assets/img/hospital'
+import { useMemo, useState } from 'react'
+import { UserRoundSearchIcon } from 'lucide-react'
 import Magnifier from '@/assets/img/magnifier'
-// import { Input } from '@/components/ui/input'
+import { Input } from '@/components/ui/input'
 import { PlusIcon } from '@radix-ui/react-icons'
 import { Button } from '@/components/ui/button'
-// import { unitTableHeader } from '@/lib/config'
-// import Table from '../../table'
+import { unitTableHeader } from '@/lib/config'
+import Table from '../../table'
+import {
+  BeneficiaryDetails,
+  BeneficiaryLocation,
+  BeneficiaryMonitorsList,
+  BeneficiaryEdit,
+} from '../../sections/beneficiaries'
+import { DeleteConfirmationModal, PhoneCallModal } from '@/components/modals'
 import CareUnitRegistration from '../../sections/careUnit/careUnitRegistration'
 
-// interface Person {
-//   Nome: string
-//   'Text Label': string
-//   'E-mail': string
-//   Telefone: string
-// }
+interface Address {
+  cep: string
+  logradouro: string
+  bairro: string
+  numero: string
+  complemento: string
+  cidade: string
+  estado: string
+}
 
-// export interface Column<T> {
-//   key: keyof T | 'Ações'
-//   label: string
-//   isAction?: boolean
-// }
+interface Dispositivo {
+  imei: string
+  modelo: string
+  bateria: number
+  conexao: string
+}
 
-// const data: Person[] = [
-//   {
-//     Nome: 'João',
-//     'Text Label': 'Lorem ipsum',
-//     'E-mail': 'joao@example.com',
-//     Telefone: '(00) 1234-5678',
-//   },
-//   {
-//     Nome: 'Maria',
-//     'Text Label': 'Dolor sit amet',
-//     'E-mail': 'maria@example.com',
-//     Telefone: '(11) 9876-5432',
-//   },
-//   {
-//     Nome: 'José',
-//     'Text Label': 'Consectetur adipiscing elit',
-//     'E-mail': 'jose@example.com',
-//     Telefone: '(22) 2468-1357',
-//   },
-//   {
-//     Nome: 'Ana',
-//     'Text Label': 'Sed do eiusmod',
-//     'E-mail': 'ana@example.com',
-//     Telefone: '(33) 1357-2468',
-//   },
-//   {
-//     Nome: 'Pedro',
-//     'Text Label': 'Tempor incididunt',
-//     'E-mail': 'pedro@example.com',
-//     Telefone: '(44) 5555-1234',
-//   },
-//   {
-//     Nome: 'Mariana',
-//     'Text Label': 'Ut labore et dolore',
-//     'E-mail': 'mariana@example.com',
-//     Telefone: '(55) 9876-5432',
-//   },
-//   {
-//     Nome: 'Carlos',
-//     'Text Label': 'Excepteur sint occaecat',
-//     'E-mail': 'carlos@example.com',
-//     Telefone: '(66) 2222-4444',
-//   },
-//   {
-//     Nome: 'Patrícia',
-//     'Text Label': 'Cupidatat non proident',
-//     'E-mail': 'patricia@example.com',
-//     Telefone: '(77) 7777-7777',
-//   },
-//   {
-//     Nome: 'Fernanda',
-//     'Text Label': 'Sunt in culpa qui',
-//     'E-mail': 'fernanda@example.com',
-//     Telefone: '(88) 8888-8888',
-//   },
-//   {
-//     Nome: 'Rafael',
-//     'Text Label': 'Deserunt mollit anim',
-//     'E-mail': 'rafael@example.com',
-//     Telefone: '(99) 9999-9999',
-//   },
-//   {
-//     Nome: 'João',
-//     'Text Label': 'Lorem ipsum',
-//     'E-mail': 'joao@example.com',
-//     Telefone: '(00) 1234-5678',
-//   },
-//   {
-//     Nome: 'Maria',
-//     'Text Label': 'Dolor sit amet',
-//     'E-mail': 'maria@example.com',
-//     Telefone: '(11) 9876-5432',
-//   },
-//   {
-//     Nome: 'José',
-//     'Text Label': 'Consectetur adipiscing elit',
-//     'E-mail': 'jose@example.com',
-//     Telefone: '(22) 2468-1357',
-//   },
-//   {
-//     Nome: 'Ana',
-//     'Text Label': 'Sed do eiusmod',
-//     'E-mail': 'ana@example.com',
-//     Telefone: '(33) 1357-2468',
-//   },
-//   {
-//     Nome: 'Pedro',
-//     'Text Label': 'Tempor incididunt',
-//     'E-mail': 'pedro@example.com',
-//     Telefone: '(44) 5555-1234',
-//   },
-//   {
-//     Nome: 'Mariana',
-//     'Text Label': 'Ut labore et dolore',
-//     'E-mail': 'mariana@example.com',
-//     Telefone: '(55) 9876-5432',
-//   },
-//   {
-//     Nome: 'Carlos',
-//     'Text Label': 'Excepteur sint occaecat',
-//     'E-mail': 'carlos@example.com',
-//     Telefone: '(66) 2222-4444',
-//   },
-//   {
-//     Nome: 'Patrícia',
-//     'Text Label': 'Cupidatat non proident',
-//     'E-mail': 'patricia@example.com',
-//     Telefone: '(77) 7777-7777',
-//   },
-//   {
-//     Nome: 'Fernanda',
-//     'Text Label': 'Sunt in culpa qui',
-//     'E-mail': 'fernanda@example.com',
-//     Telefone: '(88) 8888-8888',
-//   },
-//   {
-//     Nome: 'Rafael',
-//     'Text Label': 'Deserunt mollit anim',
-//     'E-mail': 'rafael@example.com',
-//     Telefone: '(99) 9999-9999',
-//   },
-// ]
+interface Contratante {
+  cpf: string
+  sexo: string
+  dataNascimento: string
+  ddd: string
+  telefone: string
+  address: Address
+}
 
-export default function CareUnits() {
-  // const [searchQuery, setSearchQuery] = useState('')
+interface Monitor {
+  nome: string
+  ddd: string
+  telefone: string
+  email: string
+  grauParentesco: string
+}
+
+export interface User {
+  id: number
+  avatar: string
+  nomeCompleto: string
+  cpf: string
+  dataNascimento: string
+  sexo: string
+  ddd: string
+  email: string
+  telefone: string
+  modelo: string
+  imei: string
+  grauParentesco: string
+  address: Address
+  dispositivo: Dispositivo
+  contratante: Contratante
+  monitor: Monitor
+}
+
+const usuarios: User[] = [
+  {
+    id: 1,
+    avatar:
+      'https://img.freepik.com/vetores-premium/ilustracao-de-avatar-de-empresario-retrato-de-usuario-de-desenho-animado-icone-de-perfil-de-usuario_118339-5507.jpg',
+    nomeCompleto: 'João Silva',
+    cpf: '123.456.789-00',
+    dataNascimento: '01-01-1990',
+    sexo: 'Masculino',
+    email: 'joao@example.com',
+    ddd: '21',
+    telefone: '98765-4321',
+    modelo: 'Samsung Galaxy S10',
+    imei: '123456789012345',
+    grauParentesco: 'Irmão',
+    address: {
+      cep: '12283-865',
+      logradouro: 'Rua Benedito Sa de Araujo',
+      bairro: 'Parque Residencial Santo André',
+      numero: '1002',
+      complemento: 'Apartamento 101',
+      cidade: 'Caçapava',
+      estado: 'São Paulo',
+    },
+    dispositivo: {
+      imei: '123456789012345',
+      modelo: 'Modelo A',
+      bateria: 80,
+      conexao: 'Wi-Fi',
+    },
+    contratante: {
+      cpf: '987.654.321-00',
+      sexo: 'Masculino',
+      dataNascimento: '05-10-1970',
+      ddd: '21',
+      telefone: '91234-5678',
+      address: {
+        cep: '12283-865',
+        logradouro: 'Rua B, 456',
+        bairro: 'Parque Residencial Santo André',
+        numero: '1002',
+        complemento: 'Apartamento 101',
+        cidade: 'São Paulo',
+        estado: 'SP',
+      },
+    },
+    monitor: {
+      nome: 'Maria Silva',
+      ddd: '21',
+      telefone: '99876-5432',
+      email: 'maria@example.com',
+      grauParentesco: 'Irmã',
+    },
+  },
+  {
+    id: 2,
+    avatar:
+      'https://img.freepik.com/vetores-premium/ilustracao-de-avatar-de-empresario-retrato-de-usuario-de-desenho-animado-icone-de-perfil-de-usuario_118339-5507.jpg',
+    nomeCompleto: 'Ana Souza',
+    cpf: '321.654.987-00',
+    dataNascimento: '1985-02-15',
+    sexo: 'Feminino',
+    email: 'joao@example.com',
+    ddd: '21',
+    telefone: '98765-4321',
+    modelo: 'Samsung Galaxy S10',
+    imei: '123456789012345',
+    grauParentesco: 'Tio',
+    address: {
+      cep: '12283-865',
+      logradouro: 'Rua Benedito Sa de Araujo',
+      bairro: 'Parque Residencial Santo André',
+      numero: '1002',
+      complemento: 'Apartamento 101',
+      cidade: 'Caçapava',
+      estado: 'São Paulo',
+    },
+    dispositivo: {
+      imei: '543216789012345',
+      modelo: 'Modelo B',
+      bateria: 60,
+      conexao: '3G',
+    },
+    contratante: {
+      cpf: '789.456.123-00',
+      sexo: 'Feminino',
+      dataNascimento: '1965-08-20',
+      ddd: '21',
+      telefone: '(21) 91234-5678',
+      address: {
+        cep: '12283-865',
+        logradouro: 'Rua B, 456',
+        bairro: 'Parque Residencial Santo André',
+        numero: '1002',
+        complemento: 'Apartamento 101',
+        cidade: 'São Paulo',
+        estado: 'SP',
+      },
+    },
+    monitor: {
+      nome: 'Carlos Souza',
+      ddd: '21',
+      telefone: '99876-5432',
+      email: 'carlos@example.com',
+      grauParentesco: 'Pai',
+    },
+  },
+]
+
+interface Person {
+  id: number
+  Nome: string
+  'E-mail': string
+  Telefone: string
+}
+
+export interface Column<T> {
+  key: keyof T | 'Ações'
+  label: string
+  isAction?: boolean
+}
+
+const data: Person[] = [
+  {
+    id: 1,
+    Nome: 'Unidade 01',
+    'E-mail': 'unidade01@example.com',
+    Telefone: '(11) 98765-4321',
+  },
+  {
+    id: 2,
+    Nome: 'Unidade 02',
+    'E-mail': 'unidade02@example.com',
+    Telefone: '(11) 9876-5432',
+  },
+  {
+    id: 3,
+    Nome: 'Unidade 03',
+    'E-mail': 'unidade03@example.com',
+    Telefone: '(22) 2468-1357',
+  },
+  {
+    id: 4,
+    Nome: 'Unidade 04',
+    'E-mail': 'unidade04@example.com',
+    Telefone: '(33) 1357-2468',
+  },
+  {
+    id: 5,
+    Nome: 'Unidade 05',
+    'E-mail': 'unidade05@example.com',
+    Telefone: '(44) 5555-1234',
+  },
+  {
+    id: 6,
+    Nome: 'Unidade 06',
+    'E-mail': 'unidade06@example.com',
+    Telefone: '(55) 9876-5432',
+  },
+  {
+    id: 7,
+    Nome: 'Unidade 07',
+    'E-mail': 'unidade07@example.com',
+    Telefone: '(66) 2222-4444',
+  },
+  {
+    id: 8,
+    Nome: 'Unidade 08',
+    'E-mail': 'unidade08@example.com',
+    Telefone: '(77) 7777-7777',
+  },
+  {
+    id: 9,
+    Nome: 'Unidade 09',
+    'E-mail': 'unidade09@example.com',
+    Telefone: '(88) 8888-8888',
+  },
+  {
+    id: 10,
+    Nome: 'Unidade 10',
+    'E-mail': 'unidade10@example.com',
+    Telefone: '(99) 9999-9999',
+  },
+  {
+    id: 11,
+    Nome: 'Unidade 11',
+    'E-mail': 'unidade11@example.com',
+    Telefone: '(00) 1234-5678',
+  },
+  {
+    id: 12,
+    Nome: 'Unidade 12',
+    'E-mail': 'unidade12@example.com',
+    Telefone: '(11) 9876-5432',
+  },
+  {
+    id: 13,
+    Nome: 'Unidade 13',
+    'E-mail': 'unidade13@example.com',
+    Telefone: '(22) 2468-1357',
+  },
+  {
+    id: 14,
+    Nome: 'Unidade 14',
+    'E-mail': 'unidade14@example.com',
+    Telefone: '(33) 1357-2468',
+  },
+  {
+    id: 15,
+    Nome: 'Unidade 15',
+    'E-mail': 'unidade15@example.com',
+    Telefone: '(44) 5555-1234',
+  },
+  {
+    id: 16,
+    Nome: 'Unidade 16',
+    'E-mail': 'unidade16@example.com',
+    Telefone: '(55) 9876-5432',
+  },
+  {
+    id: 17,
+    Nome: 'Unidade 17',
+    'E-mail': 'unidade17@example.com',
+    Telefone: '(66) 2222-4444',
+  },
+  {
+    id: 18,
+    Nome: 'Unidade 18',
+    'E-mail': 'unidade18@example.com',
+    Telefone: '(77) 7777-7777',
+  },
+  {
+    id: 19,
+    Nome: 'Unidade 19',
+    'E-mail': 'unidade19@example.com',
+    Telefone: '(88) 8888-8888',
+  },
+  {
+    id: 20,
+    Nome: 'Unidade 20',
+    'E-mail': 'unidade20@example.com',
+    Telefone: '(99) 9999-9999',
+  },
+]
+
+export default function CareUnit() {
+  const [searchQuery, setSearchQuery] = useState('')
   const [isVisibleSection, setIsVisibleSection] = useState('')
+  const [visibleItems, setVisibleItems] = useState(8)
+  const [selectedUser, setSelectedUser] = useState<User | null>(null)
+  const [openDialog, setOpenDialog] = useState({
+    phoneCall: false,
+    delete: false,
+  })
 
-  // const filteredData = useMemo(() => {
-  //   return data.filter((item) =>
-  //     Object.values(item).some((value) =>
-  //       value.toString().toLowerCase().includes(searchQuery.toLowerCase()),
-  //     ),
-  //   )
-  // }, [searchQuery])
+  const filteredData = useMemo(() => {
+    return data.filter((item) =>
+      Object.values(item).some((value) =>
+        value.toString().toLowerCase().includes(searchQuery.toLowerCase()),
+      ),
+    )
+  }, [searchQuery])
+
+  const handleShowMore = () => {
+    setVisibleItems((prev) => prev + 8)
+  }
+
+  const handleActionClick = (id: number, action: string) => {
+    const selectedUser = usuarios.find((user) => user.id === id)
+    if (selectedUser) {
+      setSelectedUser(selectedUser)
+      setIsVisibleSection(action)
+    } else {
+      console.error(`Usuário com id ${id} não encontrado.`)
+    }
+  }
 
   return (
     <section>
@@ -171,7 +360,6 @@ export default function CareUnits() {
           className={`absolute inset-0 bg-black transition-opacity duration-500 ease-in-out ${
             isVisibleSection !== '' ? 'opacity-50' : 'opacity-0'
           }`}
-          onClick={() => setIsVisibleSection('')}
         ></div>
 
         <div
@@ -180,13 +368,36 @@ export default function CareUnits() {
             isVisibleSection !== '' ? 'translate-x-0' : 'translate-x-full'
           }`}
         >
-          {isVisibleSection === 'careUnit' && <CareUnitRegistration />}
+          {isVisibleSection === 'beneficiaries' && (
+            <CareUnitRegistration closeSection={setIsVisibleSection} />
+          )}
+
+          {isVisibleSection === 'view' && (
+            <BeneficiaryDetails
+              selectedUser={selectedUser!}
+              closeSection={setIsVisibleSection}
+            />
+          )}
+          {isVisibleSection === 'list' && (
+            <BeneficiaryMonitorsList closeSection={setIsVisibleSection} />
+          )}
+
+          {isVisibleSection === 'map' && (
+            <BeneficiaryLocation closeSection={setIsVisibleSection} />
+          )}
+
+          {isVisibleSection === 'edit' && (
+            <BeneficiaryEdit
+              selectedUser={selectedUser!}
+              closeSection={setIsVisibleSection}
+            />
+          )}
         </div>
       </div>
 
       <header className="flex items-center justify-between mb-6">
         <div className="flex flex-auto items-center gap-2">
-          <Hospital className="text-primary" />
+          <UserRoundSearchIcon className="text-primary" />
           <span className="flex-1 text-xl font-semibold text-[#1A1A1A]">
             Unidades Cadastradas
           </span>
@@ -196,18 +407,20 @@ export default function CareUnits() {
           <div className="relative">
             <Magnifier className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
 
-            {/* <Input
+            <Input
               placeholder="Buscar Unidade"
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="pl-10 pr-4 py-2 border rounded-lg text-sm"
-            /> */}
+            />
           </div>
 
           <Button
             className="flex items-center gap-2 bg-primary text-gray-50 shadow-xl"
-            onClick={() => setIsVisibleSection('careUnit')}
+            onClick={() => {
+              setIsVisibleSection('beneficiaries')
+            }}
           >
             <PlusIcon />
             <span className="text-white font-semibold">Adicionar</span>
@@ -215,7 +428,62 @@ export default function CareUnits() {
         </div>
       </header>
 
-      {/* <Table data={filteredData} columns={unitTableHeader} /> */}
+      <Table
+        showSection={setIsVisibleSection}
+        data={filteredData.slice(0, visibleItems)}
+        columns={unitTableHeader}
+        onActionClick={handleActionClick}
+        openModal={(action) => {
+          if (action === 'call') {
+            setOpenDialog((prevState) => ({
+              ...prevState,
+              phoneCall: true,
+            }))
+            return
+          }
+
+          if (action === 'delete') {
+            setOpenDialog((prevState) => ({
+              ...prevState,
+              delete: true,
+            }))
+          }
+        }}
+      />
+
+      {visibleItems < filteredData.length && (
+        <div className="flex justify-start mt-8">
+          <Button
+            className="bg-gray-100 hover:bg-gray-100 text-gray-900 font-semibold text-base border border-gray-200"
+            onClick={handleShowMore}
+          >
+            Ver mais
+          </Button>
+        </div>
+      )}
+
+      {openDialog.phoneCall && (
+        <PhoneCallModal
+          onClose={() =>
+            setOpenDialog((prevState) => ({
+              ...prevState,
+              phoneCall: false,
+            }))
+          }
+        />
+      )}
+
+      {openDialog.delete && (
+        <DeleteConfirmationModal
+          label="Beneficiário"
+          onClose={() =>
+            setOpenDialog((prevState) => ({
+              ...prevState,
+              delete: false,
+            }))
+          }
+        />
+      )}
     </section>
   )
 }

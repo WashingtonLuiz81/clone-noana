@@ -10,6 +10,7 @@ import SimpleCaregiverRegistrationFormData from './simpleCaregiverRegistrationFo
 import SimpleCaregiverRegistrationFormBonds from './simpleCaregiverRegistrationFormBonds'
 import BeneficiariesRegistrationBatchFormFile from './beneficiariesRegistrationBatchFormFile'
 import BeneficiariesRegistrationBatchFormBonds from './beneficiariesRegistrationBatchFormBonds'
+import CareUnitRegistrationFormData from './careUnitRegistrationFormData'
 
 export {
   BeneficiariesRegistrationManualFormData,
@@ -24,4 +25,5 @@ export {
   SimpleCaregiverRegistrationFormBonds,
   BeneficiariesRegistrationBatchFormFile,
   BeneficiariesRegistrationBatchFormBonds,
+  CareUnitRegistrationFormData,
 }
