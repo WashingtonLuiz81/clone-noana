@@ -21,7 +21,7 @@ export default function BatchBeneficiaryRegistration() {
 
   return (
     <div className="bg-gray-50 rounded-2xl">
-      {activeStep === 1 && (
+      {activeStep === 0 && (
         <div className="flex items-center justify-end">
           <Button
             type="submit"

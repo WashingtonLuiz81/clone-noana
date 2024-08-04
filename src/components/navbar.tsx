@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import classNames from 'classnames'
 import { UserHeart, Hospital } from '@/assets/img/icons'
+import { Bell } from 'lucide-react'
 
 export default function NavigationBar() {
   const pathname = usePathname()
@@ -21,9 +22,29 @@ export default function NavigationBar() {
               },
             )}
           >
-            <Hospital
+            <Bell
               className={classNames({
                 'text-primary': pathname === '/usuario-mestre',
+              })}
+            />{' '}
+            Alertas
+          </Link>
+        </li>
+
+        <li className="px-4 py-2">
+          <Link
+            href="/usuario-mestre/unidades"
+            className={classNames(
+              'flex items-center gap-2 font-medium text-gray-600',
+              {
+                'text-primary font-semibold':
+                  pathname === '/usuario-mestre/unidades',
+              },
+            )}
+          >
+            <Hospital
+              className={classNames({
+                'text-primary': pathname === '/usuario-mestre/unidades',
               })}
             />{' '}
             Unidades

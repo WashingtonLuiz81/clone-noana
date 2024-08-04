@@ -6,14 +6,14 @@ import { PlusIcon } from '@radix-ui/react-icons'
 import { Button } from '@/components/ui/button'
 import { unitTableHeader } from '@/lib/config'
 import Table from '../../table'
-import {
-  BeneficiaryDetails,
-  BeneficiaryLocation,
-  BeneficiaryMonitorsList,
-  BeneficiaryEdit,
-} from '../../sections/beneficiaries'
 import { DeleteConfirmationModal, PhoneCallModal } from '@/components/modals'
-import CareUnitRegistration from '../../sections/careUnit/careUnitRegistration'
+import {
+  CareUnitDetails,
+  CareUnitEdit,
+  CareUnitList,
+  CareUnitLocation,
+  CareUnitRegistration,
+} from '../../sections/careUnit'
 
 interface Address {
   cep: string
@@ -373,24 +373,22 @@ export default function CareUnit() {
           )}
 
           {isVisibleSection === 'view' && (
-            <BeneficiaryDetails
-              selectedUser={selectedUser!}
+            <CareUnitDetails
               closeSection={setIsVisibleSection}
+              selectedUser={selectedUser!}
             />
           )}
+
           {isVisibleSection === 'list' && (
-            <BeneficiaryMonitorsList closeSection={setIsVisibleSection} />
+            <CareUnitList closeSection={setIsVisibleSection} />
           )}
 
           {isVisibleSection === 'map' && (
-            <BeneficiaryLocation closeSection={setIsVisibleSection} />
+            <CareUnitLocation closeSection={setIsVisibleSection} />
           )}
 
           {isVisibleSection === 'edit' && (
-            <BeneficiaryEdit
-              selectedUser={selectedUser!}
-              closeSection={setIsVisibleSection}
-            />
+            <CareUnitEdit closeSection={setIsVisibleSection} />
           )}
         </div>
       </div>
@@ -475,7 +473,7 @@ export default function CareUnit() {
 
       {openDialog.delete && (
         <DeleteConfirmationModal
-          label="Beneficiário"
+          label="Unidade de Cuidado"
           onClose={() =>
             setOpenDialog((prevState) => ({
               ...prevState,
