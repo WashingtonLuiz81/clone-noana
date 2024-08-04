@@ -1,15 +1,28 @@
 import { Card } from '@/components/ui/card'
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
-import { PhoneIcon } from 'lucide-react'
+import { PhoneIcon, X } from 'lucide-react'
+import { useState } from 'react'
+import { PhoneCallModal } from '@/components/modals'
 
-export default function CareUnitList() {
+interface CareUnitListProps {
+  closeSection: (isVisible: string) => void
+}
+
+export default function CareUnitList({ closeSection }: CareUnitListProps) {
+  const [phoneCallModal, setPhoneCallModal] = useState(false)
+
   return (
-    <section className="absolute right-0 w-[54rem]">
+    <section className="h-screen overflow-y-auto scrollbar-hide">
       <div className="p-8 bg-gray-100 min-h-screen">
-        <h1 className="text-2xl font-semibold mb-6">
-          Lista de Cuidadores Mestre
-        </h1>
+        <div className="flex items-center justify-between mb-7">
+          <h1 className="text-2xl font-semibold">Lista de Cuidadores Mestre</h1>
+
+          <X
+            className="cursor-pointer text-gray-900"
+            onClick={() => closeSection('')}
+          />
+        </div>
 
         <div className="space-y-6">
           <Card className="flex justify-between p-6 items-start bg-gray-50">
@@ -50,7 +63,10 @@ export default function CareUnitList() {
 
             <div className="flex gap-7">
               <Button variant="outline">Desvincular</Button>
-              <Button className="flex items-center gap-4 text-sm font-semibold text-white">
+              <Button
+                className="flex items-center gap-4 text-sm font-semibold text-white"
+                onClick={() => setPhoneCallModal(true)}
+              >
                 <PhoneIcon width={20} height={20} />
                 Ligar
               </Button>
@@ -95,7 +111,10 @@ export default function CareUnitList() {
 
             <div className="flex gap-7">
               <Button variant="outline">Desvincular</Button>
-              <Button className="flex items-center gap-4 text-white">
+              <Button
+                className="flex items-center gap-4 text-white"
+                onClick={() => setPhoneCallModal(true)}
+              >
                 <PhoneIcon width={20} height={20} />
                 Ligar
               </Button>
@@ -140,7 +159,10 @@ export default function CareUnitList() {
 
             <div className="flex gap-7">
               <Button variant="outline">Desvincular</Button>
-              <Button className="flex items-center gap-4 text-white">
+              <Button
+                className="flex items-center gap-4 text-white"
+                onClick={() => setPhoneCallModal(true)}
+              >
                 <PhoneIcon width={20} height={20} />
                 Ligar
               </Button>
@@ -148,6 +170,10 @@ export default function CareUnitList() {
           </Card>
         </div>
       </div>
+
+      {phoneCallModal && (
+        <PhoneCallModal onClose={() => setPhoneCallModal(false)} />
+      )}
     </section>
   )
 }

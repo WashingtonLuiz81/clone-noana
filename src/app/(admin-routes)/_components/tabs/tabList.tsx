@@ -8,7 +8,7 @@ interface TabListProps {
 
 export default function TabList({ tabTitle, setTabTitle, tabs }: TabListProps) {
   return (
-    <ul className="w-full flex items-center">
+    <ul className="w-full flex items-center bg-gray-100">
       {tabs.map((tab) => (
         <TabItem
           key={tab}

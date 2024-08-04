@@ -27,6 +27,7 @@ export default function MonitorDetails({ closeSection }: MonitorDetailsProps) {
         <div className="bg-gray-100 p-10">
           <div className="flex justify-between items-center text-gray-900">
             <h1 className="text-2xl font-semibold">Detalhes do Monitor</h1>
+
             <div className="flex items-center gap-4">
               <Button
                 className="flex items-center gap-4 text-sm font-semibold text-white"
