@@ -1,13 +1,13 @@
 import { useState } from 'react'
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar'
-import { Progress } from '@/components/ui/progress'
 
 import { PhoneIcon, X } from 'lucide-react'
 import { User } from '../../../tabs/contentTabs/recipient'
 import { RadioGroup } from '../../../radioGroupLinkedUnit'
 import { Button } from '@/components/ui/button'
 import { PhoneCallModal } from '@/components/modals'
+import BatteryLevel from '@/components/batteryLevel'
 
 interface BeneficiaryDetailsProps {
   selectedUser: User
@@ -151,13 +151,7 @@ export default function BeneficiaryDetails({
 
               <div className="flex gap-9 text-sm font-medium text-gray-900">
                 <span className="w-[60px] text-gray-500">Bateria: </span>
-                <span className="text-left">
-                  <Progress
-                    value={selectedUser.dispositivo.bateria}
-                    className="w-full"
-                  />
-                  <span className="">{selectedUser.dispositivo.bateria}%</span>
-                </span>
+                <BatteryLevel value={selectedUser.dispositivo.bateria} />
               </div>
 
               <div className="flex gap-9 text-sm font-medium text-gray-900">

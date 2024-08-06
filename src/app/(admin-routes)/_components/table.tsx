@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useState, ReactNode } from 'react'
+import { format, parseISO } from 'date-fns'
 import {
   PencilLineIcon,
   EyeIcon,
@@ -9,22 +10,22 @@ import {
   Trash2Icon,
   UserCheckIcon,
   LockKeyholeIcon,
+  FileTextIcon,
+  AlertTriangleIcon,
+  CheckIcon,
 } from 'lucide-react'
 import TableArrow from '@/assets/img/table-arrow'
 import TableArrowUp from '@/assets/img/table-arrow-up'
 import TableArrowDown from '@/assets/img/table-arrow-down'
 import {
+  alertsTableActions,
+  Column,
   monitorTableActions,
   unitTableActions,
   usersTableActions,
 } from '@/lib/config'
 import { Avatar, AvatarImage, AvatarFallback } from '@radix-ui/react-avatar'
-
-interface Column<T> {
-  key: keyof T | 'Ações'
-  label: string
-  isAction?: boolean
-}
+import ProgressBar from '@/components/batteryLevel'
 
 interface TableProps<T> {
   data: T[]
@@ -33,6 +34,7 @@ interface TableProps<T> {
   showSection: (section: string) => void
   openModal?: (section: string) => void
   onActionClick: (id: number, action: string) => void
+  isAlert?: boolean
 }
 
 interface SortConfig<T> {
@@ -44,16 +46,17 @@ interface IconMap {
   [key: string]: JSX.Element
 }
 
-const Table = <T extends { id: number }>({
+const Table = <T extends { id: number; isResolved?: boolean }>({
   data,
   columns,
   showSection,
   onActionClick,
   persona,
   openModal,
+  isAlert,
 }: TableProps<T>) => {
   const [sortConfig, setSortConfig] = useState<SortConfig<T> | null>(null)
-  const styleButtonAction = 'text-primary cursor-pointer'
+  const styleButtonAction = 'cursor-pointer'
 
   const actionsSorted =
     persona === 'monitor'
@@ -62,7 +65,9 @@ const Table = <T extends { id: number }>({
         ? usersTableActions
         : persona === 'simpleCaregiver'
           ? usersTableActions
-          : unitTableActions
+          : persona === 'alerts'
+            ? alertsTableActions
+            : unitTableActions
 
   const handleActionClick = (id: number, action: string) => {
     onActionClick(id, action)
@@ -73,57 +78,76 @@ const Table = <T extends { id: number }>({
     }
   }
 
-  const createIconMap = (id: number): IconMap => ({
-    view: (
-      <EyeIcon
-        className={styleButtonAction}
-        width="20"
-        onClick={() => handleActionClick(id, 'view')}
-      />
-    ),
-    list: (
-      <UserCheckIcon
-        className={styleButtonAction}
-        width="20"
-        onClick={() => handleActionClick(id, 'list')}
-      />
-    ),
-    edit: (
-      <PencilLineIcon
-        className={styleButtonAction}
-        width="20"
-        onClick={() => handleActionClick(id, 'edit')}
-      />
-    ),
-    call: (
-      <PhoneCallIcon
-        className={styleButtonAction}
-        width="20"
-        onClick={() => openModal && openModal('call')}
-      />
-    ),
-    map: (
-      <MapPinIcon
-        className={styleButtonAction}
-        width="20"
-        onClick={() => handleActionClick(id, 'map')}
-      />
-    ),
-    trash: (
-      <Trash2Icon
-        className={styleButtonAction}
-        width="20"
-        onClick={() => openModal && openModal('delete')}
-      />
-    ),
-    lock: (
-      <LockKeyholeIcon
-        className={styleButtonAction}
-        width="20"
-        onClick={() => openModal && openModal('lock')}
-      />
-    ),
-  })
+  const createIconMap = (id: number, isResolved?: boolean): IconMap => {
+    const iconClass = `${styleButtonAction} ${isResolved ? 'text-primary' : !isAlert ? 'text-primary' : 'text-white'}`
+    return {
+      view: (
+        <EyeIcon
+          className={iconClass}
+          width="20"
+          onClick={() => handleActionClick(id, 'view')}
+        />
+      ),
+      list: (
+        <UserCheckIcon
+          className={iconClass}
+          width="20"
+          onClick={() => handleActionClick(id, 'list')}
+        />
+      ),
+      edit: (
+        <PencilLineIcon
+          className={iconClass}
+          width="20"
+          onClick={() => handleActionClick(id, 'edit')}
+        />
+      ),
+      call: (
+        <PhoneCallIcon
+          className={iconClass}
+          width="20"
+          onClick={() => openModal && openModal('call')}
+        />
+      ),
+      map: (
+        <MapPinIcon
+          className={iconClass}
+          width="20"
+          onClick={() => handleActionClick(id, 'map')}
+        />
+      ),
+      trash: (
+        <Trash2Icon
+          className={iconClass}
+          width="20"
+          onClick={() => openModal && openModal('delete')}
+        />
+      ),
+      lock: (
+        <LockKeyholeIcon
+          className={iconClass}
+          width="20"
+          onClick={() => openModal && openModal('lock')}
+        />
+      ),
+      fileText: (
+        <FileTextIcon
+          className={iconClass}
+          width="20"
+          onClick={() => handleActionClick(id, 'fileText')}
+        />
+      ),
+      alert: isResolved ? (
+        <CheckIcon className={`${iconClass} cursor-text`} width="20" />
+      ) : (
+        <AlertTriangleIcon
+          className={iconClass}
+          width="20"
+          onClick={() => openModal && openModal('alert')}
+        />
+      ),
+    }
+  }
 
   const sortedData = [...data]
   if (sortConfig !== null && sortConfig.key !== 'Ações') {
@@ -142,6 +166,8 @@ const Table = <T extends { id: number }>({
     })
   }
 
+  sortedData.sort((a, b) => (b.isResolved ? -1 : 1) - (a.isResolved ? -1 : 1))
+
   const requestSort = (key: keyof T | 'Ações') => {
     let direction: 'ascending' | 'descending' = 'ascending'
     if (
@@ -156,7 +182,7 @@ const Table = <T extends { id: number }>({
 
   const renderCell = (item: T, column: Column<T>): ReactNode => {
     if (column.key === 'Ações') {
-      const iconMap = createIconMap(item.id)
+      const iconMap = createIconMap(item.id, item.isResolved)
       return (
         <div className="flex items-center gap-3">
           {actionsSorted.map((action, index) => (
@@ -168,7 +194,10 @@ const Table = <T extends { id: number }>({
 
     const value = item[column.key as keyof T]
 
-    if (column.key === 'Nome' && typeof value === 'string') {
+    if (
+      column.key === 'Nome' ||
+      (column.key === 'beneficiaryName' && typeof value === 'string')
+    ) {
       return (
         <div className="flex items-center gap-3">
           <Avatar>
@@ -181,9 +210,26 @@ const Table = <T extends { id: number }>({
             />
             <AvatarFallback className="w-8 h-8 flex-1">CN</AvatarFallback>
           </Avatar>
-          {value}
+          <>{value}</>
         </div>
       )
+    }
+
+    if (column.key === 'alertDateTime' && typeof value === 'string') {
+      const parsedDate = parseISO(value)
+      return format(parsedDate, 'dd/MM/yyyy HH:mm')
+    }
+
+    if (column.key === 'batteryPercentage' && typeof value === 'number') {
+      const progressBarProps = !item.isResolved
+        ? {
+            value,
+            containerClassName: 'bg-opacity-100 bg-red-50',
+            color: '#FEF1F1',
+          }
+        : { value }
+
+      return <ProgressBar {...progressBarProps} />
     }
 
     if (typeof value === 'string' || typeof value === 'number') {
@@ -228,7 +274,12 @@ const Table = <T extends { id: number }>({
       </thead>
       <tbody>
         {sortedData.map((item, index) => (
-          <tr key={index} className="border-b border-gray-200">
+          <tr
+            key={index}
+            className={`border-b border-gray-200 ${
+              isAlert && !item.isResolved && 'bg-red-500 text-white'
+            }`}
+          >
             {columns.map((column) => (
               <td
                 key={column.key as string}
