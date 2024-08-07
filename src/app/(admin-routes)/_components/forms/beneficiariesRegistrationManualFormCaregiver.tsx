@@ -208,7 +208,7 @@ export default function BeneficiariesRegistrationManualFormCaregiver({
             />
           </div>
 
-          {tabTitle === 'Vincular' && (
+          {tabTitle === 'Cadastrar' && (
             <Button
               variant={'outline'}
               className="flex items-center gap-2 text-primary"
