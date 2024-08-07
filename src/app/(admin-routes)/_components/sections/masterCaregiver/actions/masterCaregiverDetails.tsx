@@ -155,7 +155,7 @@ export default function MasterCaregiverDetails({
             <Card className="relative flex flex-col justify-center bg-white rounded-2xl shadow-md text-gray-900 px-8 py-6">
               <CardHeader className="p-0 mb-3">
                 <CardTitle className="flex items-center justify-between text-base font-semibold">
-                  Beneficiários Vinculados ao Monitor
+                  Beneficiários Vinculados
                   <Button
                     type="button"
                     className="flex items-center font-semibold text-sm bg-gray-100 border border-gray-200 text-gray-900 hover:bg-gray-100"

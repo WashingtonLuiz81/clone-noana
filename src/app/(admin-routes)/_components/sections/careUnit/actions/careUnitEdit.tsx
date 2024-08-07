@@ -328,14 +328,6 @@ export default function CareUnitEdit({ closeSection }: CareUnitEditProps) {
                       />
                     </div>
                   </div>
-                  <div className="flex justify-end">
-                    <Button
-                      type="submit"
-                      className="flex items-center space-x-2 text-white"
-                    >
-                      <span>Cadastrar Unidade</span>
-                    </Button>
-                  </div>
                 </div>
               </AccordionContent>
             </AccordionItem>
