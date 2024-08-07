@@ -208,24 +208,26 @@ export default function BeneficiariesRegistrationManualFormCaregiver({
             />
           </div>
 
-          <Button
-            variant={'outline'}
-            className="flex items-center gap-2 text-primary"
-            onClick={() => {
-              if (fields.length < 5)
-                append({
-                  nomeCompleto: '',
-                  cpf: '',
-                  dataNascimento: '',
-                  telefone: '',
-                  ddd: '',
-                })
-            }}
-            disabled={fields.length >= 5}
-          >
-            <PlusIcon />
-            <span>Adicionar Cuidador</span>
-          </Button>
+          {tabTitle === 'Vincular' && (
+            <Button
+              variant={'outline'}
+              className="flex items-center gap-2 text-primary"
+              onClick={() => {
+                if (fields.length < 5)
+                  append({
+                    nomeCompleto: '',
+                    cpf: '',
+                    dataNascimento: '',
+                    telefone: '',
+                    ddd: '',
+                  })
+              }}
+              disabled={fields.length >= 5}
+            >
+              <PlusIcon />
+              <span>Adicionar Cuidador</span>
+            </Button>
+          )}
         </div>
       </div>
 

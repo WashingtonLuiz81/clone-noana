@@ -3,9 +3,13 @@ import { Button } from './ui/button'
 
 interface ResolveAlertProps {
   status?: boolean
+  resolveAlertFunction?: () => void
 }
 
-export default function ResolveAlert({ status }: ResolveAlertProps) {
+export default function ResolveAlert({
+  status,
+  resolveAlertFunction,
+}: ResolveAlertProps) {
   return (
     <div
       className={`flex items-center gap-4 p-4 rounded-xl border ${status ? 'border-green-600 bg-green-50' : 'border-status-error bg-red-50'}`}
@@ -22,7 +26,11 @@ export default function ResolveAlert({ status }: ResolveAlertProps) {
           : 'Este alerta ainda não foi resolvido!'}
       </span>
 
-      {!status && <Button className="text-white">Resolver Alerta</Button>}
+      {!status && (
+        <Button className="text-white" onClick={resolveAlertFunction}>
+          Resolver Alerta
+        </Button>
+      )}
     </div>
   )
 }

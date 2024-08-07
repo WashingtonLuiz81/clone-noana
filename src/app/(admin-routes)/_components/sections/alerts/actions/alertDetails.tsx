@@ -3,7 +3,7 @@ import { format } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar'
-import { PhoneCallModal } from '@/components/modals'
+import { PhoneCallModal, ResolveAlertModal } from '@/components/modals'
 import BatteryLevel from '@/components/batteryLevel'
 import { Alert } from '@/lib/config'
 import ResolveAlert from '@/components/resolveAlert'
@@ -19,6 +19,7 @@ export default function AlertDetails({
   closeSection,
 }: AlertDetailsProps) {
   const [phoneCallModal, setPhoneCallModal] = useState(false)
+  const [resolveAlertModal, setResolveAlertModal] = useState(false)
 
   const formattedDateTime = format(
     new Date(selectedUser.alertDateTime),
@@ -46,7 +47,10 @@ export default function AlertDetails({
           </div>
 
           <div className="mt-6">
-            <ResolveAlert status={!!selectedUser.isResolved} />
+            <ResolveAlert
+              status={!!selectedUser.isResolved}
+              resolveAlertFunction={() => setResolveAlertModal(true)}
+            />
           </div>
 
           <div className="flex flex-col items-center mb-24 mt-9 relative">
@@ -182,6 +186,10 @@ export default function AlertDetails({
             </CardContent>
           </Card>
         </div>
+
+        {resolveAlertModal && (
+          <ResolveAlertModal onClose={() => setResolveAlertModal(false)} />
+        )}
 
         {phoneCallModal && (
           <PhoneCallModal onClose={() => setPhoneCallModal(false)} />
