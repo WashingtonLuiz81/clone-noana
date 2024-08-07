@@ -273,7 +273,7 @@ export default function MonitorEdit({
             className="bg-gray-50 px-6 rounded-xl border border-gray-200 shadow"
           >
             <AccordionTrigger className="text-lg font-semibold text-gray-900 hover:no-underline">
-              Vínculo
+              Beneficiário Vinculado
             </AccordionTrigger>
 
             <AccordionContent className="mt-4">
