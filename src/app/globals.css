@@ -37,3 +37,11 @@
 
 @import "~slick-carousel/slick/slick.css";
 @import "~slick-carousel/slick/slick-theme.css";
+
+.slick-dots .slick-active .custom-dots {
+  @apply bg-primary;
+}
+
+.slick-dots {
+  bottom: -50px !important;
+}

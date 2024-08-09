@@ -1,9 +1,12 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    domains: ['noana-admin-images-hml.s3.amazonaws.com', 'ui-avatars.com'],
-    loader: 'imgix',
-    path: '/assets/img/',
+    domains: [
+      // 'via.assets.so',
+      // 'noana-admin-images-hml.s3.amazonaws.com',
+      // 'ui-avatars.com',
+      'via.placeholder.com',
+    ],
   },
   async rewrites() {
     return [

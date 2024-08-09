@@ -6,6 +6,8 @@ import TableArrow from './table-arrow'
 import logoNoana from './logo-noana.svg'
 import logoNoanaWhite from './logo-noana-white.svg'
 
+import carousel01 from './carousel-01.jpg'
+
 import ImageMap from './mapa.svg'
 
 export {
@@ -16,4 +18,5 @@ export {
   Magnifier,
   TableArrow,
   ImageMap,
+  carousel01,
 }
